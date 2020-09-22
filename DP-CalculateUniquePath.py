@@ -10,12 +10,13 @@
 class Solution:
     def total_unique_paths(self, n,m):
         f = [[None] * (m+1) for _ in range(n+1)]  #创建空二维数组
-        # initialization
-       
-        
+        # 合规判断
+        if n < 1 or m < 1:
+           return -1
+    
         for i in range(1, n+1):
             for j in range(1, m+1):
-                if i == 1 or j == 1:
+                if i == 1 or j == 1:     # initialization
                     f[i][j] = 1
                 else:
                     f[i][j] = f[i-1][j] + f[i][j-1]
