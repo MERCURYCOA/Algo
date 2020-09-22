@@ -1,6 +1,6 @@
 # 用2元，5元，7元硬币拼出27元，硬币个数最少是多少？
 # https://pan.baidu.com/play/video#/video?path=%2F%E4%B9%9D%E7%AB%A0%E7%AE%97%E6%B3%95%2F07-%E4%B9%9D%E7%AB%A0%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%2F%E4%B9%9D%E7%AB%A0%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%921_%E7%AE%80%E4%BB%8B.mov&t=-1
-
+# 动态规划 - 求最值型问题
 
 
 import sys
