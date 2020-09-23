@@ -69,3 +69,38 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.total_unique_paths([[0,0,1,0],[0,1,0,0],[0,0,0,0]]))
+    
+# 题三：找到双向最大上升连续子序列，从左到右上升和从右到左上升
+# 题目转换成：求上升，然后翻转数组，之后在求上升，最后比较那个大返回哪个
+
+class Solution:
+    def max_increase_subarray(self, A):
+        n = len(A)
+        f = [0]*n
+        f[0] = 1
+        max_subarray = 0
+        for i in range(1,n):
+            if A[i] > A[i-1]:
+                f[i] = f[i-1] + 1
+                max_subarray = max(max_subarray, f[i])
+            else:
+                f[i] = 1
+        return max_subarray
+    def bidirection(self, A):
+        n = len(A)
+        if n == 0:
+            return 0
+        r1 = self.max_increase_subarray(A)
+        i = 0
+        j = n-1
+        while (i < j):
+            temp = A[i]
+            A[i] = A[j]
+            A[j] = temp
+            i += 1
+            j -= 1
+        r2 = self.max_increase_subarray(A)
+        return max(r1,r2)
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.bidirection([1,2,3,5,4,3,2,1,7,1]))
