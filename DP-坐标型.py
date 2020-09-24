@@ -104,3 +104,32 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.bidirection([1,2,3,5,4,3,2,1,7,1]))
+# 题四
+# N*M 网格中有数字，求从左上到右下角路径上数字和最小是多少？
+#方法一：
+import sys
+
+class Solution:
+    def min_path_sum(self, A):
+        n = len(A)
+        m = len(A[0])
+        if n == 0:
+            return -1
+        f = [[0]*m for _ in range(n)]
+        for i in range(0, n):
+            for j in range(0, m):
+                if i ==0 and j == 0:
+                    f[i][j] = A[i][j]
+                    continue   # 不要忘记continue，你不希望再执行后面的语句， 这里不想continue，后面的分类就要单独处理第一行，第一列
+                temp = sys.maxsize
+                if j > 0:
+                    temp = min(temp, f[i][j-1])
+                if i > 0:
+                    temp = min(temp, f[i-1][j])
+                f[i][j] = temp + A[i][j]      # 这里在i>0和j>0内循环的是temp, 不是f[i][j],因为最小值只能是上面或左边其中的一个路径，通过temp找到最小的，然后加上当前A[i][j]
+        return f[n-1][m-1]
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.min_path_sum([[1,2]]))
+# 方法二： 滚动数组
+
