@@ -132,4 +132,32 @@ if __name__ == '__main__':
     solution = Solution()
     print(solution.min_path_sum([[1,2]]))
 # 方法二： 滚动数组
+#关键：开2行数组，建2个指针，old, new, 每行一换，也就是在i循环这一层，需要让old new交替，也就是old = new, new = 1 [其实就是0 -> 1, 1 -> 0]
+#     然后把后面每个i改成new, i-1改成old， 返回f[new][m-1]
+import sys
 
+class Solution:
+    def min_path_sum(self, A):
+        n = len(A)
+        m = len(A[0])
+        if n == 0:
+            return -1
+        f = [[0]*m for _ in range(0,2)]
+        old = new = 0
+        for i in range(0, n):
+            old = new
+            new = 1 - new
+            for j in range(0, m):
+                if i == 0 and j == 0:
+                    f[new][j] = A[i][j]
+                    continue
+                temp = sys.maxsize
+                if j > 0:
+                    temp = min(temp, f[new][j-1])
+                if i > 0:
+                    temp = min(temp, f[old][j])
+                f[new][j] = temp + A[i][j]
+        return f[new][m-1]
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.min_path_sum([[1,2]]))
