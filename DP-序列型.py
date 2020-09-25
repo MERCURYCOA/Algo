@@ -124,4 +124,19 @@ if __name__ == '__main__':
 # 方法二：
 # 滚动数组的思想 - 这里用长度为2的数组，或者直接设两个值滚动向前
 
+class Solution:
+    def max_house_stealing(self, A):
+        n = len(A)
+        if n == 0:
+            return 0
+        new = A[0]
+        old = 0
+        for i in range(1,n):
+            t = max(old + A[i], new)    # 注意： old初始化为0，old的初始角色类似f[0] = 0， 不可以直接 old = new, new = max(old + A[i], new), 这样的话 old 就是A[0]了，就错了
+            old = new
+            new = t
+        return new
 
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.max_house_stealing([1,2]))
