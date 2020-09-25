@@ -60,4 +60,45 @@ if __name__ == '__main__':
     print(solution.paint_house_min_cost([[14,2,11],[11,14,5],[14,3,10]]))
   
 # 方法二：时间复杂度O(NK)
+# 思想：求f[i][j] = min(f[i-1][k]) + C[i-1][j],其中k != j  方法一是用两个for循环求最小值，复杂度为k^2,降低复杂度的方法是先求f[i-1][j]的最小值min1和次小值min2,下标分别为id1,id2
+#      查看f[i][j]中如果j！=id1,就是当前j的颜色没有跟前一行最小值撞色，那么f[i][j] = C[i-1][j] + min1，如果j = id1,说明当前j跟前一行最小值撞色，那么当前f[i][j]就染成次小值的颜色，
+#      即 方= C[i-1][j] + min2
+#      查看f[i][j]中如果j！=id1,就是当前j的颜色没有跟前一行最小值撞色，那么f[i][j] = C[i-1][j] + min1，如果j = id1,说明当前j跟前一行最小值撞色，那么当前f[i][j]就染成次小值的颜色，
+#      即f[i][j] = C[i-1][j] + min2
+# 技巧：找到挖去一个值后的最小值的方法： 假设最小值为
+import sys
 
+class Solution:
+    def paint_house_min_cost(self, C):
+        n = len(C)
+        m = len(C[0])
+        f = [[0]*m for _ in range(n+1)]
+        min1 = min2 = 0
+        id1 = id2 = 0
+        for i in range(1,n+1):
+            min1 = min2 = sys.maxsize
+            for j in range(0,m):
+                if f[i-1][j] < min1:
+                    min2 = min1
+                    id2 = id1
+                    min1 = f[i-1][j]
+                    id1 = j
+                else:
+                    if f[i-1][j] < min2:
+                        min2 = f[i-1][j]
+            for j in range(0,m):
+                f[i][j] = C[i-1][j]
+                if j != id1:
+                    f[i][j] += min1
+                else:
+                    f[i][j] += min2
+        res = f[n][0]
+        for t in range(1,m):
+            res = min(res,f[n][t])
+        return res
+
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.paint_house_min_cost([[14,2,11],[11,14,5],[14,3,10]]))
+ 
+   
