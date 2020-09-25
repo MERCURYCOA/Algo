@@ -193,4 +193,19 @@ if __name__ == '__main__':
     print(solution.max_stock_profits([1,2,3]))
 
 # 方法二：不用开数组，只维护一个最小值
+class Solution:
+    def max_stock_profits(self, A):
+        n = len(A)
+        if n == 0:
+            return 0
+        minV = A[0]
+        res = 0
+        for i in range(0,n):
+            res = max(res, A[i] - minV)
+            minV = min(minV, A[i])
+        return res
+            
 
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.max_stock_profits([3,2,1]))
