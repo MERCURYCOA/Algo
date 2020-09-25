@@ -172,27 +172,9 @@ if __name__ == '__main__':
     solution = Solution()
     print(solution.circle_house([1,2,3]))
 
-# 题五： 股票买卖，给出连续n天股票价格，只能买一股卖一股，最大利润？
-# 方法一：
-class Solution:
-    def max_stock_profits(self, A):
-        n = len(A)
-        if n == 0:
-            return 0
-        f = [0]*(n+1)
-        for i in range(2,n+1):
-            if A[i-2] < A[i-1]:
-                f[i] = A[i-1] - A[i-2] + f[i-1]
-            else:
-                f[i] = f[i-1]
-        return f[n]
-            
+# 题五： 股票买卖，给出连续n天股票价格，只能买一股卖一股，不能多次交易，最大利润？
 
-if __name__ == '__main__':
-    solution = Solution()
-    print(solution.max_stock_profits([1,2,3]))
-
-# 方法二：不用开数组，只维护一个最小值
+# 不涉及储存每个f[n]，不用开数组，只维护一个最小值
 class Solution:
     def max_stock_profits(self, A):
         n = len(A)
@@ -209,3 +191,24 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.max_stock_profits([3,2,1]))
+
+# 题六：可以多次交易，最大利润？
+
+# 这里需要储存多次交易的利润，所以需要开数组
+class Solution:
+    def max_stock_profits(self, A):
+        n = len(A)
+        if n == 0:
+            return 0
+        f = [0]*(n+1)
+        for i in range(2,n+1):
+            if A[i-2] < A[i-1]:
+                f[i] = A[i-1] - A[i-2] + f[i-1]
+            else:
+                f[i] = f[i-1]
+        return f[n]
+            
+
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.max_stock_profits([2，1，2，1，2，3，0]))
