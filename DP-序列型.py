@@ -101,4 +101,27 @@ if __name__ == '__main__':
     solution = Solution()
     print(solution.paint_house_min_cost([[14,2,11],[11,14,5],[14,3,10]]))
  
+ # 题三： 小偷偷金币，N栋房子， 每个房子有A[i]个金币，不能同时偷相邻房子
+ # 方法一：
+    class Solution:
+    def max_house_stealing(self, A):
+        n = len(A)
+        f = [0]*(n+1)
+        if n == 0:
+            return 0
+        f[0] = 0
+        for i in range(1,n+1):
+            if i == 1:
+                f[i] = A[i-1]
+            if i > 1:
+                f[i] = max(f[i-2] + A[i-1], f[i-1])
+        return f[n]
+
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.max_house_stealing([1,2]))
    
+# 方法二：
+# 滚动数组的思想 - 这里用长度为2的数组，或者直接设两个值滚动向前
+
+
