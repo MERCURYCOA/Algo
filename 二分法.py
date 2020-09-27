@@ -12,8 +12,8 @@ class Solution:
         if A == None or n == 0:
             return -1
         
-        start = A[0]
-        end = A[n-1]
+        start = 0
+        end = n-1
         while start+1 < end:  #如果用start < end, 需要在后面做很多分类工作，这里start + 1 < end确保start和end不相邻，也就不会让mid一直等于start或end，而陷入死循环。
                               # 注意：如果这样走下去，start最终会停在倒数第二个位置，不会到达最后一位，end会停在第二个位置，不会到达第一位，这样就避免了死循环
             mid = start + (end-start)//2   # 除法向下取整用//, 取浮点用/
