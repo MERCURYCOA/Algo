@@ -1,4 +1,4 @@
-# 二分法模版一：
+# 二分法模版一：条件：sorted数组，需返回符合条件的任意位置，第一个，或最后一个。
 # while start+1 < end
 # mid = start + (end - start)/2
 # A[mid] ==, <, >
