@@ -135,3 +135,50 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.find_peak([9,10,9,8,11,7,6]))
+
+# 翻转排序数组 rotated sorted array 如 4，5，6，7，1，2，3 本来是sorted数列，在某一翻转
+# 题六：在rotated sorted array中找到某数target?
+# 关键：A[mid] 的位置不确定，所以要分情况讨论，根据rotated sorted数列的特点，翻转点A[0]将数组分成两组，大于等于A[0]和小于等于A[0] （画图可以直观看到，分别在第2，4象限）
+# A[mid]不同位置的情况内，再通过判断target位置对start,end指针进行移动
+class Solution:
+    def serch_in_rotated_array(self, A, target):
+        n = len(A)
+        if(n == 0 or A == None):
+            return -1
+        start = 0
+        end = n-1
+        while start+1 < end:
+            mid = start + (end - start)//2
+            if A[mid] == target:
+                return mid
+            if A[start] < A[mid]:
+                if A[start] < target and target < A[mid]:
+                    end = mid
+                else:
+                    start = mid
+            else:
+                if target < A[mid] and target < A[end]:
+                    start = mid
+                else:
+                    end = mid
+solution = Solution()
+print(solution.serch_in_rotated_array([4,5,6,7,0,1,2,3], 6))
+
+
+#题七：find minimum in rotated sorted array
+class Solution:
+    def min_in_rotated_array(self, A):
+        n = len(A)
+        if(n == 0 or A == None):
+            return -1
+        start = 0
+        end = n-1
+        while start+1 < end:
+            mid = start + (end - start)//2
+            if A[mid] < A[end]:
+                end = mid
+            else:
+                start = mid
+        return min(A[start], A[end])
+solution = Solution()
+print(solution.min_in_rotated_array([4,5,6,7,0,1,2,3]))
