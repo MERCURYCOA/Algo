@@ -2,7 +2,7 @@
 # while start+1 < end
 # mid = start + (end - start)/2
 # A[mid] ==, <, >
-# A[mid], A[start], A[end]
+# 出循环之后，判断A[mid], A[start], A[end]谁是答案
 
 #题一： 给定sorted数字序列和一个target数，找到target在数组中最后的位置，如果没有，return -1
 
