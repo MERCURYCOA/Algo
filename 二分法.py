@@ -92,6 +92,7 @@ class Solution:
         return -1
 
 #题四：find mountain number,单峰数列，找到峰值
+# 注意：如果数列有相等的数，不能用二分法，只能用for循环
 class Solution:
     def get_mountain(self, A):
         n = len(A)
@@ -113,6 +114,7 @@ if __name__ == '__main__':
     
 #题五： find a peak number， 多峰数列，找到一个极值
 #注意：如果是找到所有极值，不可以用二分法，只能用for循环，因为二分法的思想是取一半丢一半，这样不能求到所有极值
+#如果有相等的数，不能用二分法
 class Solution:
     def find_peak(self, A):
         n = len(A)
