@@ -90,3 +90,25 @@ class Solution:
         if A[start] == target:
             return start
         return -1
+
+#题四：find mountain number,单峰数列，找到峰值
+class Solution:
+    def get_mountain(self, A):
+        n = len(A)
+        if(n == 0 or A == None):
+            return -1
+        start = 0
+        end = n-1
+        while start+1 < end:
+            mid = start + (end - start)//2
+            if A[mid] > A[mid+1]:
+                end = mid
+            else:
+                start = mid
+        return max(A[start], A[end])
+
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.get_mountain([9,10,9,8]))
+    
+#题五： find a peak number， 多峰数列，找到一个极值
