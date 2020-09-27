@@ -36,3 +36,57 @@ if __name__ == '__main__':
     solution = Solution()
     print(solution.last_target([0,1,2,2,5], 2))
 
+# 题二： find first bad version      OOOOOOOOXXXXXXXXXX
+
+class Solution:
+    def get_first_bad_version(self, A):
+        n = len(A)
+        if(n == 0 or A == None):
+            return -1
+        start = 0
+        end = n-1
+        while start+1 < end:
+            mid = start + (end - start)//2
+            if A[mid] == 1:
+                end = mid
+            else:
+                start = mid
+        
+        if A[end] == 1:
+            return end
+        if A[start] == 1:
+            return start
+        return -1
+
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.get_first_bad_version([0,0,0,1,1,1]))
+ 
+# 题三： 一串很长的sorted数组，你无法得到其长度，给定target， 找到target的位置,可以用reader.get(k)找到第k个数的值
+# 思想：倍增找到右边界 + 二分法  查看1，2，4，8，16...发现
+# 思想：倍增找到右边界 + 二分法  查看第1，2，4，8，16...，如果A[16] >k， 说明k在A[8]到A[16]之间，因为之前查看过A[8]及之前的数。
+
+class Solution:
+    def get_k(self, A,target):
+        n = len(A)
+        if(n == 0 or A == None):
+            return -1
+        count = 1
+        while reader.get(count-1) < target:
+            count = count*2
+        start = count/2
+        end = count - 1
+        while start+1 < end:
+            mid = start + (end - start)//2
+            if A[mid] == target:
+                return mid
+            elif A[mid] > target:
+                end = mid
+            else:
+                start = mid
+        
+        if A[end] == target:
+            return end
+        if A[start] == target:
+            return start
+        return -1
