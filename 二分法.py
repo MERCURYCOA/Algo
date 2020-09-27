@@ -112,3 +112,24 @@ if __name__ == '__main__':
     print(solution.get_mountain([9,10,9,8]))
     
 #题五： find a peak number， 多峰数列，找到一个极值
+#注意：如果是找到所有极值，不可以用二分法，只能用for循环，因为二分法的思想是取一半丢一半，这样不能求到所有极值
+class Solution:
+    def find_peak(self, A):
+        n = len(A)
+        if(n == 0 or A == None):
+            return -1
+        start = 0
+        end = n-1
+        res = list()
+        while start+1 < end:
+            mid = start + (end - start)//2
+            if A[mid] > A[mid+1] and A[mid] > A[mid-1]:
+                return mid
+            elif A[mid] < A[mid+1] and A[mid] > A[mid+1]:
+                start = mid
+            else:
+                end = mid
+        return -1
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.find_peak([9,10,9,8,11,7,6]))
