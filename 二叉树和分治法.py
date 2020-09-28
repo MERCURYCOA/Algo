@@ -43,3 +43,64 @@ Node4 = Node2.left = TreeNode(4)
 Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.preorderTraversal(Node1))
+# 方法二：非递归
+# 后序（一）非常巧妙
+class TreeNode:
+    def __init__(self,val):
+        self.val = val
+        self.left = None
+        self.right = None
+class Solution:
+    def postorderTraversal(self, root):
+        stack = [root]
+        while stack:
+            t = stack.pop()
+            if type(t) is TreeNode:
+                stack.append(t.val)  # 这里最tricky, 之前t被pop出，这里重新存入的是t.val而不是t。前一步判断type(t) is TreeNode，作用是不让t.val重新进入循环，而是直接print出来
+                if t.right:
+                    stack.append(t.right)
+                if t.left:
+                    stack.append(t.left)
+            else:
+                print(t)
+
+Node1 = TreeNode(1)
+Node2 = Node1.left = TreeNode(2)
+Node3 = Node1.right = TreeNode(3)
+Node4 = Node2.left = TreeNode(4)
+Node4 = Node2.right = TreeNode(5)
+solution = Solution()
+print(solution.postorderTraversal(Node1)
+#后序（二）
+ class TreeNode:
+    def __init__(self,val):
+        self.val = val
+        self.left = None
+        self.right = None
+class Solution:
+    def postorderTraversal(self, root):
+        if root == None:
+            return []
+        stack = []
+        res = []
+        while stack or root:
+            while root:
+                stack.append(root)
+                if root.left:
+                    root = root.left
+                else:
+                    root = root.right
+            s = stack.pop()
+            res.append(s.val)
+            if stack and s == stack[-1].left:
+                root = stack[-1].right
+            else:
+                root = None
+        return res
+Node1 = TreeNode(1)
+Node2 = Node1.left = TreeNode(2)
+Node3 = Node1.right = TreeNode(3)
+Node4 = Node2.left = TreeNode(4)
+Node4 = Node2.right = TreeNode(5)
+solution = Solution()
+print(solution.postorderTraversal(Node1))
