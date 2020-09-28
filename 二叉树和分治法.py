@@ -22,10 +22,18 @@ class Solution:
         left = self.preorderTraversal(root.left)
         right = self.preorderTraversal(root.right)
         
+        #前序
         result.append(root.val)
         result.extend(left)   # extend与append区别： extend是把两个list连接起来; append是把后面的list作为一个元素放到前面的list里。
         result.extend(right)
-            
+        #中序
+        #result.extend(left)
+        #result.append(root.val)
+        #result.extend(right)
+        #后序
+        #result.extend(left)
+        #result.extend(right)
+        #result.append(root.val)
         return result
 
 Node1 = TreeNode(1)
