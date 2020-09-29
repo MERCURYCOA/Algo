@@ -6,6 +6,7 @@
 # 题一： 前序遍历二叉树
 # 分治法和遍历法的区别：分治法 - 每次递归都创建一个新的result列表，最终结果是把所有列表连接起来。 遍历法 - 全局变量result， 每次递归结果都放到这个列表中。
 # 所以分治法用result.extend, 遍历法用result.append
+# 递归
 # 方法一：分治法
 class TreeNode:
     def __init__(self, x):
@@ -44,6 +45,36 @@ Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.preorderTraversal(Node1))
 
+# 遍历：
+class TreeNode:
+    def __init__(self,val):
+        self.val = val
+        self.left = None
+        self.right = None
+class Solution:
+    def postorderTraversal(self, root, result):  # 注意：遍历的参数有2个，root和result
+        if root == None:
+           return []
+        result.append(root.val)
+        self.postorderTraversal(root.left, result)
+        self.postorderTraversal(root.right,result)       
+        #中序
+        # self.postorderTraversal(root.left, result)
+        # result.append(root.val)
+        # self.postorderTraversal(root.right,result)
+        #后序
+        # self.postorderTraversal(root.left, result)
+        # self.postorderTraversal(root.right,result)
+        # result.append(root.val)
+        
+        return result
+Node1 = TreeNode(1)
+Node2 = Node1.left = TreeNode(2)
+Node3 = Node1.right = TreeNode(3)
+Node4 = Node2.left = TreeNode(4)
+Node4 = Node2.right = TreeNode(5)
+solution = Solution()
+print(solution.postorderTraversal(Node1, []))
 # 方法二：非递归
 # 用stack/ queue
 
