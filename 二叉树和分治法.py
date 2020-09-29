@@ -137,4 +137,29 @@ solution = Solution()
 print(solution.preorderTraversal(Node1))
     
 # 中序
-      
+class TreeNode:
+    def __init__(self,val):
+        self.val = val
+        self.left = None
+        self.right = None
+class Solution:
+    def inorderTraversal(self, root):
+        if root == None:
+            return []
+        stack = []
+        res = []
+        while stack or root:
+            while root:
+                stack.append(root)
+                root = root.left
+            root = stack.pop()
+            res.append(root.val)
+            root = root.right
+        return res
+Node1 = TreeNode(1)
+Node2 = Node1.left = TreeNode(2)
+Node3 = Node1.right = TreeNode(3)
+Node4 = Node2.left = TreeNode(4)
+Node4 = Node2.right = TreeNode(5)
+solution = Solution()
+print(solution.inorderTraversal(Node1))      
