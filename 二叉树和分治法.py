@@ -217,3 +217,37 @@ Node4 = Node2.left = TreeNode(4)
 Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.max_depth(Node1))
+
+#题三：求所有路径
+# 递归和迭代的区别：递归调用自身，迭代不调用自身而用stack去遍历二叉树所有节点
+# 递归法
+class TreeNode:
+    def __init__(self,val):
+        self.val = val
+        self.left = None
+        self.right = None
+class Solution:
+    def all_paths(self, root):
+        paths = []
+        if root == None:
+           return paths
+        
+        if root.left == None and root.right == None:
+            paths.append(str(root.val))
+            return paths
+        left, right = [],[]
+        if root.left:
+            left = [str(root.val) + path for path in self.all_paths(root.left)]
+        if root.right:
+            right = [str(root.val) + path for path in self.all_paths(root.right)]
+
+        return left + right
+Node1 = TreeNode(1)
+Node2 = Node1.left = TreeNode(2)
+Node3 = Node1.right = TreeNode(3)
+Node4 = Node2.left = TreeNode(4)
+Node4 = Node2.right = TreeNode(5)
+solution = Solution()
+print(solution.all_paths(Node1))
+      
+# 迭代法
