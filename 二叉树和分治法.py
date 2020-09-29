@@ -194,3 +194,26 @@ Node4 = Node2.left = TreeNode(4)
 Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.inorderTraversal(Node1))      
+
+#题二：求二叉树最大深度
+# 分治法：
+class TreeNode:
+    def __init__(self,val):
+        self.val = val
+        self.left = None
+        self.right = None
+class Solution:
+    def max_depth(self, root):
+        if root == None:
+           return 0
+        left = self.max_depth(root.left)
+        right = self.max_depth(root.right)
+        
+        return max(left, right)+1
+Node1 = TreeNode(1)
+Node2 = Node1.left = TreeNode(2)
+Node3 = Node1.right = TreeNode(3)
+Node4 = Node2.left = TreeNode(4)
+Node4 = Node2.right = TreeNode(5)
+solution = Solution()
+print(solution.max_depth(Node1))
