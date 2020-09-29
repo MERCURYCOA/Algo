@@ -285,3 +285,37 @@ Node4 = Node2.left = TreeNode(4)
 Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.findSubtree(Node1))
+
+# 判断平衡树
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: The root of binary tree.
+    @return: True if this Binary tree is Balanced, or false.
+    """
+    def isBalanced(self, root):
+        # write your code here
+        balanced, max_height = self.helper(root)
+        return balanced
+        
+    def helper(self, root):
+        if root is None:
+            return True, 0
+            
+        l_balanced, leftHeight = self.helper(root.left) # 必须记录高度才能计算左右子树高度之差，这里helper重要的思想是 返回两个类型的值  bool 和 int
+        r_balanced, rightHeight = self.helper(root.right)
+        if not (l_balanced and r_balanced):
+            return False, 0
+        
+        if abs(leftHeight - rightHeight) > 1:
+            cur_balance = False
+        else:
+            cur_balance = True
+        return  cur_balance, max(leftHeight, rightHeight) + 1
