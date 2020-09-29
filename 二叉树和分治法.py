@@ -235,13 +235,14 @@ class Solution:
         if root.left == None and root.right == None:
             paths.append(str(root.val))
             return paths
-        left, right = [],[]
-        if root.left:
-            left = [str(root.val) + path for path in self.all_paths(root.left)]
-        if root.right:
-            right = [str(root.val) + path for path in self.all_paths(root.right)]
+        paths = []
+        left = self.all_paths(root.left)
+        right = self.all_paths(root.right)
 
-        return left + right
+        for path in left + right:
+            paths.append(str(root.val) + '->' + path)
+
+        return paths
 Node1 = TreeNode(1)
 Node2 = Node1.left = TreeNode(2)
 Node3 = Node1.right = TreeNode(3)
@@ -250,4 +251,4 @@ Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.all_paths(Node1))
       
-# 迭代法
+
