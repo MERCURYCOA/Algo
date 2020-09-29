@@ -251,4 +251,37 @@ Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.all_paths(Node1))
       
+# 题四：Minimum subtree, 注意subtree不是指每个node, node.left, node.right, 是每个node一直到叶子
+import sys
+class TreeNode:
+    def __init__(self,val):
+        self.val = val
+        self.left = None
+        self.right = None
+class Solution:
+    def findSubtree(self, root):
+        minimum_sum, subtree, sum_of_root = self.helper(root)
+        return subtree
+    def helper(self, root):
+        if root is None:
+            return sys.maxsize, None, 0
 
+        left_min, left_subtree, left_sum = self.helper(root.left)
+        right_min, right_subtree, right_sum = self.helper(root.right)
+        
+        sum_of_root = left_sum + right_sum + root.val
+        
+        if left_min == min(left_min, right_min, sum_of_root):
+            return left_min, left_subtree, sum_of_root
+        if right_min == min(left_min, right_min, sum_of_root):
+            return right_min, right_subtree, sum_of_root
+        
+        return sum_of_root, root, sum_of_root
+    
+Node1 = TreeNode(1)
+Node2 = Node1.left = TreeNode(2)
+Node3 = Node1.right = TreeNode(3)
+Node4 = Node2.left = TreeNode(4)
+Node4 = Node2.right = TreeNode(5)
+solution = Solution()
+print(solution.findSubtree(Node1))
