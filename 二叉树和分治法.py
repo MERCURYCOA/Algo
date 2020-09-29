@@ -43,7 +43,10 @@ Node4 = Node2.left = TreeNode(4)
 Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.preorderTraversal(Node1))
+
 # 方法二：非递归
+# 用stack/ queue
+
 # 后序（一）非常巧妙
 class TreeNode:
     def __init__(self,val):
@@ -104,3 +107,34 @@ Node4 = Node2.left = TreeNode(4)
 Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.postorderTraversal(Node1))
+
+# 前序
+class TreeNode:
+    def __init__(self,val):
+        self.val = val
+        self.left = None
+        self.right = None
+class Solution:
+    def preorderTraversal(self, root):
+        if root == None:
+            return []
+        stack = [root]
+        res = []
+        while stack:
+            node = stack.pop()
+            res.append(node.val)
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+        return res
+Node1 = TreeNode(1)
+Node2 = Node1.left = TreeNode(2)
+Node3 = Node1.right = TreeNode(3)
+Node4 = Node2.left = TreeNode(4)
+Node4 = Node2.right = TreeNode(5)
+solution = Solution()
+print(solution.preorderTraversal(Node1))
+    
+# 中序
+      
