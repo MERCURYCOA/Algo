@@ -319,3 +319,37 @@ class Solution:
         else:
             cur_balance = True
         return  cur_balance, max(leftHeight, rightHeight) + 1
+# 最大平均数子树
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+class Solution:
+    """
+    @param root: the root of binary tree
+    @return: the root of the maximum average of subtree
+    """
+    
+    
+    def findSubtree2(self, root):
+        # write your code here
+        if not root:
+            return root
+        max_ave_subtree, max_average, num_node = self.helper(root)
+        return max_ave_subtree
+    
+    def helper(self, root):
+        if root == None:
+            return None, 0, 0
+
+        left_subtree, left_average, left_num = self.helper(root.left)
+        right_subtree, right_average, right_num = self.helper(root.right)
+        
+        cur_average = (root.val + (left_average*left_num) + (right_average*right_num))/(1+left_num+right_num)
+        
+        if left_subtree and left_average == max(left_average, right_average, cur_average):
+            return left_subtree, left_average, left_num+right_num+1   #注意子树的数量是增加的， 不能用left_num   # 哪些是变的，哪些不变，要清楚
+        if right_subtree and right_average == max(left_average, right_average, cur_average):
+            return right_subtree, right_average, right_num+left_num+1   
+        return root, cur_average, left_num+right_num+1  
