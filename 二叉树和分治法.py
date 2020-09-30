@@ -287,13 +287,10 @@ solution = Solution()
 print(solution.findSubtree(Node1))
 
 # 题五：判断平衡树
-"""
-Definition of TreeNode:
 class TreeNode:
     def __init__(self, val):
         self.val = val
         self.left, self.right = None, None
-"""
 
 class Solution:
     """
@@ -324,7 +321,7 @@ class TreeNode:
     def __init__(self, val):
         self.val = val
         self.left, self.right = None, None
-"""
+
 class Solution:
     """
     @param root: the root of binary tree
@@ -358,9 +355,6 @@ class TreeNode:
     def __init__(self, val):
         self.val = val
         self.left, self.right = None, None
-"""
-
-
 class Solution:
     """
     @param: root: The root of the binary search tree.
@@ -392,8 +386,6 @@ class TreeNode:
     def __init__(self, val):
         this.val = val
         this.left, this.right = None, None
-"""
-
 
 class Solution:
     """
@@ -452,7 +444,6 @@ class TreeNode:
     def __init__(self, val):
         self.val = val
         self.left, self.right = None, None
-"""
 import sys
 
 class Solution:
