@@ -353,7 +353,7 @@ class Solution:
         if right_subtree and right_average == max(left_average, right_average, cur_average):
             return right_subtree, right_average, right_num+left_num+1   
         return root, cur_average, left_num+right_num+1  
-# 最近公共祖先
+# 最近公共祖先 I
 class TreeNode:
     def __init__(self, val):
         self.val = val
@@ -387,3 +387,50 @@ class Solution:
         if left and not right:
             return left
         return None
+ # 最近公共祖先 III  # 比I多加了一个限制，判断有没有a, 有没有B
+class TreeNode:
+    def __init__(self, val):
+        this.val = val
+        this.left, this.right = None, None
+"""
+
+
+class Solution:
+    """
+    @param: root: The root of the binary tree.
+    @param: A: A TreeNode
+    @param: B: A TreeNode
+    @return: Return the LCA of the two nodes.
+    """
+    def lowestCommonAncestor3(self, root, A, B):
+        # write your code here
+        lca, a, b = self.helper(root, A, B)
+        if a and b:
+            return lca
+        else:
+            return None
+    
+    def helper(self, root, A, B):
+        if not root:
+            return None, False, False
+        
+        
+        left, left_a, left_b = self.lowestCommonAncestor3(root.left, A, B)
+        right, right_a, right_b = self.lowestCommonAncestor3(root.right, A, B)
+        
+        a = left_a or right_a or root == A
+        b = left_b or right_b or root == B
+        
+        if A == root or B == root:
+            return root, a, b
+        
+        if left and right:
+            return root, a, b
+        if left and not right:
+            left, left_a, left_b
+        if right and not left:
+            right, right_a, right_b
+        return a, b, None
+ 
+ 
+# 最近公共祖先 II
