@@ -286,7 +286,7 @@ Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.findSubtree(Node1))
 
-# 判断平衡树
+# 题五：判断平衡树
 """
 Definition of TreeNode:
 class TreeNode:
@@ -319,7 +319,7 @@ class Solution:
         else:
             cur_balance = True
         return  cur_balance, max(leftHeight, rightHeight) + 1
-# 最大平均数子树
+# 题六：最大平均数子树
 class TreeNode:
     def __init__(self, val):
         self.val = val
@@ -353,7 +353,7 @@ class Solution:
         if right_subtree and right_average == max(left_average, right_average, cur_average):
             return right_subtree, right_average, right_num+left_num+1   
         return root, cur_average, left_num+right_num+1  
-# 最近公共祖先 I
+# 题七：最近公共祖先 I
 class TreeNode:
     def __init__(self, val):
         self.val = val
@@ -387,7 +387,7 @@ class Solution:
         if left and not right:
             return left
         return None
- # 最近公共祖先 III  # 比I多加了一个限制，判断有没有a, 有没有B
+# 题八 最近公共祖先 III  # 比I多加了一个限制，判断有没有a, 有没有B
 class TreeNode:
     def __init__(self, val):
         this.val = val
@@ -433,7 +433,7 @@ class Solution:
         return a, b, None
  
  
-# 最近公共祖先 II   #建立parent set
+# 题九： 最近公共祖先 II   #建立parent set
 parentSet = set()
         # 把A的祖先节点都加入到哈希表中
         curr = A
@@ -447,3 +447,32 @@ parentSet = set()
                 return curr
             curr = curr.parent
         return None
+# 题十： 验证二叉查找树   
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+import sys
+
+class Solution:
+    """
+    @param root: The root of binary tree.
+    @return: True if the binary tree is BST, or false
+    """
+    def isValidBST(self, root):
+        # write your code here
+        validate, _, _ = self.helper(root)
+        return validate
+    def helper(self, root):    
+        if not root:
+            return True, - sys.maxsize-1, sys.maxsize  # 这里拿只有一个节点时举例子，当root.left和root.right为None时，需要返回什么
+        
+        left_validate, left_max, left_min = self.helper(root.left)
+        right_validate, right_max, right_min = self.helper(root.right)
+        
+        if left_validate and right_validate: 
+            return left_validate and right_validate and left_max < root.val and root.val < right_min, max(right_max, root.val), min(left_min, root.val)
+        return False, max(right_max, root.val), min(left_min, root.val)  #这里的返回值根据isValidBST需要的返回值确定
+     
+    
