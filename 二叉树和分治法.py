@@ -353,3 +353,37 @@ class Solution:
         if right_subtree and right_average == max(left_average, right_average, cur_average):
             return right_subtree, right_average, right_num+left_num+1   
         return root, cur_average, left_num+right_num+1  
+# 最近公共祖先
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+
+class Solution:
+    """
+    @param: root: The root of the binary search tree.
+    @param: A: A TreeNode in a Binary.
+    @param: B: A TreeNode in a Binary.
+    @return: Return the least common ancestor(LCA) of the two nodes.
+    """
+    def lowestCommonAncestor(self, root, A, B):
+        # write your code here
+        if not root:
+            return None
+        if root is A or root is B:   # 处理当前节点
+            return root
+        
+        left = self.lowestCommonAncestor(root.left, A, B)
+        right = self.lowestCommonAncestor(root.right, A, B)
+        
+        if not left and not right: # 对left和right分类讨论
+            return None
+        if left and right:
+            return root
+        if not left and right:
+            return right
+        if left and not right:
+            return left
+        return None
