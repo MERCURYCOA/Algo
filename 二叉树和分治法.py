@@ -433,4 +433,17 @@ class Solution:
         return a, b, None
  
  
-# 最近公共祖先 II
+# 最近公共祖先 II   #建立parent set
+parentSet = set()
+        # 把A的祖先节点都加入到哈希表中
+        curr = A
+        while (curr is not None):
+            parentSet.add(curr)
+            curr = curr.parent
+        # 遍历B的祖先节点，第一个在哈希表中出现的即为答案
+        curr = B
+        while (curr is not None):
+            if (curr in parentSet):
+                return curr
+            curr = curr.parent
+        return None
