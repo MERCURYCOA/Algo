@@ -466,4 +466,49 @@ class Solution:
             return left_validate and right_validate and left_max < root.val and root.val < right_min, max(right_max, root.val), min(left_min, root.val)
         return False, max(right_max, root.val), min(left_min, root.val)  #这里的返回值根据isValidBST需要的返回值确定
      
-    
+ # 题十一：二叉树转单链表
+ class TreeNode:
+    def __init__(self,val):
+        self.val = val
+        self.left = None
+        self.right = None
+class ListNode:
+    def __init__(self,val):
+        self.val = val
+        self.next = None
+
+class Solution:
+    def BTtoLinkedList(self, root):
+        return self.helper(root)
+    def helper(self, root):
+        if not root:
+            return None
+        left = self.helper(root.left)
+        right = self.helper(root.right)
+        root_node = ListNode(root.val)
+        if not left and not right:
+            return root_node
+        if left and right:
+            cur = left
+            while cur.next:
+                cur = cur.next
+            cur.next = root_node
+            root_node.next = right
+            return left
+        if left and not right:
+            cur = left
+            while cur.next:
+                cur = cur.next
+            cur.next = root_node
+            return left
+        if not left and right:
+            root_node.next = right
+            return root_node
+Node1 = TreeNode(1)
+Node2 = Node1.left = TreeNode(2)
+Node3 = Node1.right = TreeNode(3)
+Node4 = Node2.left = TreeNode(4)
+Node4 = Node2.right = TreeNode(5)
+solution = Solution()
+print(solution.BTtoLinkedList(Node1).val)
+# 题十二： 二叉树转双链表 （1<->2<->3）
