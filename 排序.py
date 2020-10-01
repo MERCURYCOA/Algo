@@ -47,8 +47,8 @@ class Solution:
         self.quickSort(A, 0, len(A)-1)
         return A
     def quickSort(self, A, start, end):
-        if start >= end:  # 可行性
-            return        # 直接return
+        if start >= end:  # 当递归到一个数时， start = end, 直接return，意思是这个数不动
+            return        
         left, right = start, end #简洁的写法
         p = A[start + (end-start)//2] #必须先把中间index的数赋给p， 不可以用p = start + (end - start)//2, 然后用A[p]做比较，因为最中间的数可能会变，必须将其固定
         while left <= right: # 这个必须有， 否则后面left <= right里面的无法循环，只执行一次
