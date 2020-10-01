@@ -1,4 +1,4 @@
-# 归并排序  时间复杂度 nlogn
+# 归并排序  时间复杂度 nlogn, 最好最坏都是， 注意跟快速排序不同， # 额外空间O(n) #是稳定排序：相同的数 2‘和2’‘， 在排完序之后他们之间的相对顺序跟之前是相同的
 #分治法,类似二分法：A对半分成left, right, 分别对left和right再对半分，一直分到left = right，就是只有一个数，返回数本身，一左一右返回后得到两个数就是这一层的left和right，比较这两个数，得到sorted的
 #的array， 这个array假设是这一层的left, 跟这一层的right array进行比较，返回得到到上一层的sorted array  ppt动画：https://www.bilibili.com/video/BV14E411o7Fb?from=search&seid=11676767501746059818
 
@@ -33,7 +33,7 @@ def merge_sort(self, arr):
             iright+=1
             k+=1
 
-#快速排序
+#快速排序 #平均时间复杂度： nlogn, 最坏n^2,  # 原地排序，不需要额外空间，# 是不稳定排序：相同的数 2‘和2’‘， 在排完序之后他们之间的相对顺序跟之前可能不同
 #思想： 找到一个p， 让p左边的数都小于p， p右边的数都大于p， 一般这个p挑选最中间的数
 class Solution:
     """
