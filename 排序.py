@@ -34,3 +34,32 @@ def merge_sort(self, arr):
             k+=1
 
 #快速排序
+#思想： 找到一个p， 让p左边的数都小于p， p右边的数都大于p， 一般这个p挑选最中间的数
+class Solution:
+    """
+    @param A: an integer array
+    @return: nothing
+    """
+    def sortIntegers2(self, A):
+        # write your code here
+        if len(A)<1:
+            return A 
+        self.quickSort(A, 0, len(A)-1)
+        return A
+    def quickSort(self, A, start, end):
+        if start >= end:  # 可行性
+            return        # 直接return
+        left, right = start, end #简洁的写法
+        p = A[start + (end-start)//2] #必须先把中间index的数赋给p， 不可以用p = start + (end - start)//2, 然后用A[p]做比较，因为最中间的数可能会变，必须将其固定
+        while left <= right: # 这个必须有， 否则后面left <= right里面的无法循环，只执行一次
+            while A[left] < p:
+                left += 1 
+            while A[right] > p:
+                right -=1 
+            if left <= right:
+                A[left], A[right] = A[right], A[left]  #简洁的写法
+                left += 1 
+                right -= 1 
+                
+        self.quickSort(A, start, right)  # left <= right循环，这里left > right, 所以左边分治的区间是start, right
+        self.quickSort(A, left, end)  # 同理
