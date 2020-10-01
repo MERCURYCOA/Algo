@@ -586,5 +586,11 @@ class Solution:
             left_last.right = root.right
             root.right = root.left
             root.left = None
-            
-        return right_last or left_last or root
+        
+        if right_last:
+            return right_last
+        if not right_last and left_last:
+            return left_last
+        if not left_last and not right_last:
+            return root
+        # return right_last or left_last or root # 上面3个if语句也可以写成这个形式，return中or运算，从左到右运算，遇到真值返回真值，如果没有真值返回False
