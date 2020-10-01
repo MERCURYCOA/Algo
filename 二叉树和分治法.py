@@ -558,3 +558,33 @@ Node4 = Node2.left = TreeNode(4)
 Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.BTtoLinkedList(Node1).val)
+
+# 题十三：二叉树拆成伪链表形式，只有右枝
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+
+class Solution:
+    """
+    @param root: a TreeNode, the root of the binary tree
+    @return: nothing
+    """
+    def flatten(self, root):
+        self.flatten_and_return_last_node(root)
+        return root
+    # restructure and return last node in preorder
+    def flatten_and_return_last_node(self, root):
+        if root is None:
+            return None
+            
+        left_last = self.flatten_and_return_last_node(root.left)  #最终返回的root肯定十不变的，变得十下面的枝和叶子，所以不需要返回root节点  # 注意做题前要明确返回的是什么形式
+        right_last = self.flatten_and_return_last_node(root.right)
+        
+        # connect 
+        if left_last is not None:  # 如果没有左枝只有右枝，不需要做任何事情
+            left_last.right = root.right
+            root.right = root.left
+            root.left = None
+            
+        return right_last or left_last or root
