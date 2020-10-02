@@ -183,3 +183,49 @@ class Solution:
             queue+= [x for x in neighbors[cur] if x not in visited]
         
         return len(visited) == n
+# 题五： copy graph  # 注意：这里的copy指，node需要全新地址的node, 只有数跟之前的一样
+# 三步走： BFS copy所有节点， connect新的所有节点
+from collections import deque
+
+class UndirectedGraphNode:
+     def __init__(self, x):
+         self.label = x
+         self.neighbors = []
+
+class Solution:
+    """
+    @param node: A undirected graph node
+    @return: A undirected graph node
+    """
+    def getNodes(self, node): # 通过BFS遍历所有节点，这里返回的节点还是old node
+        queue = deque([node])
+        result = set([node])
+        while queue:
+            n = queue.popleft()
+            result.add(n)
+            queue += [neighbor for neighbor in n.neighbors if neighbor not in result]
+        return result
+    
+    def cloneGraph(self, node):
+        # write your code here
+        if not node:
+            return node
+        root = node 
+        nodes = self.getNodes(node)
+        
+        # copy nodes 
+        mapping = {}  # 创建字典, 在old node和 new old之间创建映射
+        for node in nodes:
+            mapping[node] = UndirectedGraphNode(node.label) #以old node为key, 创建new node作为value
+        
+        # connect nodes
+        for node in nodes:
+            new_code = mapping[node]  
+            for neighbor in node.neighbors:    #这里要重点理解  1， 找到node的邻居节点， 注意neighbor也是节点！！！
+                new_neighbor = mapping[neighbor]   #2， mapping[neighbor]其实就是mapping[node]， 这里的意思是找到当前old node的neighbor节点的映射new node
+                new_code.neighbors.append(new_neighbor)  #举例：mapping = {old_node0 [neighbor:old_node2]: new_node0, old_node1: new_node1,old_node2: new_node2}
+        return mapping[root]                             # 现在要给new_node0找new_neighbor, 因为old_node0的neighbor是old_node_2,所以new_node0的neighbor一定是new_old0
+                                                         # 但是怎么找到new_node2呢？已知 old_node0的neighbor:old_node2,并且mapping[old_node2] = new_code2
+                                                         # 所以当前new_code0的new_neighbor 是 mapping[neighbor]，本质上也就是mapping[old_node2]
+    
+    
