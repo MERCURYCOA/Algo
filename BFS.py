@@ -157,3 +157,29 @@ class Solution:
             else:
                 node.left = TreeNode(data[pos])
         return root
+# 题四：判断图为树  
+# 条件： 节点数n，边的个数必须为n-1； 各点联通
+# 代码的体现： len(edges) == n-1, 访问过的节点数==n， 用queue储存当前节点所连接的点并且还没被访问到，用visited数组记录访问过的节点，最后判断len(visited) == n
+class Solution:
+    """
+    @param n: An integer
+    @param edges: a list of undirected edges
+    @return: true if it's a valid tree, or false
+    """
+    def validTree(self, n, edges):
+        # write your code here
+        if len(edges) != n-1:
+            return False
+        neighbors = collections.defaultdict(list)
+        for k,v in edges:
+            neighbors[k].append(v)
+            neighbors[v].append(k)
+        
+        queue = [0]
+        visited = []
+        while queue:
+            cur = queue.pop()
+            visited.append(cur)
+            queue+= [x for x in neighbors[cur] if x not in visited]
+        
+        return len(visited) == n
