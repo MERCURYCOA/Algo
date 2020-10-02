@@ -91,3 +91,67 @@ class Solution:
         return list(reversed(result))  #注意不要用list.reverse(),那样返回为空
                 level.append(node.val)
                 level.append(node.val)
+
+# 题三：二叉树序列化和反序列化：
+# 序列化的意思是把各种object（树，图，integer,bouble等）变成string，以方便网络传输和内存变外存，外存恢复内存。 这里是把树结构变成[1,2,3,#,4]的形式
+# 关键 处理None节点
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+
+
+from collections import deque
+class Solution:
+    
+    def serialize(self, root):
+        # write your code here
+        if not root:
+            return []
+        result = []
+        queue = deque([root])
+        while queue:
+            node = queue.popleft()
+            if type(node) is TreeNode:
+                result.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                else:
+                    queue.append(None)
+                if node.right:
+                    queue.append(node.right)
+                else:
+                    queue.append(None)
+            else:
+                result.append("#")
+        return result
+   
+    def deserialize(self, data):
+        # write your code here
+        if not data:
+            return None
+    
+        root = TreeNode(data[0])
+        queue = deque([root])
+        pos = 1
+        while queue and pos < len(data)-1:
+            node = queue.popleft()
+            if data[pos] == '#':
+                node.left = None
+            else:
+                node.left = TreeNode(data[pos])
+                queue.append(node.left)
+            if data[pos +1] == '#':
+                node.right = None
+            else:
+                node.right = TreeNode(data[pos+1])
+                queue.append(node.right)
+            pos += 2
+        
+        if queue and pos == len(data)-1:
+            node = queue.popleft()
+            if data[pos] == '#':
+                node.left = None
+            else:
+                node.left = TreeNode(data[pos])
+        return root
