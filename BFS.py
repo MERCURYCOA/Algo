@@ -1,4 +1,4 @@
-# 题一：binary tree level order traversal
+# 题一：binary tree level order traversal  #因为是level order, 所以每一层都得是一个list,不能是把所有integer放进一个list里面
 # 用deque, popleft()时间复杂度O(1)
 
 class TreeNode:
