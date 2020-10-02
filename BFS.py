@@ -32,7 +32,7 @@ class Solution:
             result.append(level)
         return result
    
-# 用list, pop()时间复杂度 O(n)
+# 用两个list
 class TreeNode:
     def __init__(self, val):
         self.val = val
