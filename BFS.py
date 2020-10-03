@@ -360,9 +360,9 @@ class Solution:
             for delta_x, delta_y in DIRECTIONS:
                 next_x = x + delta_x
                 next_y = y + delta_y
-                if not self.is_valid(grid, next_x, next_y, visited):
+                if not self.is_valid(grid, next_x, next_y, visited):  #注意这里valid有3个条件：边界内，没有访问过，值为1
                     continue
-                queue.append((next_x, next_y)) #把1上下左右的点的坐标都
+                queue.append((next_x, next_y))  #只有1周围如果有1，放到queue里面，查看后面这个1是不是周围还有1， 因为相邻的1只能算1个岛
                 visited.add((next_x, next_y))
 
     def is_valid(self, grid, x, y, visited):
@@ -371,4 +371,4 @@ class Solution:
             return False
         if (x, y) in visited:
             return False
-        return grid[x][y]
+        return grid[x][y]  # 这里有隐含条件， grid[x][y] == 1。 如果当前节点是0，not valid, 是1， valid
