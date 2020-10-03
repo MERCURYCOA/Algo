@@ -228,4 +228,47 @@ class Solution:
                                                          # 但是怎么找到new_node2呢？已知 old_node0的neighbor:old_node2,并且mapping[old_node2] = new_code2
                                                          # 所以当前new_code0的new_neighbor 是 mapping[neighbor]，本质上也就是mapping[old_node2]
     
+# 题六： 拓扑排序 - 针对给定的有向图找到任意一种拓扑排序的顺序.
+#给定一个有向图，图节点的拓扑排序定义如下:
+#对于图中的每一条有向边 A -> B , 在拓扑排序中A一定在B之前.
+#拓扑排序中的第一个节点可以是图中的任何一个没有其他节点指向它的节点.
+#关键是：节点的入度必须在节点出现之前，相当于先修课程
+class DirectedGraphNode:
+    def __init__(self, x):
+        self.label = x
+        self.neighbors = []
+
+
+import collections
+
+class Solution:
+    """
+    @param: graph: A list of Directed graph node
+    @return: Any topological order for the given graph.
+    """
+    def topSort(self, graph):
+        node_to_indegree = self.get_indegree(graph)
+
+        # bfs
+        order = []
+        start_nodes = [n for n in graph if node_to_indegree[n] == 0]
+        queue = collections.deque(start_nodes)
+        while queue:
+            node = queue.popleft()
+            order.append(node)
+            for neighbor in node.neighbors:
+                node_to_indegree[neighbor] -= 1  # 找到一个入度就在字典中减去一个入读
+                if node_to_indegree[neighbor] == 0: #当入度全部找到时，该节点加到queue中，继续遍历这个节点的neighbors, 同时因为入度为0，说明指向节点的节点都已经加到order了，所以也要将该节点加到order里
+                    queue.append(neighbor)
+        return order
     
+    def get_indegree(self, graph):
+        node_to_indegree = {x: 0 for x in graph}
+
+        for node in graph:
+            for neighbor in node.neighbors:
+                node_to_indegree[neighbor] += 1
+                # neighbor是本节点指向的那些点，不包括被指向的点，因为是有向图
+                #这里统计每个节点的neighbor节点的入度，就是计算每个节点被多少个节点
+                #入度为0的节点都可以作为开头节点
+        return node_to_indegree
