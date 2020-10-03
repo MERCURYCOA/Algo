@@ -272,3 +272,59 @@ class Solution:
                 #这里统计每个节点的neighbor节点的入度，就是计算每个节点被多少个节点
                 #入度为0的节点都可以作为开头节点
         return node_to_indegree
+# 题七： 重构序列 - 判断给出的org是不是seq可以唯一重构的图
+# 步骤： 1， build graph, 将给出的seq建成图，其实就是字典{node: neighbors[]}
+# 2, 找到每个节点的入度
+# 3， 通过topological sort对节点进行序列化， 判断order是否唯一，如果唯一，order长度是否等于org, 如果长度等于，判断是不是完全相等
+class Solution:
+    """
+    @param org: a permutation of the integers from 1 to n
+    @param seqs: a list of sequences
+    @return: true if it can be reconstructed only one or false
+    """
+    def sequenceReconstruction(self, org, seqs):
+        # write your code here
+        graph = self.build_graph(seqs)  #通过seq建graph
+        topo_order = self.topological_sort(graph) # 通过graph找到唯一order
+        return topo_order == org  # 判断order 和 org是不是相等
+        
+    def build_graph(self, seqs):
+        graph = {}
+        for seq in seqs:
+            for node in seq:
+                if node not in graph:
+                    graph[node] = set()
+                    
+        for seq in seqs:
+            for i in range(1, len(seq)):
+                graph[seq[i-1]].add(seq[i])
+        return graph
+    
+    def get_indegrees(self, graph):
+        indegrees = {node: 0 for node in graph}
+        for node in graph:
+            for neighbor in graph[node]:
+                indegrees[neighbor] += 1 
+        return indegrees
+        
+    def topological_sort(self, graph):
+        indegrees = self.get_indegrees(graph)
+        queue = []
+        for node in graph:
+            if indegrees[node] == 0:
+                queue.append(node)
+                
+        order = []
+        while queue:
+            if len(queue) > 1:   #如果queue里面同时有两个及以上节点，说明同一层有两个及以上节点，也就是有两个及以上路径，那么order一定不唯一，所以直接返回None
+                return None
+            node = queue.pop()
+            order.append(node)
+            for neighbor in graph[node]:
+                indegrees[neighbor] -= 1 
+                if indegrees[neighbor] == 0:
+                    queue.append(neighbor)
+        if len(order) == len(graph):
+            return order 
+        return None
+        
