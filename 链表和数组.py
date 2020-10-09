@@ -117,3 +117,33 @@ class Solution:
             else:  # 如果fast存在，fast.next不存在，就会无限循环， 所以必须else break
                 break
         return False 
+# 题四：如果是linked list, 返回入口节点， 如果不是，返回None
+class Solution:
+    """
+    @param head: The first node of linked list.
+    @return: The node where the cycle begins. if there is no cycle, return null
+    """
+    def detectCycle(self, head):
+        # write your code here
+        if head == None or head.next == None:
+            return None 
+            
+        slow = head
+        fast = head
+        while fast and slow:
+            if fast.next:  # 这里必须判断
+                slow = slow.next
+                fast = fast.next.next
+                if slow and fast and slow == fast:
+                   break # 注意这里两个while, 内层不可以return, 这里要break
+            else:  
+                break
+        if slow == fast:
+            slow = head # slow撤回开头
+            while slow != fast:  # 错误做法：while fast and slow: slow = slow.next fast = fast.next if slow == fast: return fast
+                                 # 如果入口是第一个节点，那么他们相遇一定也是第一个节点，这时应该返回当前节点，按照错误做法，会进入while， 在第二节点处发现相等，
+                                 # 返回的是第二节点，但其实入口在第一节点。 正确做法是：while slow!= fast, 只有二者不相等才能进入while
+                slow = slow.next
+                fast = fast.next
+            return fast
+        return None 
