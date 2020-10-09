@@ -94,3 +94,26 @@ class Solution:
             prev = prev.next
             cur = cur.next
         return res
+# 题三：linked list cycle
+# trick: 快慢指针
+class Solution:
+    """
+    @param head: The first node of linked list.
+    @return: True if it has a cycle, or false
+    """
+    def hasCycle(self, head):
+        # write your code here
+        if head == None or head.next == None:
+            return False 
+            
+        slow = head
+        fast = head
+        while fast and slow:
+            if fast.next:  # 这里必须判断
+                slow = slow.next
+                fast = fast.next.next
+                if slow and fast and slow == fast:
+                    return True
+            else:  # 如果fast存在，fast.next不存在，就会无限循环， 所以必须else break
+                break
+        return False 
