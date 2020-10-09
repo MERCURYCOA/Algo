@@ -147,3 +147,75 @@ class Solution:
                 fast = fast.next
             return fast
         return None 
+# 题五：链表排序 要求 时间nlogn 空间 O（1）
+#方法一：归并排序   注意：数组归并需要空间O(n),因为你要新建数组，链表则只需要新建一个dummy node，比较大小后将小node加到后面即可，所以空间是O(1)
+# 分治模版背过！！！！！！！！！！！
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    """
+    @param head: The head of linked list.
+    @return: You should return the head of the sorted linked list, using constant space complexity.
+    """
+    def sortList(self, head):
+        # write your code here
+        if head == None or head.next == None:
+            return head
+        mid = self.findMiddle(head)
+        left = head
+        right = mid.next
+        mid.next = None
+       
+        # 递归的拆解
+        sorted_left = self.sortList(left)
+        sorted_right = self.sortList(right)
+        
+        # 递归的出口
+        return self.merge(sorted_left, sorted_right)
+
+    def findMiddle(self, head):
+        if head == None or head.next == None:
+            return head
+        slow = head
+        fast = head
+        while fast.next and fast.next.next:  #这样mid才能停在靠左的地方，
+                                             # mid.next才不会越界
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+        
+    def merge(self, head1, head2):
+        if not head1:
+            return head2
+        if not head2:
+            return head1
+            
+        
+        dummy = ListNode(0)
+        cur = dummy  # dummy最后返回需要用，需要一个指针
+        while head1 and head2:
+            if head1.val < head2.val:
+                cur.next = head1
+                cur = cur.next
+                head1 = head1.next
+            else:
+                cur.next = head2
+                cur = cur.next
+                head2 = head2.next
+            
+        if head1:
+            cur.next = head1
+        if head2:
+            cur.next = head2
+        return dummy.next    
+    
+# 方法二： 快排
+
+
+                
