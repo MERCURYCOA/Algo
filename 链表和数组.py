@@ -304,4 +304,27 @@ class Solution:
             sums[sum] = i
             
         return res
-            
+# 题五：子数组之和最接近0，返回index
+
+class Solution:
+    """
+    @param: nums: A list of integers
+    @return: A list of integers includes the index of the first number and the index of the last number
+    """
+    def subarraySumClosest(self, nums):
+        # write your code here
+        prefix_sum = [(0, -1)]
+        for i, num in enumerate(nums):
+            prefix_sum.append((prefix_sum[-1][0] + num, i))  # [-1]指的是最后一对元素
+        
+        prefix_sum.sort()  #按照sum大小排序，排过序之后index是乱的
+        
+        closest, answer = sys.maxsize, []
+        for i in range(1, len(prefix_sum)):
+            if closest > prefix_sum[i][0] - prefix_sum[i - 1][0]:  #不要字典就是因为不能进行i-1, i的比较
+                closest = prefix_sum[i][0] - prefix_sum[i - 1][0]  #这里一直记录的是 最小的prefix_sum差值。 注意： 在没排序的时候 prefix_sum[i]和prefix_sum[i-1]不一定是相邻的，这就是我们要找的prefix_sum[j+1] - prefix_sum[i]
+                left = min(prefix_sum[i - 1][1], prefix_sum[i][1]) + 1   # 因为index是乱的，所以要找到prefix_sum[i]和prefix_sum[i-1]谁的坐标靠左就是起点，靠右就是终点
+                right = max(prefix_sum[i - 1][1], prefix_sum[i][1])
+                answer = [left, right]
+        
+        return answer
