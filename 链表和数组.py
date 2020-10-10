@@ -282,3 +282,26 @@ class Solution:
         return max_diff
 # 题三： minimum subarray 
 # 思路：所有元素取相反数，求maximum就可以了
+# 题四： 子数组之和为0
+class Solution:
+    """
+    @param nums: A list of integers
+    @return: A list of integers includes the index of the first number and the index of the last number
+    """
+    def subarraySum(self, nums):
+        # write your code here
+        if not nums or (len(nums) == 0):
+            return None
+        res = []
+        sum = 0
+        sums =  {0:-1}
+        for i, num in enumerate(nums):  # enumerate 数组index和元素
+            sum += num
+            if sum in sums:
+                res.append(sums[sum] + 1)  # prefixSum[i]记录A[0]到A[i-1]的和，记得+1
+                res.append(i)
+                break
+            sums[sum] = i
+            
+        return res
+            
