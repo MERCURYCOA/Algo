@@ -258,4 +258,25 @@ class Solution:
             return self.findKth(index_a+k//2, A, index_b, B, k-k//2)  # 这里k的递归必须是k-k//2， 不可以是k//2, 因为考虑奇偶
         return self.findKth(index_a, A, index_b + k//2, B, k-k//2)
 
-                
+    
+# 题二： maximum subarray  包含负数  时间O(n)
+# 记录sum,min_sum, sum和min_sum的最大差值,最后的最大差值就是max subarray
+class Solution:
+    """
+    @param nums: A list of integers
+    @return: A integer indicate the sum of max subarray
+    """
+    def maxSubArray(self, nums):
+        # write your code here
+        if not nums or (len(nums) == 0):
+            return None
+        n = len(nums)    
+        max_diff = float("-inf")  #负无穷
+        sum = 0
+        min_sum = 0
+        for j in range(n):
+            sum += nums[j]
+            max_diff = max(max_diff, sum - min_sum)
+            min_sum = min(sum, min_sum)
+            
+        return max_diff
