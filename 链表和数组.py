@@ -280,3 +280,5 @@ class Solution:
             min_sum = min(sum, min_sum)
             
         return max_diff
+# 题三： minimum subarray 
+# 思路：所有元素取相反数，求maximum就可以了
