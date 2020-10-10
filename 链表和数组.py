@@ -217,5 +217,45 @@ class Solution:
     
 # 方法二： 快排
 
+#===========================================================================================
+#数组
+# 题一：找到2个数组的中位数  要求：logn
+
+#思路：根据中位数定义， n是数组A和B元素数之和， n是基数，中位数是n//2+1, n是偶数，中位数是最中间两个数的平均。
+# 问题转化为2个数组中求第k小的数。想用logn解决，就要用O(1)的时间将问题降为k/2。分别给A，B各一个指针，先找到各自第K//2个元素，比较大小，较小的值所在的数组，例如A，的前k//2个元素一定
+# 不包括第k小元素，所以让A的指针指向前走k//2，接下来就变成找第(k-k//2)小的数了,进入递归
+class Solution:
+    """
+    @param: A: An integer array
+    @param: B: An integer array
+    @return: a double whose format is *.5 or *.0
+    """
+    def findMedianSortedArrays(self, A, B):
+        # write your code here
+        
+        n = len(A) + len(B)
+        if n%2 == 1:
+            return self.findKth(0,A, 0, B, n//2 + 1)
+            
+        else:
+            smaller = self.findKth(0,A, 0,B, n // 2)
+            bigger = self.findKth(0,A, 0, B, n // 2 + 1)
+            return (smaller + bigger) / 2  # 不可以直接让k = (n//2 + n//2+1)/2  因为n是偶数时，需要先求出最中间的两个数，然后求平均
+        
+        
+    def findKth(self, index_a, A, index_b, B, k):
+        if len(A) == index_a:  # A到头了
+            return B[index_b+k-1]
+        if len(B) == index_b:  # B到头了
+            return A[index_a+k-1]
+        if k == 1:    # 递归出口  找当前最小的数，只有比较2个指针当前的数的大小就可以
+            return min(A[index_a], B[index_b])
+            
+        a = A[index_a + k//2 -1] if index_a + k//2 <= len(A) else None   # a是指针向前走k//2后指向的元素， 因为index从0开始，正如第k个元素是A[k-1], 这里a=A[index_a + k//2 -1]
+        b = B[index_b + k//2-1] if index_b + k//2 <= len(B) else None   # 注意不越界
+        
+        if b is None or (a is not None and a < b):
+            return self.findKth(index_a+k//2, A, index_b, B, k-k//2)  # 这里k的递归必须是k-k//2， 不可以是k//2, 因为考虑奇偶
+        return self.findKth(index_a, A, index_b + k//2, B, k-k//2)
 
                 
