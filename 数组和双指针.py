@@ -110,7 +110,7 @@ class Solution:
         return answer
         
 # ============================================
-
+# 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
 
@@ -227,5 +227,25 @@ class Solution:
                 left += 1 
                 
 
-                
+# 题四：能组成三角形的个数
+
+class Solution:
+    """
+    @param S: A list of integers
+    @return: An integer
+    """
+    def triangleCount(self, S):
+        # write your code here
+        S.sort()
+        
+        ans = 0
+        for i in range(len(S)-1, 1,-1):
+            left, right = 0, i - 1
+            while left < right:
+                if S[left] + S[right] > S[i]:
+                    ans += right - left  # 如果 S[left], S[right], S[i]能组成三角形，那么S[left]和S[right]中间的数都能和S[right]，S[i]组成，因为他们都大于S[left]
+                    right -= 1
+                else:
+                    left += 1  # 移动最小的边，因为条件要求和大于S[i], 如果要求小于某值，就移动最大的值
+        return ans
             
