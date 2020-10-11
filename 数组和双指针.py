@@ -185,3 +185,47 @@ class TwoSum:
             if value-num in self.map and (value-num != num or self.map[num]>1):
                 return True
         return False 
+# 题三：3 sums, a + b + c = 0, 找到所有的[a, b, c] -> 不能重复
+# 转化为 b + c = -a
+class Solution:
+    """
+    @param numbers: Give an array numbers of n integer
+    @return: Find all unique triplets in the array which gives the sum of zero.
+    """
+    def threeSum(self, numbers):
+        # write your code here
+        if not numbers or len(numbers) == 0:
+            return []
+        
+        n = len(numbers)
+        numbers = sorted(numbers)
+        res = []
+        
+        for i in range(n-2):
+            if i>0 and numbers[i] == numbers[i-1]:
+                continue
+            target = -numbers[i]
+            self.twoSum(target, numbers, i+1, res)  # 因为twoSum函数中已经将答案append到res, 这里不要让twoSum等于什么，直接传入调用twoSum,传入res
+        return res
+        
+    def twoSum(self, target, numbers, start_index,res):
+        left, right = start_index, len(numbers)-1
+        while left < right:                                     # 3种情况，第一种情况内又考虑重复，一定要思路清晰
+            if numbers[left] + numbers[right] == target:
+                res.append([-target, numbers[left], numbers[right]])  # 加入的是具体的数，不是index
+                left += 1
+                right -= 1 
+            
+                while left < right and numbers[left] == numbers[left-1]: #因为res不能重复，所以这里只需判断numbers[left] + numbers[right] == target 情况下后面的left+,right-1是否是否与left,right位置的数相等即可，其他两种情况不需要做这个判断，反正都会略过
+                    left += 1     
+                while left < right and numbers[right] == numbers[right+1]:
+                    right -= 1 
+            elif numbers[left] + numbers[right] > target:
+                right -= 1 
+                
+            else:
+                left += 1 
+                
+
+                
+            
