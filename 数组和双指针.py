@@ -121,9 +121,9 @@ def deduplication(nums):
         nums.sort()
         lo, hi = 0, len(nums)-1
         while lo < hi:
-            while lo < hi and nums[lo] != nums[lo+1]:
+            while lo < hi and nums[lo] != nums[lo+1]:   # 左指针必须遇到非重复数组才能前进，因为左边存的是unique的数
                 lo += 1 
-            while lo < hi and nums[hi] == nums[hi-1]:
+            while lo < hi and nums[hi] == nums[hi-1]:  # 右边可以重复
                 hi -= 1
             
             if lo < hi:
@@ -132,5 +132,21 @@ def deduplication(nums):
                 hi -= 1
                 
         return lo + 1  # print(nums)
-# 法二：dict存 时间 O(n) 空间 O(n)
 
+# 法二：set存访问过的数， 时间 O(n) 空间 O(n)
+def deduplication(nums):
+               # write your code here
+        left, right = 0, len(nums) - 1
+        visited = set()
+        while left <= right:
+            if nums[left] not in visited:   # 左指针必须没有访问过才能前进
+                visited.add(nums[left])
+                print(visited)
+                left += 1
+            else:
+                nums[left], nums[right] = nums[right], nums[left]
+                right -= 1
+        
+        return right + 1  # 这里要注意哪个指针代表uniqur数的结束
+                
+       # print(nums)
