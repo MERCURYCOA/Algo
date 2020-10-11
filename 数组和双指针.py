@@ -111,7 +111,9 @@ class Solution:
         
 # ============================================
 
-# 双指针
+# 双指针 #dictionary
+# 排好序用双指针更快，没有排序要么先排序要么用dictionary
+
 # 题一：将数组中重复的数移到后面，返回unique数的个数
 # 法1： 双向指针 nlogn, no extra space
 def deduplication(nums):
