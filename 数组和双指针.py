@@ -249,3 +249,21 @@ class Solution:
                     left += 1  # 移动最小的边，因为条件要求和大于S[i], 如果要求小于某值，就移动最大的值
         return ans
             
+# 题五：差值为target,返回这一对数字[num1, num2], 且num1 < num2
+# 求差值， 用同向双指针， 
+def diffTarget(A, target):
+    if not A or not target or len(A) == 0:
+        return -1
+    A.sort()
+    i, j = 0,1
+    res = []
+    while i < j and j < len(A):
+        if A[j] - A[i] == target:
+            res.extend([A[i], A[j]])
+            break
+        elif A[j] - A[i] < target: #右减左 小于target， 右指针向前，找更大的数
+            right -= 1 
+        else:                       #找到第一个右减左 大于target， 右停下，左向前，缩小当前差值
+            left += 1 
+    return res
+print(diffTarget([2, 7, 15, 24], 5))
