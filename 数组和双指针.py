@@ -112,4 +112,25 @@ class Solution:
 # ============================================
 
 # 双指针
+# 题一：将数组中重复的数移到后面，返回unique数的个数
+# 法1： 双向指针 nlogn, no extra space
+def deduplication(nums):
+        
+        if len(nums) < 2: return len(nums)
+        
+        nums.sort()
+        lo, hi = 0, len(nums)-1
+        while lo < hi:
+            while lo < hi and nums[lo] != nums[lo+1]:
+                lo += 1 
+            while lo < hi and nums[hi] == nums[hi-1]:
+                hi -= 1
+            
+            if lo < hi:
+                nums[lo], nums[hi] = nums[hi], nums[lo]
+                lo += 1 
+                hi -= 1
+                
+        return lo + 1  # print(nums)
+# 法二：dict存 时间 O(n) 空间 O(n)
 
