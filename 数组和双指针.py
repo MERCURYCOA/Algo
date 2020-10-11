@@ -267,3 +267,43 @@ def diffTarget(A, target):
             left += 1 
     return res
 print(diffTarget([2, 7, 15, 24], 5))
+
+# 题六： 4 sum
+# 固定2个，移动2个
+# 注意4个数都有排除重复， i，j， left， right都要排除重复
+class Solution:
+    """
+    @param numbers: Give an array
+    @param target: An integer
+    @return: Find all unique quadruplets in the array which gives the sum of zero
+    """
+    def fourSum(self, numbers, target):
+        # write your code here
+        if len(numbers) <4:
+            return []
+        numbers.sort()
+        res = []
+        for i in range(len(numbers)-3):
+            if i and numbers[i] == numbers[i-1]:  #i去重
+                continue
+            for j in range(i+1,len(numbers)-2): # j起始点是i+1, 不是0
+                if j != i+1 and numbers[j] == numbers[j-1]:  # j 去重, j可以跟i相等, 但j不可以等于前一个j
+                    continue
+                left = j + 1 
+                right = len(numbers)-1
+                while left < right and left < len(numbers)-1:
+                    if numbers[i] + numbers[j] + numbers[left] + numbers[right] == target:
+                        res.append([numbers[i], numbers[j],numbers[left], numbers[right]])
+                        right -= 1 
+                        left += 1 
+                        while left < right and numbers[left] == numbers[left-1]:           #left去重
+                            left += 1 
+                        while left < right and numbers[right] == numbers[right+1]:          # right去重
+                            right -= 1 
+                    elif numbers[i] + numbers[j] + numbers[left] + numbers[right] > target:
+                        right -= 1 
+                    else:
+                        left += 1 
+        return res            
+                    
+                    
