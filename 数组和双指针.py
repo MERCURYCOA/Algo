@@ -364,3 +364,43 @@ class Solution:
                 i += 1  #只有i前进，因为left要坚守0的真谛，i一旦发现0，就跟left换，left前进， 也就是left永远在左边第一个不是0 的数的位置
                 
         return nums
+# 题九： color sort II  k种颜色分成k部分
+# nlogk, 对颜色进行二分  [3,2,2,1,4], k=4, 找到颜色的中间是2，九把数组分成大于2和小于等于2的， [2,2,1] [3,4] 再对两个子数组递归
+# 需要记录颜色，也就是k的开始和结束， index的开始和结束
+
+class Solution:
+    """
+    @param colors: A list of integer
+    @param k: An integer
+    @return: nothing
+    """
+    def sortColors2(self, colors, k):
+        # write your code here
+        if not colors or len(colors) == 0:
+            return []
+            
+        self.colorsPatition(colors, 0, len(colors)-1, 1, k)
+        
+    def colorsPatition(self, colors, index_left, index_right, color_start, color_end):
+        if color_start == color_end:
+            return
+        if index_left >= index_right:
+            return
+        
+        left, right = index_left, index_right  # 记下开始和结束，后面递归要用的
+        
+        color_mid =  (color_end + color_start)//2   #这里的color_mid就是（1+k）//2, 不是index，数字就代表颜色
+        while left <= right:                            #后面递归要用到停止的left和right的位置，作为下一步递归的开始或停止的地方，所以用left<= right,他们会交错，left停在较大值的第一个，right停在较小值的最后一个，
+                                                        # 不用额外判断left=right的地方的值是大于还是小于color_mid. 如果用left<right,还有判断他们相遇的地方与color_mid的大小，然后才能判断下一层递归的起点或终点
+            while left <= right and colors[left] <= color_mid:
+                left += 1 
+                
+            while left <= right and colors[right] > color_mid:
+                right -= 1 
+            if left <= right:
+                colors[left], colors[right]= colors[right], colors[left]
+                left += 1 
+                right -= 1 
+    
+        self.colorsPatition(colors, index_left,right, color_start, color_mid)
+        self.colorsPatition(colors,left, index_right, color_mid+1, color_end)
