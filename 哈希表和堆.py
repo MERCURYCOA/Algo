@@ -39,4 +39,81 @@ class Solution:
                 self.add_node(new_hash_table, node.val)
                 node = node.next
         return new_hash_table    
+  
+# 题二：LRU cache - least recently used 缓存， 维护一定长度，最新访问的节点在最前面，超过规定长度要删掉最远访问的节点
+# 关键： 字典+双向链表  {key: node}, node存4个值： prev, next, key, value
+# 链表： head -> node -> node -> tail, 链表维护head, tail, 长度capacity
+# 链表查找O(n), 通过字典查找node，获取node的prev, next，只需O(1) - 提高效率
+
+class LinkedNode:
+    def __init__(self, prev = None, next = None, key = None, value = None):
+        self.prev = prev
+        self.next = next
+        self.key = key
+        self.value = value
         
+class LRUCache:         # 题意：创造一种新的数据结构
+    """
+    @param: capacity: An integer
+    """
+    def __init__(self, capacity):
+        # do intialization if necessary
+        self.dict = {}          # 此结构维护一个字典和一个链表（head, tail）， 固定长度
+        self.head = None
+        self.tail = None 
+        self.capacity = capacity
+    """
+    @param: key: An integer
+    @return: An integer
+    """
+    def add_node(self, node):
+        self.dict[node.key] = node
+        if not self.head:
+            self.head = node 
+            self.tail = node 
+            return
+        self.tail.next = node 
+        node.prev = self.tail
+        self.tail = node 
+        
+    def remove_node(self, node):
+        if node.prev:
+            node.prev.next = node.next
+        else:
+            self.head = node.next
+        if node.next:
+            node.next.prev = node.prev
+        else:
+            self.tail = node.prev
+        del self.dict[node.key]
+        node.prev = None
+        node.next = None
+            
+    def get(self, key):         
+        # write your code here
+        if key not in self.dict:
+            return -1
+        node = self.dict[key]
+        self.remove_node(node)
+        self.add_node(node)
+        return node.value        # 注意返回的是value, 不是key
+         
+    """
+    @param: key: An integer
+    @param: value: An integer
+    @return: nothing
+    """
+    def set(self, key, value):
+        # write your code here
+        if key in self.dict:    
+            self.dict[key].value = value       # 修改key 的value值
+            self.get(key)                      # 把刚刚访问过的node放到链表的tail
+            return
+        
+        if len(self.dict) == self.capacity:
+            self.remove_node(self.head)
+            
+        node = LinkedNode(self.tail, None, key, value)
+        self.add_node(node)
+
+
