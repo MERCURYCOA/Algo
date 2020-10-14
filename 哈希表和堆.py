@@ -117,7 +117,7 @@ class LRUCache:         # 题意：创造一种新的数据结构
         self.add_node(node)
 
 # ========================================================================================
-# 堆： 操作：O(logn) Add， O（logn）pop, O(1) min or max 
+# 堆： 操作：O(logn) Add， O（logn）remove, O(1) min or max 
 # 堆本质是完全二叉树，一般可以用数组表示，从上到下，从左到右将二叉树填满
 # 题一： 堆化
 class Solution:
@@ -127,10 +127,10 @@ class Solution:
     """
     def heapify(self, A):
         # write your code here
-       for i in range(len(A)//2, -1, -1):
+       for i in range(len(A)//2, -1, -1):  # O(n)
            self.siftdown(A, i)
            
-    def siftdown(self, A, index):
+    def siftdown(self, A, index):   # O(logn)
         n = len(A)
         while index < n:
             left = index * 2 + 1
