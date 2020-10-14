@@ -116,4 +116,31 @@ class LRUCache:         # 题意：创造一种新的数据结构
         node = LinkedNode(self.tail, None, key, value)
         self.add_node(node)
 
-
+# ========================================================================================
+# 堆： 操作：O(logn) Add， O（logn）pop, O(1) min or max 
+# 堆本质是完全二叉树，一般可以用数组表示，从上到下，从左到右将二叉树填满
+# 题一： 堆化
+class Solution:
+    """
+    @param: A: Given an integer array
+    @return: nothing
+    """
+    def heapify(self, A):
+        # write your code here
+       for i in range(len(A)//2, -1, -1):
+           self.siftdown(A, i)
+           
+    def siftdown(self, A, index):
+        n = len(A)
+        while index < n:
+            left = index * 2 + 1
+            right = index * 2 + 2
+            minIndex = index
+            if left < n and A[left] < A[minIndex]:
+                minIndex = left
+            if right < n and A[right] < A[minIndex]:
+                minIndex = right
+            if minIndex == index:
+                break
+            A[minIndex], A[index] = A[index], A[minIndex]
+            index = minIndex
