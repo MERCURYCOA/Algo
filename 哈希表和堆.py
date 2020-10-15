@@ -168,3 +168,31 @@ class Solution:
                     
         return val
         
+# 题三： 前K大数II
+
+import heapq
+class Solution:
+    """
+    @param: k: An integer
+    """
+    def __init__(self, k):
+        # do intialization if necessary
+        self.heap = []
+        self.k = k 
+    """
+    @param: num: Number to be added
+    @return: nothing
+    """
+    def add(self, num):
+        # write your code here
+        heapq.heappush(self.heap, num)
+        if len(self.heap) > self.k:
+            heapq.heappop(self.heap)
+    """
+    @return: Top k element
+    """
+    def topk(self):
+        # sorted: 最小堆只是孩子比父亲节点小，不一定是从小到大排好的
+        # reverse:heapq是最小堆，所以需要reverse
+        return sorted(self.heap, reverse=True)
+        
