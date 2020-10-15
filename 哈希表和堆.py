@@ -196,7 +196,7 @@ class Solution:
         # reverse:heapq是最小堆，所以需要reverse
         return sorted(self.heap, reverse=True)
 # 题四：合并K个排序链表
-# 方法一 heapq
+# 方法一 heapq  O(Nlogk)
 """
 Definition of ListNode
 class ListNode(object):
@@ -230,8 +230,7 @@ class Solution:
                 heapq.heappush(heap, (node.next.val, count, node.next))
                 count += 1
         return dummy.next
-# 方法二： 分治法
-
+# 方法二： 分治法  O(nlogk)
 """
 Definition of ListNode
 class ListNode(object):
@@ -282,7 +281,7 @@ class Solution:
             tail.next = right
         return dummy.next
     
-# 方法三： 两两迭代
+# 方法三： 两两迭代  O(nlogk)
 # 注意，不可行的方法： 1，2合并，再跟3合并，再跟4合并...  - 这样会超时
 # 正确的迭代方法是：两两合并，成新的lists，再对新的lists，两两合并，一直到最后合并成1个链表
 """
