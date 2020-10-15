@@ -195,9 +195,8 @@ class Solution:
         # sorted: 最小堆只是孩子比父亲节点小，不一定是从小到大排好的
         # reverse:heapq是最小堆，所以需要reverse
         return sorted(self.heap, reverse=True)
-# 题三：合并K个排序链表
+# 题四：合并K个排序链表
 # 方法一 heapq
-# 题三：合并K个排序链表
 """
 Definition of ListNode
 class ListNode(object):
@@ -233,3 +232,52 @@ class Solution:
         return dummy.next
 # 方法二： 分治法
 
+"""
+Definition of ListNode
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    """
+    @param lists: a list of ListNode
+    @return: The head of one sorted list.
+    """
+    def mergeKLists(self, lists):
+        if not lists:
+            return None
+        if len(lists) == 1:
+            return lists[0]  # 注意，这里不能返回lists,而应该返回lists的第一个元素，因为lists是数组[],它的第一个元素才是node
+        k = len(lists)
+     
+        mid = len(lists)//2
+        sorted_left = self.mergeKLists(lists[:mid])  # 注意数组的边界，[:mid]不包括mid， [mid:]包括mid，数组包前不包后
+        sorted_right = self.mergeKLists(lists[mid:])
+        return self.merge(sorted_left, sorted_right)  #这里必须return
+    
+    def merge(self, left, right):
+        if not left:
+            return right
+            
+        if not right:
+            return left 
+        dummy = ListNode(-1)
+        tail = dummy
+        while left and right:
+            if left.val < right.val:
+                tail.next = left
+                left = left.next
+                tail = tail.next
+            else:
+                tail.next = right 
+                right = right.next
+                tail = tail.next
+        if left:
+            tail.next = left 
+            
+        if right:
+            tail.next = right
+        return dummy.next
