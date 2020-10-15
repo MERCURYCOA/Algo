@@ -195,4 +195,41 @@ class Solution:
         # sorted: 最小堆只是孩子比父亲节点小，不一定是从小到大排好的
         # reverse:heapq是最小堆，所以需要reverse
         return sorted(self.heap, reverse=True)
-        
+# 题三：合并K个排序链表
+# 方法一 heapq
+# 题三：合并K个排序链表
+"""
+Definition of ListNode
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+import heapq
+
+class Solution:
+    """
+    @param lists: a list of ListNode
+    @return: The head of one sorted list.
+    """
+    def mergeKLists(self, lists):
+        if not lists:
+            return None
+        heap, count = [], 0
+        dummy = ListNode(0)
+        tail = dummy
+        for head in lists:
+            if head:
+                heapq.heappush(heap, (head.val, count, head))  #couunt的作用是防止head.val相等时，向后找head比较，而head是不能比较的，所以需要中间有一个不会重复的数字可以在head,val相等时用来参考比较，这样就不会找到head了。
+                count += 1
+        while heap:
+            value, count, node = heapq.heappop(heap)
+            tail.next = node 
+            tail = node 
+            if node.next:
+                heapq.heappush(heap, (node.next.val, count, node.next))
+                count += 1
+        return dummy.next
+# 方法二： 分治法
+
