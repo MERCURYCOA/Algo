@@ -281,3 +281,57 @@ class Solution:
         if right:
             tail.next = right
         return dummy.next
+    
+# 方法三： 两两迭代
+# 注意，不可行的方法： 1，2合并，再跟3合并，再跟4合并...  - 这样会超时
+# 正确的迭代方法是：两两合并，成新的lists，再对新的lists，两两合并，一直到最后合并成1个链表
+"""
+Definition of ListNode
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+class Solution:
+    """
+    @param lists: a list of ListNode
+    @return: The head of one sorted list.
+    """
+    def mergeKLists(self, lists):
+        # write your code here
+        if not lists:
+            return None 
+        while len(lists) > 1:
+            next_lists = [] #两个合并， 加到新建的list
+            for i in range(0,len(lists), 2):
+                if i+1 < len(lists):
+                    new = self.merge_two_lists(lists[i], lists[i+1])
+                else:
+                    new = lists[i]
+                next_lists.append(new)
+            lists = next_lists  # 让新的list= lists，再进入while循环， 知道最后合并到只剩一条链表
+        return lists[0]
+    
+    def merge_two_lists(self, head1, head2):
+        if not head1:
+            return head2
+        if not head2:
+            return head1
+        
+        dummy = ListNode(-1)
+        tail = dummy
+        while head1 and head2:
+            if head1.val < head2.val:
+                tail.next = head1
+                head1 = head1.next
+            else:
+                tail.next = head2
+                head2 = head2.next
+            tail = tail.next
+        if head1:
+            tail.next = head1 
+            
+        if head2:
+            tail.next = head2
+        return dummy.next
