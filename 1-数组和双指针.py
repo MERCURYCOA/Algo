@@ -451,4 +451,24 @@ class Solution:
         return longest
     
  # 方法二：用dict
+# 记录元素和元素的index到字典，遇到重复元素让左指针直接指向当前重复元素前一次出现的index+1.例如：a,b,c,b  第二个b出现时，让左指针指向dict[b]+1,dict[b]存的是第一个b的下标，+1就是左指针指向c。
+class Solution:
+    """
+    @param s: a string
+    @return: an integer
+    """
+    def lengthOfLongestSubstring(self, s):
+        # write your code here
+        if not s:
+            return 0
+            
+        dict = {}
+        longest = 0
+        i = 0
+        for j in range(len(s)):
+            if s[j] in dict:
+                i = max(i, dict[s[j]]+1)
 
+            dict[s[j]] = j
+            longest = max(longest, j-i+1)
+        return longest
