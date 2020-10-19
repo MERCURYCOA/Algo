@@ -60,8 +60,32 @@ class Solution:
             min_sum = min(sum, min_sum)
             
         return max_diff
-# 题三： minimum subarray 
-# 思路：所有元素取相反数，求maximum就可以了
+# 题三： minimum subarray , 和大于S的最小子数组
+import sys
+class Solution:
+    """
+    @param nums: an array of integers
+    @param s: An integer
+    @return: an integer representing the minimum size of subarray
+    """
+    def minimumSize(self, nums, s):
+        if not s:
+            return -1
+            
+        min_size = sys.maxsize
+        sum, j = 0, 0
+        for i in range(len(nums)):
+            while j < len(nums) and sum < s: # j循环的条件 - while
+                sum += nums[j]
+                j += 1 
+            if sum >= s:                    # j停下的条件 - if
+                min_size = min(min_size, j-i)
+            sum -= nums[i]
+        if min_size == sys.maxsize:
+            return -1
+        return min_size
+    
+    
 # 题四： 子数组之和为0
 class Solution:
     """
