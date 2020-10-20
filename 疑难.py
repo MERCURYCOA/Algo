@@ -1,4 +1,4 @@
-#股票III - leetcode123： 最多交易2次，求最大利润
+# 一： 股票III - leetcode123： 最多交易2次，求最大利润
 import sys
 
 class Solution:
@@ -28,3 +28,5 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.max_stock_profits([2,1,2,1,2,3,0]))
+
+# 二：岛屿数量II - 并查集 
