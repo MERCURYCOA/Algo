@@ -294,6 +294,9 @@ class Solution:
         self.colorsPatition(colors, index_left,right, color_start, color_mid)
         self.colorsPatition(colors,left, index_right, color_mid+1, color_end)
         
+#====================================
+# 双指针+dict
+
 # 题十： 最长无重复字符的子串
 # 方法一： set
 class Solution:
@@ -337,3 +340,41 @@ class Solution:
             dict[s[j]] = j
             longest = max(longest, j-i+1)
         return longest
+
+# 题十一： 最小子串覆盖
+class Solution:
+    """
+    @param source : A string
+    @param target: A string
+    @return: A string denote the minimum window, return "" if there is no such a string
+    """
+    def minWindow(self, source , target):
+        s = {x:0 for x in source}
+        t = {x:0 for x in target}
+        for x in target:
+            t[x] += 1
+        j = 0
+        res = ""
+        min_len = len(source)
+        for i in range(len(source)):
+            while j < len(source):
+                if self.contain(s, t):
+                    break
+                s[source[j]] += 1 
+                j += 1 
+                
+            if self.contain(s,t) and min_len >= j-i:
+                min_len = j-i
+                res = source[i:j]
+            s[source[i]] -= 1 
+        return res
+    
+    
+    def contain(self, s, t):
+        for key, value in t.items():
+            if key not in s:
+                return False
+            if s[key] - value < 0:
+                return False 
+                
+        return True
