@@ -1,3 +1,4 @@
+# 什么时候用trie树： 1 需要一个一个字母进行遍历  2 需要前缀特性  3 需要省空间
 # 题一：实现Trie
 # 注意：实例化一个TrieNode包括它本身，他的children,和is_word。在字典里的映射不是TrieNode:{children},而是字符：TrieNode,例如：‘a’:TrieNode({children},is_word)。
 class TrieNode:
