@@ -1,4 +1,4 @@
-# 题一： 连接图
+# 题一： 连接图I
 
 class Solution:
     def __init__(self, n):
@@ -30,3 +30,48 @@ solution.connect(2,3)
 solution.connect(3,4)
 solution.connect(4,5)
 print(solution.find(1))  # 5
+
+
+# 题二：连接图 II
+
+class Solution:
+    def __init__(self, n):
+        self.father = {}
+        for i in range(1, n+1):
+            self.father[i] = i 
+
+    def find(self, node):
+        path = []
+        cur = node
+        while self.father[cur] != cur:
+            path.append(cur)
+            cur = self.father[cur]
+
+        for n in path:
+            self.father[n] = cur
+
+        return cur
+
+    def connect(self, a, b):
+        self.father[a] = self.find(b)
+
+    def query(self, a):     # 图的本质是dict, 查询图其实是查询dict
+        fa = self.find(a)
+        count = 0
+        for key, value in self.father.items():
+            if value == fa:
+                count += 1
+            else:
+                continue
+
+        return count
+
+solution = Solution(8)
+solution.connect(1,2)
+solution.connect(2,3)
+solution.connect(3,4)
+solution.connect(4,5)
+solution.connect(7,8)
+
+print(solution.find(1))
+print(solution.query(7))
