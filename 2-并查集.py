@@ -75,3 +75,41 @@ solution.connect(7,8)
 
 print(solution.find(1))
 print(solution.query(7))
+
+# 题三： 连接图III
+
+class Solution:
+    def __init__(self, n):
+        self.father = {}
+        self.size = n   # 实时维护一个size就是联通图个数，最初个数是n
+        for i in range(1, n+1):
+            self.father[i] = i 
+
+    def find(self, node):
+        path = []
+        cur = node
+        while self.father[cur] != cur:
+            path.append(cur)
+            cur = self.father[cur]
+
+        for n in path:
+            self.father[n] = cur
+
+        return cur
+
+    def connect(self, a, b):
+        self.father[a] = self.find(b)
+        self.size -= 1          # 每次连接两个节点，联通图个数减1
+
+    def query(self):
+        return self.size        # 返回当前联通图个数
+
+solution = Solution(8)
+solution.connect(1,2)
+solution.connect(2,3)
+solution.connect(3,4)
+solution.connect(4,5)
+solution.connect(7,8)
+
+print(solution.find(1))
+print(solution.query())
