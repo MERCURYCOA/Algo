@@ -366,7 +366,8 @@ class Solution:
             if self.contain(s,t) and min_len >= j-i:
                 min_len = j-i
                 res = source[i:j]
-            s[source[i]] -= 1 
+            s[source[i]] -= 1   #i更新过程：从0开始，找到第一个覆盖target的子串，i向后移动，找到当前最小覆盖，当i移动到第一个target里的元素被剔除时停下，也就是当前i到j直接无法覆盖target时停下。
+                                # 这时新的一轮查找开始，j向后移动直到找到覆盖target的子串，然后i向后移动，找到当前最短覆盖子串
         return res
     
     
