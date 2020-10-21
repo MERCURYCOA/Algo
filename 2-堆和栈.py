@@ -38,3 +38,73 @@ class Solution:
                                                      
                     visited[x_][y_] = 1 
         return res
+# 题二： 数据流中位数
+# 思路：  维护maxheap，median, minheap，maxheap存小于median的数， minheap存大于等于median的数。 如果下一个进来的num>=当前median,num进入minheap， 如果num小于median, num进入maxheap
+        # 之后查看两个堆的大小，因为题设说当nums有偶数个元素时，median取最中间的2个数中小的那一个，所以minheap的元素个数要么等于maxheap元素个数，要么多1个。
+# 方法一：全局变量
+    class Solution:
+    """
+    @param nums: A list of integers
+    @return: the median of numbers
+    """
+    def medianII(self, nums):
+        if not nums:
+            return []
+            
+        self.median = nums[0]
+        self.maxheap = []
+        self.minheap = []
+        
+        medians = [nums[0]]
+        for num in nums[1:]:
+            self.add(num)
+            medians.append(self.median)
+            
+        return medians
+
+    def add(self, num):
+        if num < self.median:
+            heapq.heappush(self.maxheap, -num)
+        else:
+            heapq.heappush(self.minheap, num)
+            
+        # balanace
+        if len(self.maxheap) > len(self.minheap):
+            heapq.heappush(self.minheap, self.median)
+            self.median = -heapq.heappop(self.maxheap)
+        elif len(self.maxheap) + 1 < len(self.minheap):
+            heapq.heappush(self.maxheap, -self.median)
+            self.median = heapq.heappop(self.minheap)
+# 方法二：不用全局变量，add函数每次返回调整过的minheap, maxheap, median    
+import heapq
+class Solution:
+    """
+    @param nums: A list of integers
+    @return: the median of numbers
+    """
+    def medianII(self, nums):
+        if not nums:
+            return []
+            
+        medians = [nums[0]]
+        maxheap = []
+        minheap = []
+        median = nums[0]
+        for num in nums[1:]:
+            maxheap, minheap, median = self.add(num, maxheap, minheap, median)
+            medians.append(median)
+        return medians
+
+    def add(self, num, maxheap, minheap, median):
+        if num >= median:
+            heapq.heappush(minheap, num)
+        else:
+            heapq.heappush(maxheap, -num)
+            
+        if len(maxheap) > len(minheap):
+            heapq.heappush(minheap, median)
+            median = -heapq.heappop(maxheap)
+        elif len(maxheap) +1 < len(minheap):
+            heapq.heappush(maxheap, -median)
+            median = heapq.heappop(minheap)
+        return maxheap, minheap, median
