@@ -108,3 +108,34 @@ class Solution:
             heapq.heappush(maxheap, -median)
             median = heapq.heappop(minheap)
         return maxheap, minheap, median
+# 题三： 滑动窗口的中位数 hash + heap  O(nlogk). 注意如果直接用heapq，remove的时间是O（k）, 总体时间就是O(nk),题目要求O(nlogk).只能用heap+hash,remove时间能达到logk
+# 核心： 窗口的滑动其实就是remove, add两步操作
+# 方法一：heap + hash
+# 方法二： bisect模块
+# 思路是：维护一个window,长度是k，被排序过。找到从nums找到该删除和该加入的数（其实就是中间隔着k-1个数，用当前下标i-k， 就是该删除的数），再通过bisect找到其在window中的位置。
+import bisect
+class Solution:
+    """
+    @param nums: A list of integers
+    @param k: An integer
+    @return: The median of the element inside the window at each moving
+    """
+    def medianSlidingWindow(self, nums, k):
+        if not nums:
+            return [] 
+        if k <= 0:
+            return []
+        if k > len(nums):
+            return []
+        n = len(nums)
+        mid = (k-1)//2
+        window = nums[:k]
+        window.sort()  # 注意这里sort的是window不是nums
+        res = [window[mid]]
+        for i in range(k, n):
+            out = nums[i-k]  # 正因为sort的是window 不是nums， 这里需要在nums里找到下一个删除的数  
+            inn = nums[i]  # 下一个放进去的数
+            window.pop(bisect.bisect_left(window, out))  # 上面找到需要加入和需要删除的数之后，再找到它们在window里是哪个位置（因为window被排序之后跟nums顺序不同）， 然后pop该删除的数，insert该加入的数
+            window.insert(bisect.bisect_left(window, inn), inn)
+            res.append(window[mid])
+        return res
