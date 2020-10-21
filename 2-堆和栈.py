@@ -41,7 +41,7 @@ class Solution:
 # 题二： 数据流中位数
 # 思路：  维护maxheap，median, minheap，maxheap存小于median的数， minheap存大于等于median的数。 如果下一个进来的num>=当前median,num进入minheap， 如果num小于median, num进入maxheap
         # 之后查看两个堆的大小，因为题设说当nums有偶数个元素时，median取最中间的2个数中小的那一个，所以minheap的元素个数要么等于maxheap元素个数，要么多1个。
-# 方法一：全局变量
+# 方法一：全局变量  时间复杂度O(nlogn) - 遍历是O（n）, 每次遍历中都有堆的操作logn
     class Solution:
     """
     @param nums: A list of integers
