@@ -31,3 +31,6 @@ if __name__ == '__main__':
 
 # 二：岛屿数量II - 并查集 
 # 三：word search II - Trie数+矩阵DFS
+# 四：滑动窗口的中位数 
+    # 方法： hash + heap  O(nlogk). 注意如果直接用heapq，remove的时间是O（k）, 总体时间就是O(nk),题目要求O(nlogk).只能用heap+hash,remove时间能达到logk
+    # 核心： 窗口的滑动其实就是remove, add两步操作
