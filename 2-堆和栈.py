@@ -1,3 +1,4 @@
+# heap操作复杂度：push O(logn) , pop O(logn), remove O(n), 最大或最小值 O(1)
 # 题一：接雨水II
 # tricks: 能不能存下水取决于边的最低点 - heaq：总是找到当前最低点
 # 矩阵中点向4个方向搜索 - 模版记住
