@@ -30,3 +30,4 @@ if __name__ == '__main__':
     print(solution.max_stock_profits([2,1,2,1,2,3,0]))
 
 # 二：岛屿数量II - 并查集 
+# 三：word search II - Trie数+矩阵DFS
