@@ -391,3 +391,33 @@ class Solution:
                 return False 
                 
         return True
+# 题十二：接雨水 
+#本质4指针相向而行
+class Solution:
+    """
+    @param heights: a list of integers
+    @return: a integer
+    """
+    def trapRainWater(self, heights):
+        if not heights:
+            return 0 
+        res = 0    
+        left, right = 0, len(heights)-1  # 查找指针
+        lefthighest = heights[left]  # 记录最左边/ 最右边最高海拔的指针
+        righthighest = heights[right]
+        
+        while left < right:
+            if lefthighest < righthighest: # 谁低舍弃谁
+                left += 1 
+                if lefthighest > heights[left]:  
+                    res += lefthighest - heights[left]
+                else:
+                    lefthighest = heights[left]
+            else:
+                right -= 1 
+                if righthighest > heights[right]:
+                    res += righthighest - heights[right]
+                else:
+                    righthighest = heights[right]
+                    
+        return res
