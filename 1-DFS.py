@@ -71,3 +71,31 @@ class Solution:
             current.append(candidatesNew[i])
             self.dfs(candidatesNew, i+1, current, remainTarget - candidatesNew[i], results)
             current.pop()
+# 题三：字符串解码 expression expanding
+#字符串递归
+class Solution:
+    """
+    @param s: an expression includes numbers, letters and brackets
+    @return: a string
+    """
+    def expressionExpand(self, s):
+        if not s:
+            return ""
+        self.right = 0
+        return self.dfs(s, 0, '')
+        
+    def dfs(self, s, index, res):
+        while index < len(s):
+            if s[index] == ']': 
+                self.right = index
+                return res
+            elif s[index].isdigit():
+                num = ''
+                while s[index] != '[':   #这里把‘[’跳过去了，所以外面if条件里不会遇到‘[’
+                    num += s[index]     # 数字在这里也是字符，所以要把多位数找全
+                    index += 1 
+                res += int(num) * self.dfs(s, index+1, '')
+            else:
+                res += s[index]
+            index = 1 + max(index, self.right)
+        return res
