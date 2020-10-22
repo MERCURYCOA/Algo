@@ -123,3 +123,55 @@ class Solution:
             else:
                 stack.append(char)
         return ''.join(stack)
+# 题四：直方图最大矩形覆盖
+# 当前高度out, 需要弹出，说明下一个进栈的数i对应的高度小于out高度，这样，stack[-1]是左边第一个小于out的数， 下一个进栈的i是右边第一个小于out的数，这两个数中间是out高度能组成的最大矩形
+# 我的解法 - 略显丑陋
+import sys
+class Solution:
+    """
+    @param height: A list of integer
+    @return: The area of largest rectangle in the histogram
+    """
+    def largestRectangleArea(self, height):
+        if not height:
+            return 0
+            
+        stack = []
+        max_ = -sys.maxsize-1
+        for i in range(len(height)):
+            while stack and height[i] < height[stack[-1]]:
+                out = stack.pop()
+                if stack:   # 注意stack剩最后一个元素时，弹出后就无法查看stack[-1]
+                    max_ = max(max_, height[out]*(i-stack[-1]-1)) # 当前弹出的高度的矩形左边可到达stack[-1] (左边第一个比当前高度小的数),右侧可到达i（右边第一个比当前高度小的数），细节处理真正涵盖的长度i-stack[-1]-1
+                else:
+                    max_ = max(max_, height[out]*(i)) # 最后弹出的元素一定是小于该元素前面的所有元素，因为比它小的在它入栈之前就被弹出了，
+            stack.append(i)
+            
+        
+        remost = len(height)-1
+        while stack:
+            out = stack.pop()
+            if stack:
+                max_ = max(max_, height[out]*(remost-stack[-1]))  # 剩到stack里，这个stack又是单调上升栈，说明当前高度的矩形左侧可以到达stack[-1],右侧可到达len(height)-1
+            else:
+                max_ = max(max_, height[out]*len(height)) # 特殊细节处理，真正意义剩到最后的元素，一定是整个直方图最低的，可以贯穿整个直方图
+        if max_ == -sys.maxsize-1:
+            max_= 0
+        return max_
+   # 下面是别人的解法 - 巧妙
+# 在heights后面补0,这样for循环完stack里就没有元素了，就不需要再来while stack
+class Solution:
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        stack = []
+        res = 0
+        heights = heights + [0]
+        for right in range(len(heights)):
+            while stack and heights[right] < heights[stack[-1]]: # 没有等号，因为下一个进来的高度跟当前高度相等时，同一个矩形可以延伸，还没找到右边第一个比当前高度小的数
+                cur = stack.pop()
+                if stack:
+                    left = stack[-1]
+                else:
+                    left = -1
+                res = max(res, (right - left - 1) * heights[cur])
+            stack.append(right)
+        return res
