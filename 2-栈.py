@@ -175,3 +175,36 @@ class Solution:
                 res = max(res, (right - left - 1) * heights[cur])
             stack.append(right)
         return res
+# 题五： 最大树 
+# 方法一： 维护单调递减栈
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param A: Given an integer array with no duplicates.
+    @return: The root of max tree.
+    """
+    def maxTree(self, A):
+        # write your code here
+        if not A:
+            return None
+        
+        stack = []
+        for index, num in enumerate(A + [sys.maxsize]): # dummy node的作用
+            cur = TreeNode(num)
+            # 单调递减栈
+            while stack and stack[-1].val < cur.val:  
+                out = stack.pop()
+
+                if stack and stack[-1].val < cur.val:  # 左边第一个比out大的数 stack[-1].val， 右边第一个比out大的数 cur.val， out一定是较小的那个数的儿子
+                    stack[-1].right = out              # 左边 < 右边, 让out成为左边的右儿子 （因为stack[-1]还存在说明这个位置的元素比之前的大，左儿子已经占了）
+                else:                                  # 左边 > 右边， 让out成为右边数cur的左儿子，因为右儿子位置需要留给继续向右遍历时小于cur的数/ 还有一种情况是out弹出后，栈内没有元素了（说明out左边没有比它大的元素，只有右边）
+                    cur.left = out 
+                    
+            stack.append(cur)
+            
+        return stack[-1].left
