@@ -1,6 +1,7 @@
 # stack 操作时间复杂度  push  O(1), pop O(1), top O(1)  注意top是查看最顶的元素但是不pop出来
 # 栈的3个考点：1 暂时保存信息  2 翻转栈  3 优化dfs，变成非递归
 # 单调栈：求每个元素左边/右边第一个比它小/大的元素时，用单调栈
+# 单调双端队列 deque 找滑动窗口最大值
 
 #题一：实现最小栈 min stack
 class MinStack:
@@ -208,3 +209,35 @@ class Solution:
             stack.append(cur)
             
         return stack[-1].left
+# 题六：sliding window maximun
+# 1 维护单调减 - 找最大值 2 维护长度k，确保已经滑过去的值被弹出
+class Solution:
+    """
+    @param nums: A list of integers.
+    @param k: An integer
+    @return: The maximum number inside the window at each moving.
+    """
+    def maxSlidingWindow(self, nums, k):
+        # write your code here
+        # 答案数组
+        ans = []
+        # 单调队列
+        qmax = collections.deque()
+        # 队列里元素数量
+        cnt = 0
+        n = len(nums)
+        for i in range(n):
+            # 维护单调性
+            while cnt != 0 and nums[i] > nums[qmax[-1]]:
+                qmax.pop()
+                cnt -= 1
+            # 滑动窗口的长度超过了k 删掉超过的部分
+            if cnt != 0 and i - qmax[0] >= k:
+                qmax.popleft()
+                cnt -= 1
+            qmax.append(i)
+            cnt += 1
+            if i >= k - 1:
+                ans.append(nums[qmax[0]])
+            # print(qmax)
+        return ans
