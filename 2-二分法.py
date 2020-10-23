@@ -106,8 +106,18 @@ print(solution.findPeak([
     ]))
 
 # 二分答案
-# 步骤：
-# 题二：实现sqrt(x)
+# 步骤/ 模版：
+#   start = 1, end = max    1, 找到可行解范围
+#   while start + 1 < end:
+#       mid = start + (end + start)//2    2,猜一个答案
+#       if check mid:                     3, 检验答案
+#           start = mid                   4, 调整搜索范围
+#       else:
+#           end = mid
+# if end: return
+# if start: return
+
+# 题二：实现sqrt(x) x是int
 # 找到第一个a使得a^2 <= x
 
 class Solution:
@@ -127,4 +137,22 @@ class Solution:
             
         if end*end <= x:
             return end 
+        return start
+# 题三：实现sqrt(x) x是float
+
+class Solution:
+    """
+    @param: x: a double
+    @return: the square root of x
+    """
+    def sqrt(self, x):
+        # write your code here
+        start, end = 0, x if x > 1 else 1
+        while start + 1e-12 < end:
+            mid = (start + end) / 2
+            if mid * mid + 1e-12 < x:
+                start = mid
+            else:
+                end = mid
+        
         return start
