@@ -26,7 +26,8 @@ class Solution:
             up = A[mid-1][peak_col]
             down = A[mid+1][peak_col]
             if max(up, down) < peak: # 情况1:上下都比peak小，说明行peak值也是列peak值
-                return peak
+                 # return peak            #返回极值本身
+                   return [mid, peak_col] # 返回坐标
             elif up> down:          # 情况2：上面大于下面，接下来就向上寻找
                 self.binary(A, sky, mid)
             elif down > up:         # 情况3: 下面大于上面，向下寻找
