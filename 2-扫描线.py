@@ -18,7 +18,7 @@ class Solution:
         if not airplanes:
             return 0 
         new_airplanes = []    
-        for e in airplanes:   
+        for e in airplanes:   # 区间拆分   
             new_airplanes.append((e.start, 1))
             new_airplanes.append((e.end, 0))
             
