@@ -156,3 +156,33 @@ class Solution:
                 end = mid
         
         return start
+# 题四： wood cut
+# 满足条件：总共至少k段，使得每段木头最长多少（最大值）
+class Solution:
+    """
+    @param L: Given n pieces of wood with length L[i]
+    @param k: An integer
+    @return: The maximum length of the small pieces
+    """
+    def woodCut(self, L, k):
+        if not L:
+            return 0
+        start, end = 1, max(L) # 每段木头的范围 （注意右侧范围是max(L), 假设k=1, 最大长度就应该是L里面最长的那一个）
+        while start + 1 < end:
+            mid = (end + start)//2     # 猜一个值 mid
+            if self.get_pieces(L, mid) >= k:  # 检验每段木头长mid时，L最多能切多少， 如果>=k，说明mid小了，每段木头还能再切长点
+                start = mid 
+            else:
+                end = mid                    #  如果<k，说明mid大了，每段木头还能再切短点
+        if self.get_pieces(L, end) >= k:   #注意，应该先检验end,因为end一定在start右边，代表end比start更长一点，如果start和end都能满足>=k, 那么应该返回end, 因为要求最大长度，所以end在前
+            return end
+        if self.get_pieces(L, start) >= k:
+            return start
+      
+        return 0
+            
+    def get_pieces(self, L, a):
+        pieces = 0
+        for l in L:
+            pieces += l//a 
+        return pieces
