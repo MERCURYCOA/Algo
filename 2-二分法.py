@@ -186,3 +186,35 @@ class Solution:
         for l in L:
             pieces += l//a 
         return pieces
+# 题五： copy books
+
+class Solution:
+    """
+    @param pages: an array of integers
+    @param k: An integer
+    @return: an integer
+    """
+    def copyBooks(self, pages, k):
+        if not pages:
+            return 0
+            
+        start, end = max(pages), sum(pages)  # 最少时间：一个人复制1本最厚的书。最长时间：1个人复制所有书
+        while start + 1 < end:
+            mid = (start+end)//2
+            if self.get_least_people(pages, mid) <= k:
+                end = mid
+            else:
+                start = mid
+        if self.get_least_people(pages, start) <= k:
+            return start
+        return end
+    
+    def get_least_people(self, pages, time_limit):  # 给定pages和最少时间， 求最少需要几个人
+        people = 1 
+        time_cost = 0 #累计时间
+        for page in pages:
+            if time_cost + page > time_limit:
+                people += 1 
+                time_cost = 0 # 新加一个人，时间累积清零
+            time_cost += page #当前page加给新来的这个人
+        return people 
