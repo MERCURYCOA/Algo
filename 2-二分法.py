@@ -1,3 +1,5 @@
+# 二维二分， 二分答案（找到满足某条件的最大值或最小值）
+
 # 二维二分： 行的二分 O(NlogN)，列的二分O(MlogM)， 行列交叉二分O(N+M)
 # 题一：find peak element II 
 # 方法一：行的二分 
@@ -103,4 +105,26 @@ print(solution.findPeak([
       [2, 8, 7]
     ]))
 
-  
+# 二分答案
+# 步骤：
+# 题二：实现sqrt(x)
+# 找到第一个a使得a^2 <= x
+
+class Solution:
+    """
+    @param x: An integer
+    @return: The sqrt of x
+    """
+    def sqrt(self, x):
+        start, end = 0, x 
+       
+        while start+1 < end:
+            mid = start + (end-start)//2
+            if mid*mid <= x:
+                start = mid
+            else:
+                end = mid 
+            
+        if end*end <= x:
+            return end 
+        return start
