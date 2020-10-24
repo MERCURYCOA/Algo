@@ -1,4 +1,4 @@
-# 前缀和
+# 前缀和 + 字典 求subarray sum ， O(n)
 
 # 题一：找到2个数组的中位数  要求：logn
 
@@ -87,7 +87,7 @@ class Solution:
         return min_size
     
     
-# 题四： 子数组之和为0
+# 题四： 子数组之和为0  #前缀和存入dict
 class Solution:
     """
     @param nums: A list of integers
