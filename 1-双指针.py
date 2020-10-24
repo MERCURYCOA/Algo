@@ -421,3 +421,60 @@ class Solution:
                     righthighest = heights[right]
                     
         return res
+# 题十三：搜索区间 - 连续使用二分法
+# 先二分找到target第一次出现的位置leftBound, 再二分查找leftBound到结尾，找到target最后一次出现的位置
+class Solution:
+    """
+    @param A: an integer sorted array
+    @param target: an integer to be inserted
+    @return: a list of length 2, [index1, index2]
+    """
+    def searchRange(self, A, target):
+        if not A:
+            return [-1,-1]
+            
+        start, end = 0, len(A)-1
+        while start + 1 < end:
+            mid = (start + end)//2 
+            if A[mid] < target:
+                start = mid 
+            else:
+                end = mid 
+        if A[start] == target:
+            leftBound = start
+        elif A[end] == target:
+            leftBound = end 
+        else:
+            return[-1, -1] 
+        
+        start, end = leftBound, len(A)-1 
+        while start + 1 < end:
+            mid = (start + end) // 2 
+            if A[mid] <= target:
+                start = mid 
+            else:
+                end = mid 
+        if A[end] == target:
+            return [leftBound, end]
+        else:
+            return [leftBound, start]
+# 题十四： 排序数组，找到第一个小于等于target的数
+
+def findFirstLess(self, presum, target):
+        m = len(presum)
+        if presum[m-1] < target:
+            return m
+        
+        start, end = 0, m - 1
+        while start + 1 < end:
+            mid = (start + end) / 2
+            if target <= presum[mid]:
+                end = mid 
+            else:
+                start = mid
+        
+        if presum[end] < target: # 前面是二分的模版， 最后的判断条件是根据题意变化的。走到这一步，start肯定是小于等于target的，end不确定，所以先判断presum[end]跟target的大小
+            return end + 1
+        if presum[start] < target: # 如果presum[end] > target, 再判断presum[start]与target的大小
+            return start + 1
+        return 0   # target太小，返回最小的位置
