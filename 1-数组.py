@@ -1,3 +1,4 @@
+# 前缀和
 
 # 题一：找到2个数组的中位数  要求：logn
 
@@ -98,11 +99,11 @@ class Solution:
             return None
         res = []
         sum = 0
-        sums =  {0:-1}
+        sums =  {0:-1}  # {sum : index} 不可以反过来，因为后面需要根据sum求index， 也就是根据key求value， 如果反过来，根据value求key很麻烦
         for i, num in enumerate(nums):  # enumerate 数组index和元素
             sum += num
             if sum in sums:
-                res.append(sums[sum] + 1)  # prefixSum[i]记录A[0]到A[i-1]的和，记得+1
+                res.append(sums[sum] + 1)  # prefixSum[i]记录A[0]到A[i-1]的和，prefixSum数组起始点是index = -1， 所以子数组为0的起点下标要+1
                 res.append(i)
                 break
             sums[sum] = i
