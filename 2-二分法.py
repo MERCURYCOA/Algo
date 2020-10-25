@@ -260,3 +260,26 @@ class Solution:
         if start + n - 1 >= i:                            #  第k大的位置在i右边
             return self.quickSelect(nums, i, end, n - (i-start))
         return nums[j+1]                                  #  第k大的位置就在j和i的中间， 返回中间位置的数 nums[j+i]
+
+    
+# 上面的partition与递归结合，在数组中不断搜索
+# 下面有的想partition， 但是其实是二分法， 找数组中第一个小于等于target位置
+
+def find(self, presum, target): #求在presum中，第一个小于等于target的位置
+        m = len(presum)
+        if presum[m-1] < target:
+            return m
+        
+        start, end = 0, m - 1
+        while start + 1 < end:
+            mid = (start + end) // 2
+            if target <= presum[mid]:
+                end = mid 
+            else:
+                start = mid
+        
+        if presum[end] < target:
+            return end + 1
+        if presum[start] < target:
+            return start + 1
+        return 0
