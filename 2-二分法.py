@@ -219,7 +219,7 @@ class Solution:
             time_cost += page #当前page加给新来的这个人
         return people 
     
-    
+ # 题六：第k大元素   
 # Partition - Quick Select 
 # 先找一个pivot, 把pivot 排在正确的位置，也就是pivot左边的数比pivot大，右边的数比pivot小（因为找的是第k大）
 # 然后判断现在这个pivot的位置是不是k，如果是，皆大欢喜，返回当前pivot的位置，
@@ -264,7 +264,7 @@ class Solution:
     
 # 上面的partition与递归结合，在数组中不断搜索
 # 下面有的想partition， 但是其实是二分法， 找数组中第一个小于等于target位置
-
+# 题七：第一个小于等于target
 def find(self, presum, target): #求在presum中，第一个小于等于target的位置
         m = len(presum)
         if presum[m-1] < target:
@@ -283,3 +283,61 @@ def find(self, presum, target): #求在presum中，第一个小于等于target�
         if presum[start] < target:
             return start + 1
         return 0
+# partition 变形
+# 题八： 摆动排序
+
+class Solution:
+    """
+    @param: nums: A list of integers
+    @return: nothing
+    """
+    def wiggleSort(self, nums):
+        if not nums:
+            return []
+        res=[]  
+        mid = self.partition(nums, 0, len(nums)-1, (len(nums)+1)//2)  # 注意中位数，这里需要左右个数相等或差1， 这里的nums已经被排过了， 左边是小于mid的, 右边是大于mid的， 但不是完全排序
+        for i in range(len(nums)):
+            res.append(mid)
+        if len(nums)%2 == 1:
+            l, r = 0, len(nums)-2
+            for i in range(len(nums)):
+                if nums[i] > mid:
+                    res[r] = nums[i]
+                    r-=2
+                elif nums[i] < mid:
+                    res[l] = nums[i]
+                    l+=2
+        else:
+            l, r = 1, len(nums)-2  # 保证 第一个必须是小的数。 不可以是 l, r = 0, len(nums)-1,这样的话 第一个就成了大的数
+            for i in range(len(nums)):
+                if nums[i] > mid:
+                    res[l] = nums[i]
+                    l+=2
+                elif nums[i] < mid:
+                    res[r] = nums[i]
+                    r-=2
+            
+            
+        for i in range(len(nums)):
+            nums[i] = res[i]
+        return nums
+        
+    def partition(self, nums, start, end, k):
+        if start == end:
+            return nums[start]
+        i, j = start, end 
+        pivot = nums[(start+end)//2]
+        while i <= j:
+            while i <= j and nums[i] < pivot:
+                i += 1 
+            while i <= j and nums[j] > pivot:
+                j -= 1 
+            if i <= j:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1 
+                j -= 1 
+        if start + k - 1 <= j:
+            return self.partition(nums, start, j, k)
+        if start + k - 1 >= i:
+            return self.partition(nums, i, end, k - (i - start))
+        return nums[j+1]
