@@ -1,4 +1,4 @@
-# 二维二分， 二分答案（找到满足某条件的最大值或最小值）
+# 主要内容 ： 二维二分， 二分答案（找到满足某条件的最大值或最小值）， partition (quick select)模版
 
 # 二维二分： 行的二分 O(NlogN)，列的二分O(MlogM)， 行列交叉二分O(N+M)
 # 题一：find peak element II 
