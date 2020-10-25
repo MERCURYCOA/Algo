@@ -1,4 +1,5 @@
 # 前缀和 + 字典 求subarray sum ， O(n)
+# 连续子数组
 
 # 题一：找到2个数组的中位数  要求：logn
 
@@ -133,5 +134,75 @@ class Solution:
                 answer = [left, right]
         
         return answer
+# 题六：连续子数组求和 ， 返回和最大的子数组的起点和终点坐标，如果有相同的最大和，返回坐标字典序最小，假设[0,3]和[1,3]的和都是最大的，返回[0,3]       
+class Solution:
+    """
+    @param: A: An integer array
+    @return: A list of integers includes the index of the first number and the index of the last number
+    """
+    def continuousSubarraySum(self, A):
+        if not A:
+            return []
+            
+        f = [A[0]]
+        start = 0
+        for i in range(1, len(A)):     # f[i]是当前子数组的最大和
+            if f[i-1] + A[i] <= A[i]:  # 如果A[i]大于f[i-1]+A[i], 当前i就是新的子数组的起点，将A[i]存入f[i]
+                f.append(A[i])
+            else:
+                f.append(f[i-1] + A[i])
+        max_value = max(f)
+        end = 0
+        for i in range(len(f)):
+            if f[i] == max_value:    # 遍历f,找到最大和子数组结束的位置
+                end = i 
+                break 
+        start = 0                    # 接下来找起点的位置
+        sum_ = sum(A[:end+1])        # 把元素组A中，end位置之前的所有元素求和，用这个和从A[0]开始减，一直减到这个和等于最大值，说明找到了这个子数组的起点
+        for i in range(0, end+1):
+            if sum_ == max_value:
+                start = i
+                break 
+            sum_ -= A[i]
+            
+        return [start, end]
+# 题七：连续子数组求和
+# 给定一个整数循环数组（头尾相接），请找出一个连续的子数组，使得该子数组的和最大。输出答案时，请分别返回第一个数字和最后一个数字的值。
+# 方法 - 取反：
+# 1， 求最大和 sum1。 
+# 2 求最小和 
+# 3 用数组总和减去最小和就是循环数组的潜在最大和 sum2。 
+# 4 比较sum1和sum2， 返回更大的那一个的起点和终点坐标
+
+# trick: 怎么求最小和？ 将数组A中所有元素取相反数，求新数组的最大和。函数用最大和的函数就可以，参数A取反。
+  @param: A: An integer array
+    @return: A list of integers includes the index of the first number and the index of the last number
+    """
+    def continuousSubarraySumII(self, A):
+        max_start, max_end, max_sum = self.find_maximum_subarray(A)
+        min_start, min_end, min_sum = self.find_maximum_subarray([-a for a in A])
+        min_sum = -min_sum  # *-1 after reuse find maximum array
         
+        total = sum(A)
+        if max_sum >= total - min_sum or min_end - min_start + 1 == len(A):
+            return [max_start, max_end]
+        
+        return [min_end + 1, min_start - 1]
+        
+    def find_maximum_subarray(self, nums):
+        max_sum = -sys.maxsize
+        curt_sum, start = 0, 0
+        max_range = []
+        
+        for index, num in enumerate(nums):
+            if curt_sum < 0:
+                curt_sum = 0
+                start = index
+            curt_sum += num
+            if curt_sum > max_sum:
+                max_sum = curt_sum
+                max_range = [start, index]
+                
+        return max_range[0], max_range[1], max_sum
+
 
