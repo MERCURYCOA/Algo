@@ -285,7 +285,8 @@ def find(self, presum, target): #求在presum中，第一个小于等于target�
         return 0
 # partition 变形
 # 题八： 摆动排序
-
+# 可以用sort,然后相邻互换 复杂度O(nlogn)
+# partition 复杂度 O（n）
 class Solution:
     """
     @param: nums: A list of integers
