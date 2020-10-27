@@ -79,38 +79,70 @@ class Solution:
 # 3， subsets每个元素只能选一次，combination sum每个元素可以重复选。所以搜索的时候从index开始而不是index+1
 
 # 题三：[2,3,6,7]找到所有和为7的数， 可重复使用
-
+# 套用susets模版，只是return条件改成sum(S) == target
+# 剪枝 当前sum(S)+num[i]>target时，break 不用往后看了，后面一定也大于target
 class Solution:
     """
     @param candidates: A list of integers
     @param target: An integer
     @return: A list of lists of integers
     """
-    def combinationSum(self, candidates, target):
-        # write your code here
-        results = []
-        if len(candidates) == 0:
-            return results
+    def combinationSum(self, num, target):
+        if not num or target == None:
+            return []
+        num= sorted(num)    
+        self.res = []
+        self.dfs(num, 0, [], target)
+        return self.res
         
-        candidates = sorted(list(set(candidates)))  # 去重 排序 才能用recursion
-        self.recursion(candidates, target, 0,[],results)
-        return results
-    def recursion(self, candidates, remainTarget, index, current, results):
-        # 递归出口   
-        if remainTarget== 0:
-                results.append(list(current))  # 将list加到list里面，必须用list()
-        # 递归拆解：找到下一个需要加到current里的数
-        for i in range(index, len(candidates)):
-
-            if remainTarget < candidates[i]: # 当前值和之前current里得的数的和超过了target，比如：[2,2,2,2]，退出当前层的recursion函数，这时返回的是current是上一层的,比如：[2,2,2]
+    def dfs(self, num, index, S, target):
+        if sum(S) == target:
+            self.res.append(list(S))
+        
+        for i in range(index, len(num)):
+            if i!= 0 and num[i] == num[i-1] and i>index:    # 去重   # 本题也可以用num = sorted(list(set(num))) 去重，但是combination sumII不可以直接用set去重，因为本题元素可重复用，II中元素不可以重复用。
+                continue
+            if sum(S) + num[i] > target:  # 剪枝
                 break
-            current.append(candidates[i])  # 如果当前值与current里得的数的和没有超过target， 将当前值加入current
-            self.recursion(candidates, remainTarget - candidates[i], i, current, results)  # 下一层recursion的开始index还是i， 因为可以重复使用同一个数字； 
-            # 如果要求不能重复使用数字， i改成i+1
-            current.pop() # 这里去掉current最后一个数，向后查看  比如[2,2,2,2]break之后， 返回的是[2,2,2]，这里去掉最后一个2， 在for循环中向后查看3
-        
+            S.append(num[i])
+            self.dfs(num, i, S, target)
+            S.pop()
+
          
 # 题二： calculate sumII  与I区别，原candidates不需要去重，只需排序，但是求出来的result需要去除， 比如 1' 1'' 1''' 选谁， 标准是需要一个1，选1', 需要2个1， 选1', 1''
+# 方法一：subsets模版
+class Solution:
+    """
+    @param num: Given the candidate numbers
+    @param target: Given the target number
+    @return: All the combinations that sum to target
+    """
+    def combinationSum2(self, num, target):
+        if not num or target == None:
+            return []
+        num = sorted(num)    
+        self.res = []
+        self.dfs(num, 0, [], target)
+        return self.res
+        
+    def dfs(self, num, index, S, target):
+        if sum(S) == target:
+            self.res.append(list(S))
+        
+        for i in range(index, len(num)):
+            if i!= 0 and num[i] == num[i-1] and i>index:    # 去重 # 不可以直接用set去重，因为本题的元素不能重复用，假设有2个1，那么1最多用2次，如果用set去重，就变成只有1个1了
+                                                            # 这里去重 去的是同一个index（即相同offset），就是从1开始的S，向后移动时，又碰到一个1，就不可以从再算一次从1开始的S
+                                                            # 但是，在同一offset下，求S的和，是不用去重的。S=[1,1,2]这里本来就要2个1，所以不用去掉第2个1，去掉就不对了
+                                                             #符合上述if判断条件， continue，继续向后查看， 注意不是break, 因为后面的可能有2，3...
+                continue
+            if sum(S) + num[i] > target:
+                break
+            S.append(num[i])
+            self.dfs(num, i+1, S, target)
+            S.pop()
+ 
+# 方法二: 引入remainTarget = target - 当前sum(S)， 当remainTarget=0时，就让S加入res。
+           
 class Solution:
     """
     @param num: Given the candidate numbers
@@ -141,8 +173,7 @@ class Solution:
         for i in range(index, len(candidatesNew)):
             if i!= 0 and candidatesNew[i] == candidatesNew[i-1] and i>index:  
                 continue
-            #results去重， 假设需要两个1， 但是candidaes有1', 1'' ,1''', 在选1‘， 1’‘时可以加进去，之后有current.pop()操作，然后index到1’‘’， current变成[1', 1'''],这是不允许的
-            #这时 index 是 1‘， i-1是1’‘， i是1''', 符合上述if判断条件， continue，继续向后查看， 注意不是break, 因为后面的可能有2，3...
+           
             # 剪枝
             if remainTarget < candidatesNew[i]:
                 break
@@ -150,6 +181,9 @@ class Solution:
             current.append(candidatesNew[i])
             self.dfs(candidatesNew, i+1, current, remainTarget - candidatesNew[i], results)
             current.pop()
+
+            
+
 # 题三：字符串解码 expression expanding
 #字符串递归
 class Solution:
