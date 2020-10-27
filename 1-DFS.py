@@ -1,7 +1,9 @@
 # DFS 时间复杂度2^n
 # DFS 有 数组的和图的（树）
 
-# 题一：subsets I - 数组深度搜索的基础
+# 数组dfs题型一：subsets 是数组深度搜索的基础
+
+# 题一：subsets I 
 # 核心：递归
 # 作为模版记住
 
@@ -69,7 +71,15 @@ class Solution:
             self.dfs(nums, i + 1, S, res) 
             S.pop()
 
-# 题三：[2,3,6,7]找到所有和为7的数， 客重复使用
+# 数组深度搜索题型二：combination sum 子数组和
+
+# 与subsets题的区别
+# 1， 多了限制，sum
+# 2， sum可能有重复，去重
+# 3， subsets每个元素只能选一次，combination sum每个元素可以重复选。所以搜索的时候从index开始而不是index+1
+
+# 题三：[2,3,6,7]找到所有和为7的数， 可重复使用
+
 class Solution:
     """
     @param candidates: A list of integers
