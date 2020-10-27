@@ -1,6 +1,56 @@
 # DFS 时间复杂度2^n
+# DFS 有 数组的和图的（树）
 
-# 题一：[2,3,6,7]找到所有和为7的数， 客重复使用
+# 题一：subsets I - 数组深度搜索的基础
+# 核心：递归
+# 作为模版记住
+
+# 方法一：
+class Solution:
+    """
+    @param nums: A set of numbers
+    @return: A list of lists
+    """
+    def subsets(self, nums):
+        nums = sorted(nums)
+        res = []
+        self.dfs(nums, 0, [], res)
+        return res
+        
+    def dfs(self, nums, index, S, res):
+        res.append(list(S))
+        
+        for i in range(index, len(nums)):
+            S.append(nums[i])
+            self.dfs(nums, i + 1, S, res)  # 每一层返回之后，将当前S的最后元素pop出来， 一定要记得，这时还在上一层递归的for循环里，如果i+1<len(nums),  再次进入 for循环，如果进不去，当前dfs返回
+            S.pop()
+# [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
+
+# 方法二：
+class Solution:
+    def subsets(self, nums):
+        self.results = []
+        self.search(sorted(nums), [], 0)
+        return self.results 
+    
+    def search(self, nums, S, index):
+        if index == len(nums):
+            self.results.append(list(S))
+            return
+        
+        S.append(nums[index])
+        self.search(nums, S, index + 1)  # 从0位置开始，先全都加进来，然后pop最后一个，看是否还能加进来， 一直这样pop，然后搜索能加进来,知道S pop成空时，移动到1位置，从1位置开始，向后每个元素加进来，再从最后pop
+        S.pop()
+        self.search(nums, S, index + 1)
+
+solution = Solution()
+print(solution.subsets([1,2,3]))
+# [[1, 2, 3], [1, 2], [1, 3], [1], [2, 3], [2], [3], []]
+
+# 题二：subsets II  去重
+
+
+# 题三：[2,3,6,7]找到所有和为7的数， 客重复使用
 class Solution:
     """
     @param candidates: A list of integers
