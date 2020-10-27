@@ -48,7 +48,26 @@ print(solution.subsets([1,2,3]))
 # [[1, 2, 3], [1, 2], [1, 3], [1], [2, 3], [2], [3], []]
 
 # 题二：subsets II  去重
-
+class Solution:
+    """
+    @param nums: A set of numbers.
+    @return: A list of lists. All valid subsets.
+    """
+    def subsetsWithDup(self, nums):
+        nums = sorted(nums)
+        res = []
+        self.dfs(nums, 0, [], res)
+        return res
+        
+    def dfs(self, nums, index, S, res):
+        res.append(list(S))
+        
+        for i in range(index, len(nums)):
+            if i != index and nums[i] == nums[i-1]:  # 判断当前i，如果i不是起点，且num[i] = nums[i-1]说明当前为重复元素，需要跳过去
+                continue
+            S.append(nums[i])
+            self.dfs(nums, i + 1, S, res) 
+            S.pop()
 
 # 题三：[2,3,6,7]找到所有和为7的数， 客重复使用
 class Solution:
