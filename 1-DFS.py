@@ -1,5 +1,5 @@
 # DFS 时间复杂度2^n
-# DFS 有 数组的和图的（树）
+# DFS 有 数组的， 字符串的，和图的（树）
 
 # 数组dfs题型一：subsets 是数组深度搜索的基础
 
@@ -109,7 +109,7 @@ class Solution:
             S.pop()
 
          
-# 题二： calculate sumII  与I区别，原candidates不需要去重，只需排序，但是求出来的result需要去除， 比如 1' 1'' 1''' 选谁， 标准是需要一个1，选1', 需要2个1， 选1', 1''
+# 题四： calculate sumII  与I区别，原candidates不需要去重，只需排序，但是求出来的result需要去除， 比如 1' 1'' 1''' 选谁， 标准是需要一个1，选1', 需要2个1， 选1', 1''
 # 方法一：subsets模版
 class Solution:
     """
@@ -183,7 +183,35 @@ class Solution:
             current.pop()
 
             
+# 题五：分割回文串
+# 字符串dfs - 想成字符与字符中间有分割线，a| b| b|a, 假设分割线1,2,3， 对字符串abba的分割就是对1,2,3的任意组合，所以是dfs
+# 再一次理解dfs, （第1层）对abba （i可以取1，2，3，4）， i=1时就是在第一个元素a后分割，将‘a’加入stringlist，然后将其后元素bba作为s进行dfs递归；（第2层）对bba（i可以取1,2,3），i=1时就是在元素b后分割，将‘b’加入stringlist, 然后将其后元素ba作为s进行dfs递归；
+# （第3层）对ba(i可以取1，2)，i=1时就是在b后分割， 将‘b’加入stringlist, 将其后元素a进行dfs递归； （第4层）对a（i只能取1），i=1时就是在a出分割，将‘a’加入stringlist, 将其后“”进行dfs递归；（最后一层）就到了递归的出口,将当前stringlist=['a', 'b', 'b', 'a']加入res
+# 从最后一层返回到第4层， i=1的循环还没完，还有stringlist.pop(), stringlist变成['a', 'b','b'], i只有一个值，刚刚取过了，这一层再返回第3层, 当前层i=1的循环还没完，还有stringlist.pop(), stringlist变成['a', 'b']，i向后走到2， i=2就是在第二个元素a后面分割，这一层加到stringlist里面的本来应该是'ba',但是‘ba’不是回文，所以不能加进stringlist,i无法再进for循环，i不能等于3，也就无法走到递归出口，无法return,也就不用pop然后返回第2层；
+# 第2层i=1的循环还没走完，stringlist.pop(),stringlist变成['a'], 继续for循环，i=2, 就是在bba的第2个元素后分割，也就是‘bb’,判断'bb'是回文，加入stringlist,stringlist变成['a', 'bb'],将其后元素继续dfs递归，a作为s进入递归，判断‘a’是回文，将‘a’加入stringlist, 变成['a', 'bb', 'a'], 将a后面的""放进dfs递归，找到出口，将当前stringlist放到res里。返回当前层i =2, stringlist.pop(), 变成['a', 'bb']。返回当前层i=1, stringlist.pop(), 变成['a']
+# 第1层的i=1还没走完，stringlist.pop(),stringlist变成[]; i=2,就是在第2个元素分割即‘ab’, 不是回文，不加入stringlist,也不用pop; i=3, 分割aab, 不是回文; i=4, abba, 是回文， stringlist=['abba'],将其后""加入dfs递归，找到出口，将当前stringlist加入res， 返回当前层i=4， stringlist.pop(), stringlist = [] ， 完结。
 
+class Solution:
+
+    def partition(self, s):
+        results = []
+        self.dfs(s, [], results)
+        return results
+    
+    def dfs(self, s, stringlist, results):
+        if len(s) == 0:         # 递归的出口   # 因为s起点在一点点向后移动，s的长度在缩短，说明分割线在向后移动，当len(s)=0时，说明已经分割完了，且每个部分都是回文
+            results.append(list(stringlist))
+            return
+            
+        for i in range(1, len(s) + 1):  # 从1开始，因为要取得前i个字符，从0开始就取不到了
+            prefix = s[:i]
+            if self.is_palindrome(prefix): # 只有回文才能继续
+                stringlist.append(prefix)
+                self.dfs(s[i:], stringlist, results)  # 这里的offset是s[i:]，起点从i开始
+                stringlist.pop()
+
+    def is_palindrome(self, s):
+        return s == s[::-1]
 # 题三：字符串解码 expression expanding
 #字符串递归
 class Solution:
