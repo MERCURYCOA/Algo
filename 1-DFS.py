@@ -1,9 +1,10 @@
 # 通用的DFS时间复杂度计算公式，O(答案个数 * 构造每个答案的时间)
 # DFS 时间复杂度2^n, 组合问题复杂度与n!相关
-# DFS 有 数组的， 字符串的，和图的（树）
+# DFS 有 数组的， 字符串的，（组合问题，排列问题）和图的（树）
+# 模版必背
 
 # 数组dfs题型一：subsets 是数组深度搜索的基础
-
+# 组合问题
 # 题一：subsets I 
 # 核心：递归
 # 作为模版记住
@@ -80,6 +81,7 @@ class Solution:
 # 3， subsets每个元素只能选一次，combination sum每个元素可以重复选。所以搜索的时候从index开始而不是index+1
 
 # 题三：[2,3,6,7]找到所有和为7的数， 可重复使用
+# 组合问题
 # 套用susets模版，只是return条件改成sum(S) == target
 # 剪枝 当前sum(S)+num[i]>target时，break 不用往后看了，后面一定也大于target
 class Solution:
@@ -111,6 +113,7 @@ class Solution:
 
          
 # 题四： calculate sumII  与I区别，原candidates不需要去重，只需排序，但是求出来的result需要去除， 比如 1' 1'' 1''' 选谁， 标准是需要一个1，选1', 需要2个1， 选1', 1''
+# 组合问题
 # 方法一：subsets模版
 class Solution:
     """
@@ -184,7 +187,7 @@ class Solution:
             current.pop()
 
             
-# 题五：分割回文串
+# 题五：分割回文串 （组合问题）
 # 字符串dfs - 想成字符与字符中间有分割线，a| b| b|a, 假设分割线1,2,3， 对字符串abba的分割就是对1,2,3的任意组合，所以是dfs
 # 再一次理解dfs, （第1层）对abba （i可以取1，2，3，4）， i=1时就是在第一个元素a后分割，将‘a’加入stringlist，然后将其后元素bba作为s进行dfs递归；（第2层）对bba（i可以取1,2,3），i=1时就是在元素b后分割，将‘b’加入stringlist, 然后将其后元素ba作为s进行dfs递归；
 # （第3层）对ba(i可以取1，2)，i=1时就是在b后分割， 将‘b’加入stringlist, 将其后元素a进行dfs递归； （第4层）对a（i只能取1），i=1时就是在a出分割，将‘a’加入stringlist, 将其后“”进行dfs递归；（最后一层）就到了递归的出口,将当前stringlist=['a', 'b', 'b', 'a']加入res
@@ -213,7 +216,38 @@ class Solution:
 
     def is_palindrome(self, s):
         return s == s[::-1]
-# 题三：字符串解码 expression expanding
+# 题六：全排列  （排列问题）
+# 无重复元素
+# []->[1]->[1,2]->[1,2,3]return->[1,2] -> [1] -> [1,3]->[1,3,2]return->[1,3]->[1]->[]->[2]->[2,1]->[2,1,3]return->[2,1]->[2,3]->[2,3,1]return->[2,3]->[2]->[]->[3]->[3,1]->[3,1,2]return->[3,1]->[3]->[3,2]->[3,2,1]return
+
+class Solution:
+    """
+    @param: nums: A list of integers.
+    @return: A list of permutations.
+    """
+    def permute(self, nums):
+        if not nums:
+            return [[]]
+            
+        res = []
+        self.dfs(nums, [], set(), res)
+        return res 
+        
+    def dfs(self, nums, permutation, visited, res):
+        if len(permutation) == len(nums):  # 位置占满，加到res， 
+            res.append(list(permutation))
+            return 
+        for num in nums:  # 每个位置可能取到所有的元素，所以要对全nums进行for 循环
+            if num in visited:  # 前面取过的，在当前位置不能再取
+                continue 
+            
+            permutation.append(num)
+            visited.add(num)
+            self.dfs(nums, permutation, visited, res)
+            permutation.pop()  # pop最后一个元素
+            visited.remove(num)  # remove当前的num # 注意这pop和remove的一定是删除的同一个元素，只是函数不同
+
+    # 题三：字符串解码 expression expanding
 #字符串递归
 class Solution:
     """
