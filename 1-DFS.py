@@ -246,7 +246,41 @@ class Solution:
             self.dfs(nums, permutation, visited, res)
             permutation.pop()  # pop最后一个元素
             visited.remove(num)  # remove当前的num # 注意这pop和remove的一定是删除的同一个元素，只是函数不同
+            
+# 题七：全排列 （有重复元素）
+# 关键：怎么处理重复元素。如果用题六的解法，只用一个set，显然无法满足重复元素排列。比如[1,1,2], 用set就会把第二个1跳过，是不对的。
+# 正确的方法是，用True/False 数组表示每个元素是否在当前排列被访问，假设【1，1，2】, boolean数组[False, False, False] 两个1不会被互相影响，前面的1被访问，变成true，第2个1还是false,还可以用
+# 但是boolean数组无法解决 offset向后移，碰到相同元素的问题。这时就单独判断 [nums[i] == nums[i - 1] and self.visited[i - 1]
 
+class Solution:
+    """
+    @param: :  A list of integers
+    @return: A list of unique permutations
+    """
+
+    def permuteUnique(self, nums):
+        self.results = []
+        self.visited = {i: False for i in range(len(nums))}
+        self.dfs([], sorted(nums))
+        return self.results
+        
+    def dfs(self, path, nums) :
+        if len(path) == len(nums) :
+            self.results.append(path[:])
+            return
+        
+        for i in range(len(nums)) :
+            if self.visited[i] :
+                continue
+            
+            if i != 0 and nums[i] == nums[i - 1] and self.visited[i - 1]:
+                continue
+            
+            self.visited[i] = True
+            path.append(nums[i])
+            self.dfs(path, nums)
+            path.pop()
+            self.visited[i] = False
     # 题三：字符串解码 expression expanding
 #字符串递归
 class Solution:
