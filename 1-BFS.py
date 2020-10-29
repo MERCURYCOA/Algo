@@ -84,7 +84,20 @@ class Solution:
 
 # 题三：二叉树序列化和反序列化：
 # 序列化的意思是把各种object（树，图，integer,bouble等）变成string，以方便网络传输和内存变外存，外存恢复内存。 这里是把树结构变成[1,2,3,#,4]的形式
-# 关键 处理None节点
+
+# 序列化：
+# 将根加入队列。
+# 每取出队首元素，将左右子节点加入队尾，直到队列为空。
+# 将BFS序转换为题目要求的字符串。
+
+# 反序列化：
+# 将data分割成节点值。
+# 令root为第一个值对应的节点。
+# 将root加入队列。
+# 每当队列非空：
+# 令level_size等于当前队列节点个数。
+# 执行level_size次，从队列中取出节点，并将接下来两个节点值连接到节点上。
+# 返回root。
 class TreeNode:
     def __init__(self, val):
         self.val = val
@@ -117,34 +130,43 @@ class Solution:
         return result
    
     def deserialize(self, data):
-        # write your code here
         if not data:
-            return None
-    
-        root = TreeNode(data[0])
-        queue = deque([root])
-        pos = 1
-        while queue and pos < len(data)-1:
-            node = queue.popleft()
-            if data[pos] == '#':
-                node.left = None
-            else:
-                node.left = TreeNode(data[pos])
-                queue.append(node.left)
-            if data[pos +1] == '#':
-                node.right = None
-            else:
-                node.right = TreeNode(data[pos+1])
-                queue.append(node.right)
-            pos += 2
+            return None 
+        n = len(data)
+        root = self.get_treenode(data[0])
+        queue = collections.deque([root])
+        pointer = 1
         
-        if queue and pos == len(data)-1:
-            node = queue.popleft()
-            if data[pos] == '#':
-                node.left = None
+        # 分层进行宽度优先搜索
+        # 获得该层的节点个数level_size，并将接下来level_size * 2个值连接到节点上
+        while queue:
+            if pointer < n:
+                level_size = len(queue)
+                for _ in range(level_size):
+                    node = queue.popleft()
+                    
+                    node.left = self.get_treenode(data[pointer])
+                    if node.left is not None:
+                        queue.append(node.left)
+                    pointer += 1
+                    if pointer == n:
+                        break
+                    
+                    node.right = self.get_treenode(data[pointer])
+                    if node.right is not None:
+                        queue.append(node.right)
+                    pointer += 1
+                    if pointer == n:
+                        break
             else:
-                node.left = TreeNode(data[pos])
+                break
         return root
+    
+    def get_treenode(self, s):
+        if s == '#':
+            return None
+        else:
+            return TreeNode(int(s))
 # 题四：判断图为树  
 # 条件： 节点数n，边的个数必须为n-1； 各点联通
 # 代码的体现： len(edges) == n-1, 访问过的节点数==n， 用queue储存当前节点所连接的点并且还没被访问到，用visited数组记录访问过的节点，最后判断len(visited) == n
