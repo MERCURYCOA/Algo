@@ -2,6 +2,18 @@
 # 内容二：图的宽度搜索（拓扑排序 Topological Sorting）  - 标配：hashmap
 # 棋盘上的宽搜 BFS
 
+# 什么时候应该使用BFS?
+
+# 1， 图的遍历 Traversal in Graph
+#    • 层级遍历 Level Order Traversal
+#    • 由点及面 Connected Component
+#    • 拓扑排序 Topological Sorting
+
+# 2， 最短路径 Shortest Path in Simple Graph • 仅限简单图求最短路径
+#    • 即，图中每条边长度都是1，且没有方向
+# 注意：最长路径用动态规划求解
+
+
 # 题一：binary tree level order traversal  #因为是level order, 所以每一层都得是一个list,不能是把所有integer放进一个list里面
 # 用deque, popleft()时间复杂度O(1)
 
