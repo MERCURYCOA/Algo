@@ -34,10 +34,10 @@ class Solution:
             return []
             
         result = []
-        queue = deque([root])
+        queue = deque([root])  # 注意不能直接deque(root), root应该是list才能在下面进行for循环
         while queue:
             level = []
-            level_size = len(queue)
+            level_size = len(queue)  # 用level size控制下一层pop出来几个node
             for _ in range(level_size):
                 node = queue.popleft()
                 level.append(node.val)
@@ -48,33 +48,7 @@ class Solution:
             result.append(level)
         return result
    
-# 用两个list
-class TreeNode:
-    def __init__(self, val):
-        self.val = val
-        self.left, self.right = None, None
-class Solution:
-    """
-    @param root: A Tree
-    @return: Level order a list of lists of integer
-    """
-    def levelOrder(self, root):
-        # write your code here
-        if not root:
-            return []
-            
-        result = []
-        queue = [root]
-        while queue:
-            level = []
-            result.append([node.val for node in queue])
-            for node in queue:
-                if node.left:
-                    level.append(node.left)
-                if node.right:
-                    level.append(node.right)
-            queue = level
-        return result
+
 # 题二： 跟题一倒过来，从最底层到root进行level order traversal
 class TreeNode:
     def __init__(self, val):
