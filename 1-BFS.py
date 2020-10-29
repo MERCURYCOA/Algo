@@ -1,4 +1,6 @@
-# 内容一：树的宽度搜索  - 标配：queue  # 内容二：图的宽度搜索  - 标配：hashmap
+# 内容一：二叉树的宽度搜索  - 标配：queue  
+# 内容二：图的宽度搜索（拓扑排序 Topological Sorting）  - 标配：hashmap
+# 棋盘上的宽搜 BFS
 
 # 题一：binary tree level order traversal  #因为是level order, 所以每一层都得是一个list,不能是把所有integer放进一个list里面
 # 用deque, popleft()时间复杂度O(1)
