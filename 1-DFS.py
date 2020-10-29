@@ -1,6 +1,6 @@
 # 通用的DFS时间复杂度计算公式，O(答案个数 * 构造每个答案的时间)
 # DFS 时间复杂度2^n, 组合问题复杂度与n!相关
-# DFS 有 数组的， 字符串的，（组合问题，排列问题）和图的（树）
+# DFS 有 数组的， 字符串的，（组合问题，排列问题）和二叉树的遍历
 # 模版必背
 
 # 数组dfs题型一：subsets 是数组深度搜索的基础
@@ -281,7 +281,7 @@ class Solution:
             self.dfs(path, nums)
             path.pop()
             self.visited[i] = False
-    # 题三：字符串解码 expression expanding
+# 题八：字符串解码 expression expanding
 #字符串递归
 class Solution:
     """
@@ -309,3 +309,72 @@ class Solution:
                 res += s[index]
             index = 1 + max(index, self.right)
         return res
+# 二叉树3种遍历+迭代器 （非递归，stack）  -- 必背
+# 题九 二叉树迭代器
+# 方法一：
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+
+Example of iterate a tree:
+iterator = BSTIterator(root)
+while iterator.hasNext():
+    node = iterator.next()
+    do something for node 
+"""
+
+
+class BSTIterator:
+    """
+    @param: root: The root of binary tree.
+    """
+    def __init__(self, root):
+        self.stack = []
+        while root:      # 初始化就可以将root开始的所有左儿子加入stack
+            self.stack.append(root)
+            root = root.left
+
+    """
+    @return: True if there has next node, or false
+    """
+    def hasNext(self):
+        return bool(self.stack)
+    """
+    @return: return next node
+    """
+    def next(self):   # 这里不可以用while stack, 判断stack是否存在已经在hasNext判断了，如果这里用while， 就不是迭代器一步一走了，就停不下来了
+        res = node = self.stack.pop()
+        if node.right:          # 判断node.right是否存在，存在就把node.right这一支的left都加进stack
+            node = node.right
+            while node:
+                self.stack.append(node)
+                node = node.left
+       
+        return res  # 注意：这里返回的是当前pop出的节点，node作为指针，已经从351行开始指向其他节点了，所以如果return node 就不对了，所以让res固定当前pop出的那个节点
+# 方法二： “一路向左” - 将向左找到所有左儿子写成一个函数，因为这样过程被重复使用了 
+
+class BSTIterator(object):
+    def __init__(self, root):
+        self.stack = []
+        self.pushLeft(root)
+
+    def next(self):
+        node = self.stack.pop()
+        self.pushLeft(node.right)
+        return node.val
+
+    def hasNext(self):
+        return self.stack != []
+    
+    def pushLeft(self, node):
+        while node:
+            self.stack.append(node)
+            node = node.left
+            
+            
+# 题十：前序遍历
+# 题十一： 中序遍历
+# 题十二： 后序遍历  压入栈内的是（node, time）， 第一层被弹出是需要把右边的孩子加入stack,第二次弹出是把自己加到res里，所以当time=1时，就不要再向右找了，之前找过了，直接将node加入res就可以了， 不然就死循环了
