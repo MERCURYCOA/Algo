@@ -237,6 +237,7 @@ class Solution:
     
 # 题五： copy graph  # 注意：这里的copy指，node需要全新地址的node, 只有数跟之前的一样
 # 三步走： BFS copy所有节点， connect新的所有节点
+# 记住：图BFS遍历的模版
 from collections import deque
 
 class UndirectedGraphNode:
@@ -249,12 +250,12 @@ class Solution:
     @param node: A undirected graph node
     @return: A undirected graph node
     """
-    def getNodes(self, node): # 通过BFS遍历所有节点，这里返回的节点还是old node
+    def getNodes(self, node): # 通过BFS遍历所有节点，这里返回的节点还是old node  # 图遍历的模版 记住
         queue = deque([node])
         result = set()
         while queue:
             n = queue.popleft()
-            result.add(n)
+            result.add(n)  # 注意参数变多，容易混淆，记得单独保留头节点， 因为指针会走掉
             queue += [neighbor for neighbor in n.neighbors if neighbor not in result]
         return result
     
