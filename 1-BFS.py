@@ -413,6 +413,7 @@ class Solution:
 # 步骤： 1， build graph, 将给出的seq建成图，其实就是字典{node: neighbors[]}
 # 2, 找到每个节点的入度
 # 3， 通过topological sort对节点进行序列化， 判断order是否唯一，如果唯一，order长度是否等于org, 如果长度等于，判断是不是完全相等
+# 方法一： 分开写
 class Solution:
     """
     @param org: a permutation of the integers from 1 to n
@@ -426,7 +427,8 @@ class Solution:
         return topo_order == org  # 判断order 和 org是不是相等
         
     def build_graph(self, seqs):
-        graph = {}
+        graph = {}          # 构建graph 不可以用for k,v in seqs: graph[k].append(v)    因为这里的seq不是边的关系，是拓扑的关系，例如 输入:org = [4,1,5,2,6,3], seqs = [[5,2,6,3],[4,1,5,2]]
+                            # 记住多种构建图的方法，应对不同题目条件
         for seq in seqs:
             for node in seq:
                 if node not in graph:
@@ -464,7 +466,55 @@ class Solution:
         if len(order) == len(graph):
             return order 
         return None
- 
+# 方法二：合起来
+import collections
+class Solution:
+    """
+    @param org: a permutation of the integers from 1 to n
+    @param seqs: a list of sequences
+    @return: true if it can be reconstructed only one or false
+    """
+    def sequenceReconstruction(self, org, seqs):
+        graph = {}
+        for seq in seqs:
+            for node in seq:
+                if node not in graph:
+                    graph[node] = set()
+                    
+        for seq in seqs:
+            for i in range(1, len(seq)):
+                graph[seq[i-1]].add(seq[i])
+                
+        indegree = self.get_indegree(graph)
+        queue = []
+        for node in graph:
+            if indegree[node] == 0:
+                queue.append(node)
+                
+        order = []
+        while queue:
+            if len(queue) > 1:   #如果queue里面同时有两个及以上节点，说明同一层有两个及以上节点，也就是有两个及以上路径，那么order一定不唯一，所以直接返回None
+                return False
+            node = queue.pop()
+            order.append(node)
+            for neighbor in graph[node]:
+                indegree[neighbor] -= 1 
+                if indegree[neighbor] == 0:
+                    queue.append(neighbor)
+        if len(order) == len(graph):
+            return order == org 
+        else:
+            return False
+            
+        
+    def get_indegree(self, graph):
+        indegrees = {node: 0 for node in graph}
+        for node in graph.keys():
+            for neighbor in graph[node]:
+                indegrees[neighbor] += 1 
+        return indegrees    
+        
+   
 # 题八：岛的个数： 0是海， 1是岛， 两个1连在一起是一个岛
 from collections import deque
 
