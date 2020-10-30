@@ -285,6 +285,9 @@ class Solution:
 # 就最朴素的图bfs deque + set
 # 找到就返回，一定是最短路径，不需要额外做什么
 
+# 此题不需要层次遍历
+# follow up: 如何找所有最近的value=target的点? 用层次遍历
+
 """
 Definition for a undirected graph node
 class UndirectedGraphNode:
@@ -320,7 +323,7 @@ class Solution:
                     visited.add(neighbor)
             q.popleft()
         return None
-    
+
     
 # 题七： 拓扑排序 - 针对给定的有向图找到任意一种拓扑排序的顺序.
 #给定一个有向图，图节点的拓扑排序定义如下:
