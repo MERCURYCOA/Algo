@@ -79,8 +79,7 @@ class Solution:
                     queue.append(node.right)
             result.append(level)
         return list(reversed(result))  #注意不要用list.reverse(),那样返回为空
-                level.append(node.val)
-                level.append(node.val)
+                
 # 题三：二叉树的锯齿形层次遍历
 """
 Definition of TreeNode:
@@ -116,7 +115,7 @@ class Solution:
                 res.append(level)
             else: 
                 res.append(list(reversed(level)))  # 此题最重要警示： reversed(A)不是list， 需要强转成list。
-            count = bool(1-count) 
+            count = bool(1-count)      # bool取反
             
         return res
                 
