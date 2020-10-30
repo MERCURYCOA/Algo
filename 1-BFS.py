@@ -280,8 +280,49 @@ class Solution:
         return mapping[root]                             # 现在要给new_node0找new_neighbor, 因为old_node0的neighbor是old_node_2,所以new_node0的neighbor一定是new_old0
                                                          # 但是怎么找到new_node2呢？已知 old_node0的neighbor:old_node2,并且mapping[old_node2] = new_code2
                                                          # 所以当前new_code0的new_neighbor 是 mapping[neighbor]，本质上也就是mapping[old_node2]
+# 题六：   搜索图中节点
+# 给定一张 无向图，一个 节点 以及一个 目标值，返回距离这个节点最近 且 值为目标值的节点
+# 就最朴素的图bfs deque + set
+# 找到就返回，一定是最短路径，不需要额外做什么
+
+"""
+Definition for a undirected graph node
+class UndirectedGraphNode:
+    def __init__(self, x):
+        self.label = x
+        self.neighbors = []
+"""
+
+
+
+class Solution:
+    """
+    @param: graph: a list of Undirected graph node
+    @param: values: a hash mapping, <UndirectedGraphNode, (int)value>
+    @param: node: an Undirected graph node
+    @param: target: An integer
+    @return: a node
+    """
+    def searchNode(self, graph, values, node, target):
+        if len(graph)==0 or len(values)==0:
+            return None
+        q=collections.deque()
+        visited=set()
+        q.append(node)
+        visited.add(node)
+        while len(q):
+            if values[q[0]] == target:#找到结果
+                return q[0];
+            for neighbor in q[0].neighbors:#遍历每个点的所有边
+                #判断此点是否出现过
+                if neighbor not in Set:
+                    q.append(neighbor)
+                    visited.add(neighbor)
+            q.popleft()
+        return None
     
-# 题六： 拓扑排序 - 针对给定的有向图找到任意一种拓扑排序的顺序.
+    
+# 题七： 拓扑排序 - 针对给定的有向图找到任意一种拓扑排序的顺序.
 #给定一个有向图，图节点的拓扑排序定义如下:
 #对于图中的每一条有向边 A -> B , 在拓扑排序中A一定在B之前.
 #拓扑排序中的第一个节点可以是图中的任何一个没有其他节点指向它的节点.
