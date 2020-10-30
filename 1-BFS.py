@@ -369,7 +369,44 @@ class Solution:
                 #这里统计每个节点的neighbor节点的入度，就是计算每个节点被多少个节点
                 #入度为0的节点都可以作为开头节点
         return node_to_indegree
-# 题七： 重构序列 - 判断给出的org是不是seq可以唯一重构的图
+# 题八：课程表I - 拓扑排序应用
+# 一个合法的选课序列就是一个拓扑序，拓扑序是指一个满足有向图上，不存在一条边出节点在入节点后的线性序列，如果有向图中有环，就不存在拓扑序。可以通过拓扑排序算法来得到拓扑序，以及判断是否存在环。
+# 如果拓扑序列个数等于节点数，代表该有向图无环，且存在拓扑序。
+import collections
+class Solution:
+    """
+    @param: numCourses: a total of n courses
+    @param: prerequisites: a list of prerequisite pairs
+    @return: true if can finish all courses or false
+    """
+    def canFinish(self, numCourses, prerequisites):
+        graph = {i:[] for i in range(numCourses)}
+        for k,v in prerequisites:
+            graph[k].append(v)
+        indegree =[0]*numCourses
+        for k, v in prerequisites:
+            indegree[v] += 1 
+        queue = collections.deque()    
+        start_nodes = []
+        for i in range(numCourses):
+            if indegree[i] == 0:
+                queue.append(i)
+        num_chosed = 0    # 代表访问过的节点拓扑节点个数， 也可以建立一个数组，然后比较数组长度和numCourses。   
+        while queue:
+            n = queue.popleft()
+            num_chosed += 1
+            for neighbor in graph[n]:
+                indegree[neighbor] -= 1 
+                if indegree[neighbor] == 0:
+                    queue.append(neighbor)
+                    
+        return num_chosed == numCourses
+
+            
+            
+            
+
+    # 题七： 重构序列 - 判断给出的org是不是seq可以唯一重构的图
 # 步骤： 1， build graph, 将给出的seq建成图，其实就是字典{node: neighbors[]}
 # 2, 找到每个节点的入度
 # 3， 通过topological sort对节点进行序列化， 判断order是否唯一，如果唯一，order长度是否等于org, 如果长度等于，判断是不是完全相等
