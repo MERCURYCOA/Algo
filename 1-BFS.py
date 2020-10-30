@@ -221,13 +221,13 @@ class Solution:
         # write your code here
         if len(edges) != n-1:
             return False
-        neighbors = collections.defaultdict(list)
+        neighbors = collections.defaultdict(list)  # 记住：怎么将edges建成字典形式的图
         for k,v in edges:
             neighbors[k].append(v)
             neighbors[v].append(k)
         
         queue = [0]
-        visited = set()  # 必须是set， 不可以是[]
+        visited = set()  # 必须是set， 不可以是[]， 如果用[],会有元素被多次访问而多次进入visited,这样len(visited)就无法判断访问过的unique节点个数
         while queue:
             cur = queue.pop()
             visited.add(cur)
