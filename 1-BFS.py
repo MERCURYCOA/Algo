@@ -251,7 +251,7 @@ class Solution:
     """
     def getNodes(self, node): # 通过BFS遍历所有节点，这里返回的节点还是old node
         queue = deque([node])
-        result = set([node])
+        result = set()
         while queue:
             n = queue.popleft()
             result.add(n)
