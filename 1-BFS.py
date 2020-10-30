@@ -81,6 +81,46 @@ class Solution:
         return list(reversed(result))  #注意不要用list.reverse(),那样返回为空
                 level.append(node.val)
                 level.append(node.val)
+# 题三：二叉树的锯齿形层次遍历
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+from collections import deque
+class Solution:
+    """
+    @param root: A Tree
+    @return: A list of lists of integer include the zigzag level order traversal of its nodes' values.
+    """
+    def zigzagLevelOrder(self, root):
+        if not root:
+            return []
+            
+        res = []
+        queue = deque([root])
+        count = True
+        while queue:
+            level = []
+            size = len(queue)
+            for _ in range(size):
+                node = queue.popleft()
+                level.append(node.val)
+                if node.left:
+                   queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            if count == True:
+                res.append(level)
+            else: 
+                res.append(list(reversed(level)))  # 此题最重要警示： reversed(A)不是list， 需要强转成list。
+            count = bool(1-count) 
+            
+        return res
+                
+            
 
 # 题三：二叉树序列化和反序列化：
 # 序列化的意思是把各种object（树，图，integer,bouble等）变成string，以方便网络传输和内存变外存，外存恢复内存。 这里是把树结构变成[1,2,3,#,4]的形式
