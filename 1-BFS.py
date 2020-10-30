@@ -208,7 +208,9 @@ class Solution:
             return TreeNode(int(s))
 # 题四：判断图为树  
 # 条件： 节点数n，边的个数必须为n-1； 各点联通
-# 代码的体现： len(edges) == n-1, 访问过的节点数==n， 用queue储存当前节点所连接的点并且还没被访问到，用visited数组记录访问过的节点，最后判断len(visited) == n
+# 代码的体现： len(edges) == n-1 来判断有没有环， 如果边数大于n-1, 说明一定存在环
+# 访问过的节点数==n 来判断是否全部联通， 用queue储存当前节点所连接的点并且还没被访问到，用visited数组记录访问过的节点，最后判断len(visited) == n
+
 class Solution:
     """
     @param n: An integer
@@ -225,13 +227,14 @@ class Solution:
             neighbors[v].append(k)
         
         queue = [0]
-        visited = []
+        visited = set()  # 必须是set， 不可以是[]
         while queue:
             cur = queue.pop()
-            visited.append(cur)
+            visited.add(cur)
             queue+= [x for x in neighbors[cur] if x not in visited]
         
-        return len(visited) == n
+        return len(visited) == n  # 如果visited < n, 说明有只是一个点没联通
+    
 # 题五： copy graph  # 注意：这里的copy指，node需要全新地址的node, 只有数跟之前的一样
 # 三步走： BFS copy所有节点， connect新的所有节点
 from collections import deque
