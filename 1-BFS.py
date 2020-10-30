@@ -380,17 +380,20 @@ class Solution:
     @return: true if can finish all courses or false
     """
     def canFinish(self, numCourses, prerequisites):
-        graph = {i:[] for i in range(numCourses)}
-        for k,v in prerequisites:
+        graph = {i:[] for i in range(numCourses)}  # 将课程号构建成图的形式 
+        for k,v in prerequisites:   # 添加neighbors, 注意根据题目描述把箭头图画出来，不然容易弄反
             graph[k].append(v)
-        indegree =[0]*numCourses
+        indegree =[0]*numCourses   # 构建indegree， 如果是真的图节点，要用dict, 但是这里用的是0 ~ n-1 序号，所以用数组就可以
         for k, v in prerequisites:
             indegree[v] += 1 
+        
         queue = collections.deque()    
         start_nodes = []
+        
         for i in range(numCourses):
             if indegree[i] == 0:
                 queue.append(i)
+        
         num_chosed = 0    # 代表访问过的节点拓扑节点个数， 也可以建立一个数组，然后比较数组长度和numCourses。   
         while queue:
             n = queue.popleft()
