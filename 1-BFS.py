@@ -13,6 +13,14 @@
 #    • 即，图中每条边长度都是1，且没有方向
 # 注意：最长路径用动态规划求解
 
+# 图的BFS:时间复杂度 = O(N + M)
+# N个点，M条边
+# M最多是O（N^2）级别
+# 说是O(M)问题也不大，因为M一般都比N大 所以最坏情况可能是 O(N^2)
+
+# 矩阵的BFS
+# 矩阵中BFS时间复杂度 = O(R * C)
+# R行C列
 
 # 题一：binary tree level order traversal  #因为是level order, 所以每一层都得是一个list,不能是把所有integer放进一个list里面
 # 用deque, popleft()时间复杂度O(1)
