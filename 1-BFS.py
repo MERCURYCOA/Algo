@@ -526,7 +526,6 @@ class Solution:
 # 题八：岛的个数： 0是海， 1是岛， 两个1连在一起是一个岛
 from collections import deque
 
-DIRECTIONS = [(1, 0), (0, -1), (-1, 0), (0, 1)] #四个方向坐标变化
 
 class Solution:
     """
@@ -548,13 +547,15 @@ class Solution:
         return islands                    
     
     def bfs(self, grid, x, y, visited):
+        dx = [1,0,-1,0]
+        dy = [0,1,0,-1]
         queue = deque([(x, y)])
         visited.add((x, y))
         while queue:
             x, y = queue.popleft()
-            for delta_x, delta_y in DIRECTIONS:
-                next_x = x + delta_x
-                next_y = y + delta_y
+            for i in range(4):  # 4个方向，看清楚了！！！！！
+                next_x = x + dx[i]
+                next_y = y + dy[i]
                 if not self.is_valid(grid, next_x, next_y, visited):  #注意这里valid有3个条件：边界内，没有访问过，值为1
                     continue
                 queue.append((next_x, next_y))  #只有1周围如果有1，放到queue里面，查看后面这个1是不是周围还有1， 因为相邻的1只能算1个岛
