@@ -523,7 +523,7 @@ class Solution:
         return indegrees    
         
    
-# 题八：岛的个数： 0是海， 1是岛， 两个1连在一起是一个岛
+# 题八：岛的个数： 0是海， 1是岛， 两个1连在一起是一个岛  - 由点及面
 from collections import deque
 
 
@@ -568,3 +568,54 @@ class Solution:
         if (x, y) in visited:
             return False
         return grid[x][y]  # 这里有隐含条件， grid[x][y] == 1。 如果当前节点是0，not valid, 是1， valid
+
+# 题九：僵尸矩阵 - 图的层级遍历
+from collections import deque
+class Solution:
+    """
+    @param grid: a 2D integer grid
+    @return: an integer
+    """
+   
+    
+    def zombie(self, grid):
+        if not grid or not grid[0]:
+            return 0 
+        n, m = len(grid), len(grid[0])
+        queue = deque()
+        DX = [1,0,-1,0]
+        DY = [0, 1, 0, -1]
+        for x in range(n):
+            for y in range(m):
+                if grid[x][y] == 1:  # 找到所有1
+                    queue.append((x,y))
+        days = 0
+            
+        while queue:
+            size = len(queue) # 层级遍历
+            days += 1
+            for k in range(size):
+                (x, y) = queue.popleft()
+                for i in range(4):
+                    x_ = x + DX[i]
+                    y_ = y + DY[i]
+                    if not self.is_valid(grid, x_, y_):
+                        continue 
+                    
+                    grid[x_][y_] = 1
+                    queue.append((x_,y_))
+        
+        for i in range(n):   # 最后扫一遍，有没有感染不到的节点，有的话返回-1
+            for j in range(m):
+                if grid[i][j] == 0:
+                    return -1
+        return days - 1        
+    def is_valid(self, grid, x_, y_):
+        n, m = len(grid), len(grid[0])
+        if not (0 <= x_ < n and  0 <= y_ < m):
+            return False
+        if grid[x_][y_] == 2 or grid[x_][y_] == 1:
+            return False 
+        return True
+        
+   
