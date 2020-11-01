@@ -1,6 +1,7 @@
 # 内容一：二叉树的宽度搜索  - 标配：queue  
 # 内容二：图的宽度搜索（拓扑排序 Topological Sorting）  - 标配：hashmap
-# 棋盘上的宽搜 BFS
+# 棋盘上的宽搜 BFS 4个方向
+# 简单图的最短路径  hashmap记录距离
 
 # 什么时候应该使用BFS?
 
@@ -617,5 +618,42 @@ class Solution:
         if grid[x_][y_] == 2 or grid[x_][y_] == 1:
             return False 
         return True
+# 题十： 骑士的最短距离
+
+# hashmap记录从source出发当当前位置的距离
+
+class Solution:
         
+    """
+    @param grid: a chessboard included 0 (false) and 1 (true)
+    @param source: a point
+    @param destination: a point
+    @return: the shortest path 
+    """
+    def shortestPath(self, grid, source, destination):
+        queue = collections.deque([(source.x, source.y)])
+        distance = {(source.x, source.y): 0}
+        dx = [1, 1, -1, -1, 2, 2, -2, -2]
+        dy = [2, -2, 2, -2, 1, -1, 1, -1]
+        while queue:
+            x, y = queue.popleft()
+            if (x, y) == (destination.x, destination.y):
+                return distance[(x, y)]
+            for i in range(8):
+                next_x, next_y = x + dx[i], y + dy[i]
+                if (next_x, next_y) in distance:   # 不走重复的路防止死循环
+                    continue
+                if not self.is_valid(next_x, next_y, grid):
+                    continue
+                distance[(next_x, next_y)] = distance[(x, y)] + 1
+                queue.append((next_x, next_y))
+        return -1
+        
+    def is_valid(self, x, y, grid):
+        n, m = len(grid), len(grid[0])
+
+        if x < 0 or x >= n or y < 0 or y >= m:
+            return False
+            
+        return not grid[x][y]
    
