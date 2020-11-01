@@ -838,5 +838,62 @@ class Solution:
         return True
     
     
+    
+# 题十三： 单词接龙
+# 分层遍历
+import collections
+class Solution:
+    """
+    @param: start: a string
+    @param: end: a string
+    @param: dict: a set of string
+    @return: An integer
+    """
+    
+    def ladderLength(self, start, end, dict):
+        dict.add(end)
+       
+        queue = collections.deque([start])
+        visited = set()
+        steps = 0
+        while queue:
+            steps += 1 
+            size = len(queue) # 每分一次层，相当于换了一个字母，就steps +1， 可能有不止一个dict里的string与pop出来的word只差一个字母，所以要分层遍历
+            for i in range(size):
+                word = queue.popleft()
+                visited.add(word)
+                if word == end:
+                    return steps
+                for new_word in self.get_next(word):
+                    if new_word not in dict or new_word in visited:
+                        continue
+                    queue.append(new_word)
+                    visited.add(new_word)
+                    
+                    
+        return 0
+                
+    def get_next(self, word):  # 这个函数容易写错
+        words = []
+        for i in range(len(word)):
+            left, right = word[:i], word[i + 1:]
+            for char in 'abcdefghijklmnopqrstuvwxyz':
+                if word[i] == char:
+                    continue
+                words.append(left + char + right)
+        return words
+    
+   # 上面函数的错误写法：
+def get_next_(self, word):
+        newwords = []
+        ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']  # 不要漏
+        for i in range(len(word)):
+            for char in ALPHABET: 
+                new_word = word.replace(word[i], char)
+                if new_word == word:  # 碰上与word相同的要跳过  # ！！！注意：这样的写法无法判断有重复字母的单词如‘kiss’， 第一个s换成其他25个字母时，与第2个s无关，但是，用new_word == word判断，会出现错误
+                    continue          # 所以，要像正确答案那样，以字母为单位判断，如word[i] == char
+                newwords.append(new_word)
+        return newwords
+  
 
 
