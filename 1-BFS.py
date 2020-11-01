@@ -618,8 +618,50 @@ node5.neighbors = [node3]
 solution = Solution()
 print(solution.connectedSet([node1, node2, node3, node4, node5]))
 
-
-# 题十：僵尸矩阵 - 图的层级遍历
+# 题十： 包裹黑色像素点的最小矩形  - 由点及面
+# 方法一：BFS
+import collections
+class Solution:
+    """
+    @param image: a binary matrix with '0' and '1'
+    @param x: the location of one of the black pixels
+    @param y: the location of one of the black pixels
+    @return: an integer
+    """
+    def minArea(self, image, x, y):
+        if not image:
+            return 0 
+        dx = [1,0,-1,0]
+        dy = [0, 1, 0, -1]
+        visited = set()    
+        queue = collections.deque([(x,y)])
+        max_x, min_x = x, x
+        max_y, min_y = y, y
+        
+        while queue:
+            (x, y) = queue.popleft()
+            visited.add((x, y))
+            for i in range(4):
+                x_ = x + dx[i]
+                y_ = y + dy[i]
+                if not (0 <= x_ < len(image) and 0 <= y_ < len(image[0])):
+                    continue 
+                if (x_, y_) in visited:
+                    continue
+                if image[x_][y_] == '0':
+                    continue
+                if image[x_][y_] == '1':
+                    queue.append((x_, y_))
+                    visited.add((x_, y_))
+                    max_x = max(max_x, x_)  # 注意是原来max_x与x_取最大值， 不是x与x_取最大值
+                    min_x = min(min_x, x_)
+                    max_y = max(max_y, y_)
+                    min_y = min(min_y, y_)
+        area = (max_y - min_y+1)*(max_x-min_x+1)
+        return area
+# 方法二： 二维二分
+ 
+# 题十一：僵尸矩阵 - 图的层级遍历
 from collections import deque
 class Solution:
     """
@@ -667,7 +709,7 @@ class Solution:
         if grid[x_][y_] == 2 or grid[x_][y_] == 1:
             return False 
         return True
-# 题十一： 骑士的最短距离
+# 题十二： 骑士的最短距离
 # 方法一：
 # hashmap记录从source出发当当前位置的距离
 """
