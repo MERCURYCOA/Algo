@@ -570,7 +570,56 @@ class Solution:
             return False
         return grid[x][y]  # 这里有隐含条件， grid[x][y] == 1。 如果当前节点是0，not valid, 是1， valid
 
-# 题九：僵尸矩阵 - 图的层级遍历
+# 题九： 无向图块联通  - 由点及面
+import collections 
+class UndirectedGraphNode:
+    def __init__(self, x):
+        self.label = x
+        self.neighbors = []
+
+class Solution:
+    def connectedSet(self, nodes):
+        if not nodes:
+            return 0
+        self.visited = set()
+        res = []
+        for node in nodes:
+            if node not in self.visited:
+                res.append(self.bfs(node))
+        return res
+    
+    
+    def bfs(self, node):
+        queue = collections.deque([node])
+        tmp = set()
+        res = []
+        while queue:
+            n = queue.popleft()
+            self.visited.add(n)
+            tmp.add(n)
+            for neighbor in n.neighbors:
+                if neighbor not in self.visited:
+                    queue.append(neighbor)
+        for x in tmp:
+            res.append(x.label)
+        return sorted(res)
+
+node1 = UndirectedGraphNode(1)
+node2 = UndirectedGraphNode(2)
+node3 = UndirectedGraphNode(3)
+node4 = UndirectedGraphNode(4)
+node5 = UndirectedGraphNode(5)
+node1.neighbors = [node2,node4]
+node2.neighbors = [node1,node4]
+node3.neighbors = [node5]
+node4.neighbors = [node1, node2]
+node5.neighbors = [node3]
+
+solution = Solution()
+print(solution.connectedSet([node1, node2, node3, node4, node5]))
+
+
+# 题十：僵尸矩阵 - 图的层级遍历
 from collections import deque
 class Solution:
     """
@@ -618,7 +667,7 @@ class Solution:
         if grid[x_][y_] == 2 or grid[x_][y_] == 1:
             return False 
         return True
-# 题十： 骑士的最短距离
+# 题十一： 骑士的最短距离
 # 方法一：
 # hashmap记录从source出发当当前位置的距离
 """
