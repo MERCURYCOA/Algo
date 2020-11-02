@@ -52,7 +52,7 @@ class Solution:
             else:
                 start = mid
         
-        if A[end] == 1:
+        if A[end] == 1:   # 因为start不能等于end，所以一定要最后判断一下start和end的情况
             return end
         if A[start] == 1:
             return start
