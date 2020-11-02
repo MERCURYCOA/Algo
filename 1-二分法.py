@@ -36,31 +36,35 @@ if __name__ == '__main__':
     solution = Solution()
     print(solution.last_target([0,1,2,2,5], 2))
 
-# 题二： find first bad version      OOOOOOOOXXXXXXXXXX
+# 题二： find first bad version  第一个错误的代码版本     OOOOOOOOXXXXXXXXXX
 
+#class SVNRepo:
+#    @classmethod
+#    def isBadVersion(cls, id)
+#        # Run unit tests to check whether verison `id` is a bad version
+#        # return true if unit tests passed else false.
+# You can use SVNRepo.isBadVersion(10) to check whether version 10 is a 
+# bad version.
 class Solution:
-    def get_first_bad_version(self, A):
-        n = len(A)
-        if(n == 0 or A == None):
-            return -1
-        start = 0
-        end = n-1
-        while start+1 < end:
-            mid = start + (end - start)//2
-            if A[mid] == 1:
-                end = mid
-            else:
-                start = mid
+    """
+    @param n: An integer
+    @return: An integer which is the first bad version.
+    """
+    def findFirstBadVersion(self, n):
+        if n <= 0:
+            return 0 
         
-        if A[end] == 1:   # 因为start不能等于end，所以一定要最后判断一下start和end的情况
-            return end
-        if A[start] == 1:
-            return start
-        return -1
-
-if __name__ == '__main__':
-    solution = Solution()
-    print(solution.get_first_bad_version([0,0,0,1,1,1]))
+        start, end = 1, n 
+        while start + 1 < end:
+            mid = start + (end - start)//2 
+            if SVNRepo.isBadVersion(mid) == True:
+                end = mid 
+            else:
+                start = mid 
+                
+        if SVNRepo.isBadVersion(start)  == True:
+            return start 
+        return end 
  
 # 题三： 一串很长的sorted数组，你无法得到其长度，给定target， 找到target的位置,可以用reader.get(k)找到第k个数的值
 # 思想：倍增找到右边界 + 二分法  查看1，2，4，8，16...发现
