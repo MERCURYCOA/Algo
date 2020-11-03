@@ -142,34 +142,6 @@ class Solution:
             return end
 
 # 翻转排序数组 rotated sorted array 如 4，5，6，7，1，2，3 本来是sorted数列，在某一翻转
-# 题六：在rotated sorted array中找到某数target?
-# 关键：A[mid] 的位置不确定，所以要分情况讨论，根据rotated sorted数列的特点，翻转点A[0]将数组分成两组，大于等于A[0]和小于等于A[0] （画图可以直观看到，分别在第2，4象限）
-# A[mid]不同位置的情况内，再通过判断target位置对start,end指针进行移动
-
-class Solution:
-    def serch_in_rotated_array(self, A, target):
-        n = len(A)
-        if(n == 0 or A == None):
-            return -1
-        start = 0
-        end = n-1
-        while start+1 < end:
-            mid = start + (end - start)//2
-            if A[mid] == target:
-                return mid
-            if A[start] < A[mid]:
-                if A[start] < target and target < A[mid]:
-                    end = mid
-                else:
-                    start = mid
-            else:
-                if target < A[mid] and target < A[end]:
-                    start = mid
-                else:
-                    end = mid
-solution = Solution()
-print(solution.serch_in_rotated_array([4,5,6,7,0,1,2,3], 6))
-
 
 #题七：find minimum in rotated sorted array  - 没有重复元素
 # 注意要与nums[end]比，不要跟nums[start]比，因为最小值一定<nums[end]
@@ -213,7 +185,45 @@ class Solution:
             if  nums[end] == nums[mid]:   # ！！！！ 4，mid == end, 无法判断翻转点在哪里， 让start向后移动，直到找到翻转点  【1，1，1，-1，1】【1， -1， 1， 1， 1】
                 start += 1
         return min(nums[start], nums[end])
-# 题九：搜索区间
+
+# 题六：在rotated sorted array中找到某数target?  - 这个题会了，才算会二分法
+# 关键：A[mid] 的位置不确定，所以要分情况讨论，根据rotated sorted数列的特点，翻转点A[0]将数组分成两组，大于等于A[0]和小于等于A[0] （画图可以直观看到，分别在第2，4象限）
+# A[mid] 与 target相对位置不同，分3种情况讨论：
+# 1 同侧，都在前半段
+# 2 同侧， 都在后半段
+# 3 不同侧
+class Solution:
+    """
+    @param A: an integer rotated sorted array
+    @param target: an integer to be searched
+    @return: an integer
+    """
+    def search(self, A, target):
+        if not A:
+            return -1 
+            
+        start, end = 0, len(A)-1 
+      
+        while start + 1 < end:
+            mid = start + (end - start)//2 
+            if A[mid] == target:
+                return mid
+            elif A[start] <= A[mid] < target: # 同侧1
+                start = mid 
+            elif target < A[mid] <= A[end]: # 同侧2
+                end = mid 
+            else:                           # 不同侧：A[mid]在前， target在后； A[mid]在后，target在前。两种情况target与A[start]的大小对指针影响相同，所以合并成一种情况
+                if target >= A[start]:
+                    end = mid 
+                else:
+                    start = mid 
+        if A[start] == target:
+            return start 
+        if A[end] == target:
+            return end 
+        return -1
+    
+    # 题九：搜索区间
 # 先find first position, 然后find last position
 # 2个while就可以，不用写两个函数
 class Solution:
