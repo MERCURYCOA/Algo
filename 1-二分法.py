@@ -170,18 +170,16 @@ print(solution.serch_in_rotated_array([4,5,6,7,0,1,2,3], 6))
 # 注意要与nums[end]比，不要跟nums[start]比，因为最小值一定<nums[end]
 
 class Solution:
-    def min_in_rotated_array(self, A):
-        n = len(A)
-        if(n == 0 or A == None):
-            return -1
-        start = 0
-        end = n-1
-        while start+1 < end:
-            mid = start + (end - start)//2
-            if A[mid] < A[end]:   # 注意不要犯低级错误， end < nums[mid],不能拿index和element比
-                end = mid
-            else:
+    def findMin(self, nums):
+        if not nums:
+            return None 
+            
+        start, end = 0, len(nums)-1 
+        while start + 1 < end:
+            mid = start + (end - start)//2 
+            if nums[end] < nums[mid]:  # 注意不要犯低级错误， end < nums[mid],不能拿index和element比
                 start = mid
-        return min(A[start], A[end])
-solution = Solution()
-print(solution.min_in_rotated_array([4,5,6,7,0,1,2,3]))
+            if nums[mid] <= nums[end]:
+                end = mid 
+        return min(nums[start], nums[end])
+    
