@@ -72,27 +72,23 @@ class Solution:
 
 class Solution:
     def get_k(self, A,target):
-        n = len(A)
-        if(n == 0 or A == None):
-            return -1
-        count = 1
-        while reader.get(count-1) < target:
-            count = count*2
-        start = count/2
-        end = count - 1
-        while start+1 < end:
-            mid = start + (end - start)//2
-            if A[mid] == target:
-                return mid
-            elif A[mid] > target:
-                end = mid
-            else:
+        kth = 1  # 不可以从0开始，因为要乘2
+        while reader.get(kth - 1) < target:  # 检查到kth-1， 1， 可以查到0。 2， kth留给后面一次倍增去检查
+            kth = kth * 2
+                
+        # start 也可以是 kth // 2，但是我习惯比较保守的写法
+        # 因为写为 0 也不会影响时间复杂度
+        start, end = 0, kth - 1
+        while start + 1 < end:
+            mid = start + (end - start) // 2
+            if reader.get(mid) < target:
                 start = mid
-        
-        if A[end] == target:
-            return end
-        if A[start] == target:
+            else:
+                end = mid
+        if reader.get(start) == target:
             return start
+        if reader.get(end) == target:
+            return end
         return -1
 
 #题四：find mountain number,单峰数列，找到峰值
@@ -144,6 +140,7 @@ if __name__ == '__main__':
 # 题六：在rotated sorted array中找到某数target?
 # 关键：A[mid] 的位置不确定，所以要分情况讨论，根据rotated sorted数列的特点，翻转点A[0]将数组分成两组，大于等于A[0]和小于等于A[0] （画图可以直观看到，分别在第2，4象限）
 # A[mid]不同位置的情况内，再通过判断target位置对start,end指针进行移动
+
 class Solution:
     def serch_in_rotated_array(self, A, target):
         n = len(A)
@@ -170,6 +167,8 @@ print(solution.serch_in_rotated_array([4,5,6,7,0,1,2,3], 6))
 
 
 #题七：find minimum in rotated sorted array
+# 注意要与nums[end]比，不要跟nums[start]比，因为最小值一定<nums[end]
+
 class Solution:
     def min_in_rotated_array(self, A):
         n = len(A)
@@ -179,7 +178,7 @@ class Solution:
         end = n-1
         while start+1 < end:
             mid = start + (end - start)//2
-            if A[mid] < A[end]:
+            if A[mid] < A[end]:   # 注意不要犯低级错误， end < nums[mid],不能拿index和element比
                 end = mid
             else:
                 start = mid
