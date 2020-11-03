@@ -1,4 +1,4 @@
-# 前缀和 + 字典 求subarray sum ， O(n)
+# 前缀和 + 字典 求subarray sum ， O(n)  注意，最大平均值子数组也可以转化为最大和子数组问题，用前缀和
 # 连续子数组
 
 # 题一：找到2个数组的中位数  要求：logn
@@ -62,7 +62,26 @@ class Solution:
             min_sum = min(sum, min_sum)
             
         return max_diff
-# 题三： minimum subarray , 和大于S的最小子数组
+# 题二-1: 子数组的最大平均值
+
+class Solution:
+    """
+    @param nums: an array
+    @param k: an integer
+    @return: the maximum average value
+    """
+    def findMaxAverage(self, nums, k):
+        # Write your code here
+        n = len(nums)
+        sum = [0 for i in range(n + 1)]
+        for i in range(1, n + 1):
+            sum[i] = sum[i - 1] + nums[i - 1]
+        ans = sum[k]
+        for i in range(k + 1, n + 1):
+            ans = max(ans, sum[i] - sum[i - k])
+        return ans * 1.0 / k
+    
+    # 题三： minimum subarray , 和大于S的最小子数组
 import sys
 class Solution:
     """
