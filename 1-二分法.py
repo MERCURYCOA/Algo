@@ -222,8 +222,36 @@ class Solution:
         if A[end] == target:
             return end 
         return -1
+# 题九：恢复翻转数组
+class Solution:
+    """
+    @param nums: An integer array
+    @return: nothing
+    """
+    def recoverRotatedSortedArray(self, nums):
+        if not nums:
+            return []
+            
+        for i in range(1, len(nums)):
+            if nums[i] < nums[i-1]:
+                self.reverse(nums, 0, i-1)
+                self.reverse(nums, i, len(nums)-1)
+                self.reverse(nums, 0, len(nums)-1)
+                
+        return nums 
+        
+    def reverse(self, nums, start, end):
+        left, right = start, end 
+        while left + 1 < right:
+            nums[left], nums[right] = nums[right], nums[left]
+            left += 1 
+            right -= 1 
+        nums[left], nums[right] = nums[right], nums[left]
+        
+            
+
     
-    # 题九：搜索区间
+# 题九：搜索区间
 # 先find first position, 然后find last position
 # 2个while就可以，不用写两个函数
 class Solution:
