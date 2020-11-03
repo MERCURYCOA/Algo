@@ -247,3 +247,82 @@ class Solution:
             return [leftBound, end]
         else:
             return [leftBound, start]
+# 题十：包裹黑色像素点的最小矩形
+# 同一操作多次使用，要写成方法，不让中间指针容易出错，写成方法，判断True or False, 不容易出错
+class Solution:
+    """
+    @param image: a binary matrix with '0' and '1'
+    @param x: the location of one of the black pixels
+    @param y: the location of one of the black pixels
+    @return: an integer
+    """
+    def minArea(self, image, x, y):
+        if not image:
+            return 0
+        n, m = len(image), len(image[0])
+        left_bound, right_bound = y, y
+        up_bound, down_bound = x, x
+        start, end = 0, x 
+        while start + 1 < end:
+            mid = start + (end - start)//2 
+            if self.checkRow(image, mid):
+                end = mid 
+
+            else:
+                start = mid 
+        if self.checkRow(image, start):
+            up_bound = start
+        else:    
+            up_bound = end
+                
+        start, end = x, n-1 
+        while start + 1 < end:
+            mid = start + (end - start)//2 
+            if self.checkRow(image, mid):
+                    start = mid 
+            else:
+                end = mid 
+         
+        if self.checkRow(image, end):
+            down_bound = end
+        else:
+            down_bound = start
+                
+        start, end = 0, y 
+        while start + 1 < end:
+            mid = start + (end - start)//2 
+            if self.checkColumn(image, mid):
+                end = mid 
+            else:
+                start = mid 
+        if self.checkColumn(image, start):
+            left_bound = start 
+        else:
+            left_bound = end
+        
+        start, end = y, m-1 
+        while start + 1 < end:
+            mid = start + (end - start)//2 
+            if self.checkColumn(image, mid):
+                start = mid 
+            else:
+                end = mid 
+        if self.checkColumn(image, end):
+            right_bound = end
+        else:
+            right_bound = start 
+        
+        return (down_bound - up_bound + 1) * (right_bound - left_bound + 1)
+        
+        
+    def checkColumn(self, image, col):
+        for i in range(len(image)):
+            if image[i][col] == '1':
+                return True
+        return False
+
+    def checkRow(self, image, row):
+        for j in range(len(image[0])):
+            if image[row][j] == '1':
+                return True
+        return False
