@@ -166,7 +166,7 @@ solution = Solution()
 print(solution.serch_in_rotated_array([4,5,6,7,0,1,2,3], 6))
 
 
-#题七：find minimum in rotated sorted array
+#题七：find minimum in rotated sorted array  - 没有重复元素
 # 注意要与nums[end]比，不要跟nums[start]比，因为最小值一定<nums[end]
 
 class Solution:
@@ -183,3 +183,29 @@ class Solution:
                 end = mid 
         return min(nums[start], nums[end])
     
+    
+    
+# 题八： find minimum in rotated sorted array  - 有重复元素
+# 分类讨论
+class Solution:
+    """
+    @param nums: a rotated sorted array
+    @return: the minimum number in the array
+    """
+    def findMin(self, nums):
+        if not nums:
+            return None 
+            
+        start, end = 0, len(nums)-1 
+        while start + 1 < end:
+            if nums[start] < nums[end]:  # 1， 无翻转
+                return nums[start]
+            mid = start + (end - start)//2 
+            if nums[end] < nums[mid]:     # 2， mid大于end
+                start = mid
+            if  nums[end] > nums[mid]:    # 3, mid 小于end
+                end = mid 
+            if  nums[end] == nums[mid]:   # ！！！！ 4，mid == end, 无法判断翻转点在哪里， 让start向后移动，直到找到翻转点  【1，1，1，-1，1】【1， -1， 1， 1， 1】
+                start += 1
+        return min(nums[start], nums[end])
+
