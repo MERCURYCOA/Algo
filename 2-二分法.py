@@ -147,7 +147,7 @@ class Solution:
     """
     def sqrt(self, x):
         # write your code here
-        start, end = 0, x if x > 1 else 1
+        start, end = 0, x if x > 1 else 1  # 注意：如果x<1，让x=1,因为如果直接用小于1的小数，返回的是该数本身，例如x= 0.5， 返回的也是0.5，所以这里让小于1的x=1。
         while start + 1e-12 < end:
             mid = (start + end) / 2
             if mid * mid + 1e-12 < x:
