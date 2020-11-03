@@ -94,23 +94,24 @@ class Solution:
 #题四：find mountain number,单峰数列，找到峰值
 # 注意：如果数列有相等的数，不能用二分法，只能用for循环
 class Solution:
-    def get_mountain(self, A):
-        n = len(A)
-        if(n == 0 or A == None):
-            return -1
-        start = 0
-        end = n-1
-        while start+1 < end:
-            mid = start + (end - start)//2
-            if A[mid] > A[mid+1]:
-                end = mid
-            else:
-                start = mid
-        return max(A[start], A[end])
+    """
+    @param nums: a mountain sequence which increase firstly and then decrease
+    @return: then mountain top
+    """
+    def mountainSequence(self, nums):
+        if not nums:
+            return None 
+        start, end = 0, len(nums)-1 
+        while start + 1 < end:
+            mid = start + (end - start)//2 
+            if nums[mid - 1] < nums[mid] < nums[mid + 1]:
+                start = mid 
+            if nums[mid + 1] < nums[mid] < nums[mid - 1]:
+                end = mid 
+            if nums[mid + 1] < nums[mid] and nums[mid - 1] < nums[mid]:
+                return nums[mid]
+        return max(nums[start], nums[end])
 
-if __name__ == '__main__':
-    solution = Solution()
-    print(solution.get_mountain([9,10,9,8]))
     
 #题五： find a peak number， 多峰数列，找到一个极值
 #注意：如果是找到所有极值，不可以用二分法，只能用for循环，因为二分法的思想是取一半丢一半，这样不能求到所有极值
