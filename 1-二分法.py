@@ -117,25 +117,29 @@ class Solution:
 #注意：如果是找到所有极值，不可以用二分法，只能用for循环，因为二分法的思想是取一半丢一半，这样不能求到所有极值
 #如果有相等的数，不能用二分法
 class Solution:
-    def find_peak(self, A):
-        n = len(A)
-        if(n == 0 or A == None):
-            return -1
-        start = 0
-        end = n-1
-        res = list()
-        while start+1 < end:
-            mid = start + (end - start)//2
-            if A[mid] > A[mid+1] and A[mid] > A[mid-1]:
+    """
+    @param A: An integers array.
+    @return: return any of peek positions.
+    """
+    def findPeak(self, A):
+        if not A:
+            return None 
+        start, end = 0, len(A)-1 
+        while start + 1 < end:
+            mid = start + (end - start)//2 
+            if A[mid-1] < A[mid] and A[mid + 1] < A[mid]:
                 return mid
-            elif A[mid] < A[mid+1] and A[mid] > A[mid+1]:
+            if A[mid - 1] < A[mid] < A[mid + 1]:
+                start = mid 
+            if A[mid + 1] < A[mid] < A[mid - 1]:
+                end = mid 
+            if A[mid - 1] > A[mid] and A[mid + 1] > A[mid]:  # 不要忘记mid是谷底的情况
                 start = mid
-            else:
-                end = mid
-        return -1
-if __name__ == '__main__':
-    solution = Solution()
-    print(solution.find_peak([9,10,9,8,11,7,6]))
+                
+        if A[start] >= A[end]:
+            return start
+        else:
+            return end
 
 # 翻转排序数组 rotated sorted array 如 4，5，6，7，1，2，3 本来是sorted数列，在某一翻转
 # 题六：在rotated sorted array中找到某数target?
