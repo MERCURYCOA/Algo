@@ -119,7 +119,7 @@ print(solution.findPeak([
 
 # 题二：实现sqrt(x) x是int
 # 找到第一个a使得a^2 <= x
-
+# Last number that number^2 <= x
 class Solution:
     """
     @param x: An integer
@@ -139,7 +139,7 @@ class Solution:
             return end 
         return start
 # 题三：实现sqrt(x) x是float
-
+# Last number that number^2 <= x - eps
 class Solution:
     """
     @param: x: a double
