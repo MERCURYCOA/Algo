@@ -208,4 +208,41 @@ class Solution:
             if  nums[end] == nums[mid]:   # ！！！！ 4，mid == end, 无法判断翻转点在哪里， 让start向后移动，直到找到翻转点  【1，1，1，-1，1】【1， -1， 1， 1， 1】
                 start += 1
         return min(nums[start], nums[end])
-
+# 题九：搜索区间
+# 先find first position, 然后find last position
+# 2个while就可以，不用写两个函数
+class Solution:
+    """
+    @param A: an integer sorted array
+    @param target: an integer to be inserted
+    @return: a list of length 2, [index1, index2]
+    """
+    def searchRange(self, A, target):
+        if not A:
+            return [-1,-1]
+            
+        start, end = 0, len(A)-1
+        while start + 1 < end:
+            mid = (start + end)//2 
+            if A[mid] < target:
+                start = mid 
+            else:
+                end = mid 
+        if A[start] == target:
+            leftBound = start
+        elif A[end] == target:
+            leftBound = end 
+        else:
+            return[-1, -1] 
+        
+        start, end = leftBound, len(A)-1 
+        while start + 1 < end:
+            mid = (start + end) // 2 
+            if A[mid] <= target:
+                start = mid 
+            else:
+                end = mid 
+        if A[end] == target:
+            return [leftBound, end]
+        else:
+            return [leftBound, start]
