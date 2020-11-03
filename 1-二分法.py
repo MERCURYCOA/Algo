@@ -222,6 +222,8 @@ class Solution:
         if A[end] == target:
             return end 
         return -1
+# 三步翻转法
+
 # 题九：恢复翻转数组
 class Solution:
     """
@@ -248,7 +250,35 @@ class Solution:
             right -= 1 
         nums[left], nums[right] = nums[right], nums[left]
         
-            
+# 题十：翻转字符串
+# offset超过string长度，取模
+# 对字符串原地操作，reverse函数要将起点和终点下标作为参数
+class Solution:
+    """
+    @param str: An array of char
+    @param offset: An integer
+    @return: nothing
+    """
+    def rotateString(self, s, offset):
+        if not s or len(s) == 0:
+            return ""
+        
+        n = len(s)
+        offset %= n
+        if offset == 0:
+            return s
+        self.reverse(s, 0, n - offset-1)
+        self.reverse(s, n - offset, len(s)-1)
+        self.reverse(s, 0, len(s)-1)
+        return s
+    def reverse(self, s, start, end):
+        left, right = start, end
+        while left+1 < right:
+            s[left], s[right] = s[right], s[left]
+            left += 1 
+            right -= 1
+        s[left], s[right] = s[right], s[left] 
+        
 
     
 # 题九：搜索区间
