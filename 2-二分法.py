@@ -186,7 +186,37 @@ class Solution:
         for l in L:
             pieces += l//a 
         return pieces
-# 题五： copy books
+# 题五：寻找重复的数
+
+class Solution:
+    """
+    @param nums: an array containing n + 1 integers which is between 1 and n
+    @return: the duplicate one
+    """
+    def findDuplicate(self, nums):
+        start, end = 1, len(nums) - 1
+        
+        while start + 1 < end:
+            mid = (start + end) // 2
+            if self.smaller_than_or_equal_to(nums, mid) > mid: # 小于mid的元素个数大于等于mid，说明重复元素在前面
+                end = mid
+            else:                                               # 小于mid的元素个数小于mid，说明重复元素在后面
+                start = mid
+                
+        if self.smaller_than_or_equal_to(nums, start) > start: #先检查前面的
+            return start
+            
+        return end
+        
+    def smaller_than_or_equal_to(self, nums, val):
+        count = 0
+        for num in nums:
+            if num <= val:
+                count += 1
+        return count
+    
+    
+    # 题五： copy books
 
 class Solution:
     """
