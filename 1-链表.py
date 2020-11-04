@@ -1,4 +1,6 @@
 # 技巧： 改变链表结构的题，用 dummy node 
+
+
 # 翻转链表：模版记住
 def reverse(self, head):  # 双指针 prev, cur
         cur = head 
@@ -9,7 +11,16 @@ def reverse(self, head):  # 双指针 prev, cur
             prev = cur      # 双指针后移
             cur = temp
         return prev
-# 题一：链表划分
+
+# 题1: 翻转链表II   
+# 注意不要死板， 2个指针， prev, cur,只有满足这2个指针指向2个相邻节点就可以进行翻转，至于指针叫什么不重要，很多变种题，指针还有干其他事情，翻转中间一段，至于2个指针走到需要翻转的地方就用这2个指针，不要重新造指针。
+# 断开，重新接上，翻转，3个基本操作，不要太多指针，需要在哪里断开，或接上，就在指针经过的时候，重新命名一个就好。
+
+# 方法：
+# 先定义一个dummy node，dummy的next是head。p1指向dummy，p2指向head。
+# 开始翻转前先将p1和p2共同前进m-1步，用p1_frozen和p2_frozen记录下当前位置。然后再多前进一步，这样一共前进了m步。
+# 然后开始翻转，方法类似题目35. Reverse Linked List。
+# 翻转结束后p1_frozen和p2_frozen的next分别指向p1和p2。
 """
 Definition of ListNode
 class ListNode(object):
@@ -20,34 +31,38 @@ class ListNode(object):
 
 class Solution:
     """
-    @param head: The first node of linked list
-    @param x: An integer
-    @return: A ListNode
+    @param head: ListNode head is the head of the linked list 
+    @param m: An integer
+    @param n: An integer
+    @return: The head of the reversed ListNode
     """
-    def partition(self, head, x):
+    def reverseBetween(self, head, m, n):
         if not head:
-            return None
-        # 2个dummy    
-        res = dummy_smaller = ListNode(0) # 区分变化指针和固定指针，最后返回的是固定的，变化的指针会跑走
-        dummy = ListNode(0)  
+            return None 
+        dummy = ListNode(0)
         dummy.next = head
-        prev = dummy  # 挖掉中间的节点，需要重新在前一节点和后一节点建立连接，所以需要记录前一个节点prev
-        cur = head
-        while cur:
-            if cur.val < x:
-                temp = cur.next
-                dummy_smaller.next = cur 
-                prev.next = temp 
-                cur = temp
-                dummy_smaller = dummy_smaller.next
-            else:
-                cur = cur.next
-                prev = prev.next
-        dummy_smaller.next = dummy.next
-        return res.next  # 不能返回dummy_smaller
-            
+        p1 = head
+        p2 = dummy
+        for i in range(m-1):
+           p1 = p1.next  
+           p2 = p2.next 
+        p1_frozen = p1   # 断口
+        p2_frozen = p2 
+        
+        p1 = p1.next 
+        p2 = p2.next 
+        for i in range(n-m):  # 注意如果不是全链翻转，不要用while, 要用for， 可以控制走几步
+            temp = p1.next
+            p1.next = p2 
+            p2 = p1
+            p1 = temp
+        p2_frozen.next = p2  # 接口
+        p1_frozen.next = p1 
+        
+        return dummy.next
 
-# 题一：reverse nodes in k group   每k个node翻转一次链表，不够k个，不翻转
+      
+# 题二：reverse nodes in k group   每k个node翻转一次链表，不够k个，不翻转
 """
 Definition of ListNode
 class ListNode(object):
@@ -93,7 +108,42 @@ class Solution:
         head.next = nk
         n1.next = nkplus
         return n1
+# 题一：链表划分
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
 
+class Solution:
+    """
+    @param head: The first node of linked list
+    @param x: An integer
+    @return: A ListNode
+    """
+    def partition(self, head, x):
+        if not head:
+            return None
+        # 2个dummy    
+        res = dummy_smaller = ListNode(0) # 区分变化指针和固定指针，最后返回的是固定的，变化的指针会跑走
+        dummy = ListNode(0)  
+        dummy.next = head
+        prev = dummy  # 挖掉中间的节点，需要重新在前一节点和后一节点建立连接，所以需要记录前一个节点prev
+        cur = head
+        while cur:
+            if cur.val < x:
+                temp = cur.next
+                dummy_smaller.next = cur 
+                prev.next = temp 
+                cur = temp
+                dummy_smaller = dummy_smaller.next
+            else:
+                cur = cur.next
+                prev = prev.next
+        dummy_smaller.next = dummy.next
+        return res.next  # 不能返回dummy_smaller
 # 题二： copy list with random pointer
 class RandomListNode:
     def __init__(self, x):
