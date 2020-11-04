@@ -1,4 +1,15 @@
 # 技巧： 改变链表结构的题，用 dummy node 
+# 翻转链表：模版记住
+def reverse(self, head):  # 双指针 prev, cur
+        cur = head 
+        prev = None  
+        while cur:
+            temp = cur.next  # 先把next保存一下
+            cur.next = prev  # 断开cur到cur.next， 让cur.next连到prev
+            prev = cur      # 双指针后移
+            cur = temp
+        return prev
+
 # 题一：reverse nodes in k group   每k个node翻转一次链表，不够k个，不翻转
 """
 Definition of ListNode
