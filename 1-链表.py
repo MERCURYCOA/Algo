@@ -62,7 +62,8 @@ class Solution:
         return dummy.next
 
       
-# 题二：reverse nodes in k group   每k个node翻转一次链表，不够k个，不翻转
+# 题2：reverse nodes in k group   每k个node翻转一次链表，不够k个，不翻转
+# 困难题分解成中等题，中等题分解成简单题
 """
 Definition of ListNode
 class ListNode(object):
@@ -78,36 +79,47 @@ class Solution:
     @return: a ListNode
     """
     def reverseKGroup(self, head, k):
-        # write your code here
         if not head:
-            return head
-        dummy = ListNode(0)
-        dummy.next = head
-        prev = dummy
-        while prev:
-            prev = self.reverse(prev, k)
-        return dummy.next
-    
-    def reverse(self, head, k):
-        curt = head
-        n1 = head.next
+            return None 
+        cur = head
+        count = 0
+        while cur:
+            count += 1 
+            cur = cur.next
+        if k >= count:
+            k = count 
+        if k <= 0:
+            k = 1 
+        x = count // k  # 代表有x段需要翻转          #例如 count = 5, k = 2
         
-        for i in range(k):
-            curt = curt.next
-            if curt == None:
-                return None
-        nk = curt
-        nkplus = curt.next
-        prev = head
-        curt = head.next
-        while curt != nkplus:
-            temp = curt.next
-            curt.next = prev
-            prev = curt
-            curt = temp
-        head.next = nk
-        n1.next = nkplus
-        return n1
+        for i in range(x):  # 0, 1
+            head = self.reverse(head, i*k+1, (i+1)*k)    # (1, k)(K+1, 2k)(2k+1, 3k)
+        return head
+        
+    def reverse(self, head, m, n):  # 翻转联邦II的模版
+        dummy = ListNode(0)
+        dummy.next = head 
+        p1, p2 = dummy, head 
+        for i in range(m-1):
+            p1 = p1.next 
+            p2 = p2.next 
+        p1_frozen = p1 
+        p2_frozen = p2 
+        p1 = p1.next 
+        p2 = p2.next 
+        
+        for i in range(n-m):
+            temp = p2.next 
+            p2.next = p1 
+            p1 = p2 
+            p2 = temp 
+        p1_frozen.next = p1 
+        p2_frozen.next = p2 
+        
+        return dummy.next
+        
+        
+       
 # 题一：链表划分
 """
 Definition of ListNode
