@@ -9,6 +9,43 @@ def reverse(self, head):  # 双指针 prev, cur
             prev = cur      # 双指针后移
             cur = temp
         return prev
+# 题一：链表划分
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    """
+    @param head: The first node of linked list
+    @param x: An integer
+    @return: A ListNode
+    """
+    def partition(self, head, x):
+        if not head:
+            return None
+        # 2个dummy    
+        res = dummy_smaller = ListNode(0) # 区分变化指针和固定指针，最后返回的是固定的，变化的指针会跑走
+        dummy = ListNode(0)  
+        dummy.next = head
+        prev = dummy  # 挖掉中间的节点，需要重新在前一节点和后一节点建立连接，所以需要记录前一个节点prev
+        cur = head
+        while cur:
+            if cur.val < x:
+                temp = cur.next
+                dummy_smaller.next = cur 
+                prev.next = temp 
+                cur = temp
+                dummy_smaller = dummy_smaller.next
+            else:
+                cur = cur.next
+                prev = prev.next
+        dummy_smaller.next = dummy.next
+        return res.next  # 不能返回dummy_smaller
+            
 
 # 题一：reverse nodes in k group   每k个node翻转一次链表，不够k个，不翻转
 """
