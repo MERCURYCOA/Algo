@@ -542,5 +542,59 @@ class Solution:
         return dummy.next    
     
 # 方法二： 快排
+class Solution:
+    """
+    @param head: The head of linked list.
+    @return: You should return the head of the sorted linked list, using constant space complexity.
+    """
+    def sortList(self, head):
+        if not head or head.next is None:
+            return head 
+        pivot, cur = head, head.next
+        pivot.next = None
+        
+        larger_dummy = ListNode(0)
+        p1 = larger_dummy
+        smaller_dummy = ListNode(0)
+        p2 = smaller_dummy
+        p3 = pivot
+        
+        while cur:
+            if cur.val > pivot.val:
+                p1.next = cur 
+                p1 = p1.next 
+            elif cur.val < pivot.val:
+                p2.next = cur 
+                p2 = p2.next 
+            else:
+                p3.next = cur  # 可能会有重复数字出现，pivot可能是2个及以上节点的链表
+                p3 = p3.next
+            cur = cur.next 
+        larger = larger_dummy.next
+        smaller = smaller_dummy.next 
+        
+        p1.next = None  # 注意断后， 因为2个节点可以指向同一个节点，假设 0->1->-1, 0是pivot, 理想中想要larger_dummy -> 1(p1), smaller_dummy -> -1(p2), 但是，如果没有断后，实际出来的是 larger_dummy->1(p1) -> -1, smaller_dummy ->-1(p2)
+                        # 因为1本来就连着-1， 让smaller_dummy指向-1不会断开1->-1, 需要你来断后
+        p2.next = None
+        p3.next = None
+        sorted_larger = self.sortList(larger)
+        sorted_smaller = self.sortList(smaller)
+        return self.joinList(pivot, sorted_smaller, sorted_larger)
+
+    def joinList(self, pivot, sorted_smaller, sorted_larger):
+        cur2 = pivot 
+        while cur2.next:
+            cur2 = cur2.next 
+        if sorted_smaller is None:
+            cur2.next = sorted_larger
+            return pivot
+        # head1, head2 = sorted_smaller, sorted_larger
+        cur1 = sorted_smaller 
+        while cur1.next:
+            cur1 = cur1.next 
+        
+        cur1.next = pivot 
+        cur2.next = sorted_larger 
+        return sorted_smaller
 
 
