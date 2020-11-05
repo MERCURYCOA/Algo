@@ -597,4 +597,49 @@ class Solution:
         cur2.next = sorted_larger 
         return sorted_smaller
 
+# 题六：有序链表转换为二叉搜索树
+"""
+Definition of ListNode
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+
+class Solution:
+    """
+    @param: head: The first node of linked list.
+    @return: a tree node
+    """
+    def sortedListToBST(self, head):
+        if not head:
+            return None 
+        if not head.next:
+            return TreeNode(head.val)
+        
+        slow, fast = head, head.next  # 找中点
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+        mid = slow.next 
+        
+        post = mid.next
+        slow.next = None  # 断后
+        mid.next = None 
+        root = TreeNode(mid.val)
+        
+        root.left = self.sortedListToBST(head)  # 递归  root.left是左边链表的中点成为的那个root
+        root.right = self.sortedListToBST(post)
+        
+        return root
+        
+
 
