@@ -230,7 +230,70 @@ class Solution:
             cur = cur.next 
         return prev1, prev2
         
-       
+# 题4: 重排链表
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    """
+    @param head: The head of linked list.
+    @return: nothing
+    """
+    def reorderList(self, head):
+        if not head:
+           return None 
+        length = 0
+        cur = head 
+        while cur:
+           length += 1 
+           cur = cur.next 
+        dummy = ListNode(0)  # 这里用dummy是怕head就一个节点，不能上2个节点，也可以先判断length==1，return heda, length > 1， p1, p2 = head, head.next。这样这里就不用dummy了。
+        dummy.next = head
+        p1, p2 = dummy, head
+        for i in range((length+1)//2):
+            p1 = p1.next
+            p2 = p2.next 
+        
+        post = p2
+        p1.next = None
+        post = self.reverse(post)
+        cur1 = head
+        cur2 = post 
+        res = dummy1 = ListNode(0)
+        is_1 = True
+        while cur1 and cur2:
+            if is_1:
+                dummy1.next = cur1
+                cur1 = cur1.next 
+
+            if not is_1:
+                dummy1.next = cur2
+                cur2 = cur2.next 
+
+            dummy1 = dummy1.next
+            is_1 = bool(1-is_1)  # bool控制加1链还是2链，注意不可以将这句加到上面两个if里，因为假设进入第一个if, 加完cur1之后，is_1变成false， 就会进入第二个if，这是不对的。两个if只能进1个。也可以改成if,else形式。
+
+            
+        if cur1:
+            dummy1.next = cur1 
+        if cur2:
+            dummy1.next = cur2 
+        return res.next
+    def reverse(self, head):
+        cur = head 
+        prev = None 
+        while cur:
+            temp = cur.next 
+            cur.next = prev 
+            prev = cur 
+            cur = temp 
+        return prev
+
 # 题一：链表划分
 """
 Definition of ListNode
