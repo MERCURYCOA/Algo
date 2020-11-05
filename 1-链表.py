@@ -16,7 +16,52 @@ def reverse(self, head):  # 双指针 prev, cur
 # 注意不要死板， 2个指针， prev, cur,只有满足这2个指针指向2个相邻节点就可以进行翻转，至于指针叫什么不重要，很多变种题，指针还有干其他事情，翻转中间一段，至于2个指针走到需要翻转的地方就用这2个指针，不要重新造指针。
 # 断开，重新接上，翻转，3个基本操作，不要太多指针，需要在哪里断开，或接上，就在指针经过的时候，重新命名一个就好。
 
-# 方法：
+# 方法1： 化整为零， 记录需要翻转的那段节点的前继节点，后继节点，翻转中间段，然后重新连接
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    """
+    @param head: ListNode head is the head of the linked list 
+    @param m: An integer
+    @param n: An integer
+    @return: The head of the reversed ListNode
+    """
+    def reverseBetween(self, head, m, n):
+        dummy = ListNode(0)
+        dummy.next = head 
+        p1, p2 = dummy, head
+        for i in range(m-1):
+            p1 = p1.next 
+            p2 = p2.next 
+        prev = p1
+        
+        for i in range(n - m+1):
+            p1 = p1.next 
+            p2 = p2.next
+        post = p2 
+        prev = self.reverse(prev, post)
+        return dummy.next
+    def reverse(self, prev, post):
+        p1 = None
+        p2 = prev.next
+        while p2 and p2 != post:
+            temp = p2.next
+            p2.next = p1 
+            p1 = p2
+            p2 = temp 
+        tail = prev.next
+        prev.next = p1
+        tail.next = post
+        return prev
+
+
+# 方法2：
 # 先定义一个dummy node，dummy的next是head。p1指向dummy，p2指向head。
 # 开始翻转前先将p1和p2共同前进m-1步，用p1_frozen和p2_frozen记录下当前位置。然后再多前进一步，这样一共前进了m步。
 # 然后开始翻转，方法类似题目35. Reverse Linked List。
@@ -117,7 +162,73 @@ class Solution:
         p2_frozen.next = p2 
         
         return dummy.next
+
+# 题3: 交换链表当中的两个节点        
+# 化整为零 ， 寻找节点，交换节点都写成方法， 交换节点的模版背过
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    """
+    @param head: a ListNode
+    @param v1: An integer
+    @param v2: An integer
+    @return: a new head of singly-linked list
+    """
+    def swapNodes(self, head, v1, v2):
+        dummy = ListNode(0)
+        dummy.next = head 
+        prev1, prev2 = self.findPrevs(dummy, v1, v2)
+        if prev1 is None or prev2 is None:
+            return head 
+        if prev1 == prev2:
+            return head 
+        if prev1.next == prev2:
+            self.swapAdj(prev1, prev2)
+        elif prev2.next == prev1:
+            self.swapAdj(prev2, prev1)
+        else:
+            self.swapRemote(prev1, prev2)
+        return dummy.next
         
+    def swapAdj(self, prev1, prev2):
+        node1 = prev1.next
+        node2 = node1.next
+        post = node2.next 
+        
+        prev1.next = node2
+        node2.next = node1 
+        node1.next = post
+        
+    def swapRemote(self, prev1, prev2):
+        node1 = prev1.next 
+        post1 = node1.next 
+        
+        node2 = prev2.next 
+        post2 = node2.next 
+        
+        prev1.next = node2
+        node2.next = post1 
+        prev2.next = node1 
+        node1.next = post2 
+        
+        
+        
+    def findPrevs(self, dummy, v1, v2):
+        prev1, prev2 = None, None 
+        cur = dummy
+        while cur.next:
+            if cur.next.val == v1:
+                prev1 = cur 
+            if cur.next.val == v2:
+                prev2 = cur 
+            cur = cur.next 
+        return prev1, prev2
         
        
 # 题一：链表划分
