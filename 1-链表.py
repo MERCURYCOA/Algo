@@ -293,7 +293,49 @@ class Solution:
             prev = cur 
             cur = temp 
         return prev
+# 题5: 旋转链表
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
 
+class Solution:
+    """
+    @param head: the List
+    @param k: rotate to the right k places
+    @return: the list after rotation
+    """
+    def rotateRight(self, head, k):
+        if not head:
+            return None 
+        cur = head
+        length = 1
+        while cur.next:  # 找到长度
+            length += 1 
+            cur = cur.next 
+        
+        if length == 1:
+            return head
+        if k >= length:
+            k = k % length 
+        if k == 0:
+            return head 
+        cur.next = head   #变成环     
+        step = length - k   # 断口向前走几步
+        
+        for i in range(step):
+            head = head.next 
+            cur = cur.next 
+        cur.next = None   # 断开尾部
+        return head     # 这个head已经不是最开始的head了， head已经向前走了step步 
+
+
+        
+            
+      
 # 题一：链表划分
 """
 Definition of ListNode
