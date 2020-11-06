@@ -66,7 +66,7 @@ class Solution:
         self.quickSort(A, left, end)  # 同理
 
         
-        
+ # 合并排序数组 - 不要想的太简单       
  # 题1: 合并排序数组II 
 # 方法1:
 class Solution:
@@ -96,3 +96,84 @@ class Solution:
    
     def mergeSortedArray(self, A, B):
         return sorted(A + B)
+# 题2 ： 合并排序数组
+# A非常大，B并入A
+# 关键：从后往前排
+class Solution:
+    """
+    @param: A: sorted integer array A which has m elements, but size of A is m+n
+    @param: m: An integer
+    @param: B: sorted integer array B which has n elements
+    @param: n: An integer
+    @return: nothing
+    """
+    def mergeSortedArray(self, A, m, B, n):
+        if not B:
+            return A 
+        pos = n + m - 1 
+        i = m - 1
+        j = n - 1
+        while i >= 0 and j >= 0 and pos >= 0:
+            if A[i] > B[j]:
+                A[pos] = A[i]
+                i -= 1 
+                pos -= 1 
+            else:
+                A[pos] = B[j]
+                j -= 1 
+                pos -= 1 
+        while i >= 0:
+            A[pos] = A[i]
+            i -= 1 
+            pos -= 1
+        while j >= 0:
+            A[pos] = B[j]
+            j -= 1 
+            pos -= 1 
+        return A
+# 题3: 两数组的交集
+# 方法一： 排序 + 双指针  O(mlogm + nlogn)
+class Solution:
+    """
+    @param nums1: an integer array
+    @param nums2: an integer array
+    @return: an integer array
+    """
+    def intersection(self, nums1, nums2):
+        if nums1 is None or nums2 is None:
+            return []
+        res = set()
+        nums1.sort()
+        nums2.sort()
+        i , j = 0,0 
+        while i < len(nums1) and j < len(nums2):
+            if nums1[i] == nums2[j]:
+                res.add(nums1[i])
+                i += 1 
+                j += 1 
+            elif nums1[i] > nums2[j]:
+                j += 1 
+            else:
+                i += 1 
+            
+        return list(res)
+
+# 方法二：2个set()   O(m+n)
+class Solution:
+    """
+    @param nums1: an integer array
+    @param nums2: an integer array
+    @return: an integer array
+    """
+    def intersection(self, nums1, nums2):
+        if nums1 is None or nums2 is None:
+            return []
+        res = set() 
+        visited = set()
+        for x in nums1:
+            if x not in visited:
+                visited.add(x)
+        for y in nums2:
+            if y in visited:
+                res.add(y)
+        return list(sorted(res))
