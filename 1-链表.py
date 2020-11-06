@@ -720,4 +720,53 @@ class Solution:
             return None
         node.val = node.next.val 
         node.next = node.next.next
+# 题八：将二叉搜索树转换为已排序的双向链接列表
+# 此题只给出TreeNode定义，没有给出ListNode定义，说明不是想让你再建一个doubly linked list, 而是将tree压扁，不能用next, prev指向前后节点，应该改变treenode们的left, right来操作
+# 基础：二叉树中序遍历
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
 
+class Solution:
+   
+    """
+    @param root: root of a tree
+    @return: head node of a doubly linked list
+    """
+    def treeToDoublyList(self, root):
+        if root is None:
+            return None
+        
+        head, tail = self.dfs(root)
+        
+        # 因为题目要求是环，所以还要首尾相连
+        tail.right = head
+        head.left = tail
+        
+        return head
+        
+    def dfs(self, root):  
+        if root is None:
+            return None, None
+            
+        left_head, left_tail = self.dfs(root.left)
+        right_head, right_tail = self.dfs(root.right)
+        
+        # left tail <-> root
+        if left_tail:
+            left_tail.right = root
+            root.left = left_tail
+        # root <-> right head
+        if right_head:
+            root.right = right_head
+            right_head.left = root
+        
+        # 其实 root 肯定是有的，第三个 or 只是为了好看
+        head = left_head or root or right_head
+        tail = right_tail or root or left_tail
+        
+        return head, tail
