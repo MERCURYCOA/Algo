@@ -1,11 +1,33 @@
-# 前缀和 + 字典 求subarray sum ， O(n)  注意，最大平均值子数组也可以转化为最大和子数组问题，用前缀和
-# 连续子数组
+# 内容一：排序数组    内容二：前缀和 + 字典 求subarray sum ， O(n)  注意，最大平均值子数组也可以转化为最大和子数组问题，用前缀和
 
+# 排序数组
+# 题1： 找到两个排序数组（A, B）第k小的数  -- 每次删 k//2 个一定不是第k小的元素，
+# 1 对A, B每次向前移动k//2， 找到A， B从当前offset开始第k//2个元素a, b。  2 如果a < b, （或者b== None），说明a及之前的元素一定没有第k小元素，b有可能是第k小，所以让A的offset向后再移动k//2 
+# 3 如果b < a, 就舍去b及之前的k//2个元素，offset向后移动k//2
+
+def findKth(index_a, A, index_b, B, k):
+        if len(A) == index_a:
+            return B[index_b+k-1]
+        if len(B) == index_b:
+            return A[index_a+k-1]
+        if k == 1:
+            return min(A[index_a], B[index_b])
+            
+        a = A[index_a + k//2 -1] if index_a + k//2 <= len(A) else None
+        b = B[index_b + k//2-1] if index_b + k//2 <= len(B) else None
+        print('a  %s' %a)
+        print('b  %s' %b)
+        if b is None or (a is not None and a < b):
+            return findKth(index_a+k//2, A, index_b, B, k-k//2)
+        return findKth(index_a, A, index_b + k//2, B, k-k//2)
+print(findKth(0,[1,4,6], 0, [2,7,9], 4))
+# 6
 # 题一：找到2个数组的中位数  要求：logn
 
 #思路：根据中位数定义， n是数组A和B元素数之和， n是基数，中位数是n//2+1, n是偶数，中位数是最中间两个数的平均。
 # 问题转化为2个数组中求第k小的数。想用logn解决，就要用O(1)的时间将问题降为k/2。分别给A，B各一个指针，先找到各自第K//2个元素，比较大小，较小的值所在的数组，例如A，的前k//2个元素一定
 # 不包括第k小元素，所以让A的指针指向前走k//2，接下来就变成找第(k-k//2)小的数了,进入递归
+# 化繁为简，化整为零，中位数问题转化为找第n//2小的数
 class Solution:
     """
     @param: A: An integer array
@@ -40,6 +62,7 @@ class Solution:
             return self.findKth(index_a+k//2, A, index_b, B, k-k//2)  # 这里k的递归必须是k-k//2， 不可以是k//2, 因为考虑奇偶
         return self.findKth(index_a, A, index_b + k//2, B, k-k//2)
 
+# 连续子数组
     
 # 题二： maximum subarray  包含负数  时间O(n)
 # 记录sum,min_sum, sum和min_sum的最大差值,最后的最大差值就是max subarray
