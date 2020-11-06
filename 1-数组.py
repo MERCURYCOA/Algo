@@ -176,7 +176,30 @@ class Solution:
 # 连续子数组
     
 # 题二： maximum subarray  包含负数  时间O(n)
-# 记录sum,min_sum, sum和min_sum的最大差值,最后的最大差值就是max subarray
+# 方法一：presum
+import sys
+class Solution:
+    """
+    @param nums: A list of integers
+    @return: A integer indicate the sum of max subarray
+    """
+    def maxSubArray(self, nums):
+        if not nums:
+            return 0 
+        n = len(nums)
+        presum = [0]*(n+1)
+        max_diff = -sys.maxsize-1
+        min_sum = 0 
+
+        for i in range (n):
+            presum[i+1] = presum[i] + nums[i]
+        for i in range(1, n+1):
+            max_diff = max(max_diff, presum[i] - min_sum)
+            min_sum = min(min_sum, presum[i])
+        return max_diff
+# 方法二： 不用presum
+       # 记录sum,min_sum, sum和min_sum的最大差值,最后的最大差值就是max subarray
+
 class Solution:
     """
     @param nums: A list of integers
