@@ -64,3 +64,35 @@ class Solution:
                 
         self.quickSort(A, start, right)  # left <= right循环，这里left > right, 所以左边分治的区间是start, right
         self.quickSort(A, left, end)  # 同理
+
+        
+        
+ # 题1: 合并排序数组II 
+# 方法1:
+class Solution:
+    #@param A and B: sorted integer array A and B.
+    #@return: A new sorted integer array
+    def mergeSortedArray(self, A, B):
+        # write your code here
+        ans = []
+        i, j = 0, 0
+        n, m = len(A), len(B)
+        while i < n and j < m :
+            if A[i] < B[j] :
+                ans.append(A[i])
+                i += 1
+            else :
+                ans.append(B[j])
+                j += 1
+        while i < n :
+            ans.append(A[i])
+            i += 1
+        while j < m :
+            ans.append(B[j])
+            j += 1
+        return ans
+# 方法二：
+class Solution:
+   
+    def mergeSortedArray(self, A, B):
+        return sorted(A + B)
