@@ -13,7 +13,7 @@ def findKth(index_a, A, index_b, B, k):
         if k == 1:
             return min(A[index_a], B[index_b])
             
-        a = A[index_a + k//2 -1] if index_a + k//2 <= len(A) else None
+        a = A[index_a + k//2 -1] if index_a + k//2 <= len(A) else None   # 第k//2个数的下标是k//2 - 1, 要分清第i个和i下标的元素
         b = B[index_b + k//2-1] if index_b + k//2 <= len(B) else None
         print('a  %s' %a)
         print('b  %s' %b)
