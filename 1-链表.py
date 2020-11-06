@@ -598,6 +598,7 @@ class Solution:
         return sorted_smaller
 
 # 题六：有序链表转换为二叉搜索树
+# 方法一：
 """
 Definition of ListNode
 class ListNode(object):
@@ -632,7 +633,7 @@ class Solution:
         mid = slow.next 
         
         # 第2中找中点的方法，让slow和fast都从head出发，问题是，当只有2个节点时，-1->1->None ， 会有两种BST {-1, #, 1} {1, -1}，第1种方法对应第一种BST， 第2种方法对应第二种BST， 多于2个节点时， 2种方法都可以，所以综合来看，第1种方法AC
-        
+        # 如果非要用第2种方法，需要排除只有2个节点的情况，详见方法二
         # slow, fast = head, head  # 找中点
         # while fast.next:
           #  slow = slow.next
@@ -648,7 +649,55 @@ class Solution:
         root.right = self.sortedListToBST(post)
         
         return root
+# 方法二：
+"""
+Definition of ListNode
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+
+class Solution:
+    """
+    @param: head: The first node of linked list.
+    @return: a tree node
+    """
+    def sortedListToBST(self, head):
+        if not head:
+            return None 
+        if not head.next:  # 1个节点
+            return TreeNode(head.val)
+        if head.next.next is None:  # 2个节点
+            root = TreeNode(head.val)
+            root.right = TreeNode(head.next.val)
+            return root
         
+        prev = None            # 3个节点及以上
+        slow, fast = head, head  # 找中点
+        while fast.next and fast.next.next:
+            prev = slow
+            slow = slow.next
+            fast = fast.next.next
+        mid = slow 
+    
+        post = mid.next
+        prev.next = None  # 断后
+        mid.next = None 
+        root = TreeNode(mid.val)
+        
+        root.left = self.sortedListToBST(head)  # 递归  root.left是左边链表的中点成为的那个root
+        root.right = self.sortedListToBST(post)
+        
+        return root
 # 题七：在O(1)时间复杂度删除链表节点 
 # 改变node的val
 """
