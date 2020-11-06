@@ -631,6 +631,14 @@ class Solution:
             fast = fast.next.next
         mid = slow.next 
         
+        # 第2中找中点的方法，让slow和fast都从head出发，问题是，当只有2个节点时，-1->1->None ， 会有两种BST {-1, #, 1} {1, -1}，第1种方法对应第一种BST， 第2种方法对应第二种BST， 多于2个节点时， 2种方法都可以，所以综合来看，第1种方法AC
+        
+        # slow, fast = head, head  # 找中点
+        # while fast.next:
+          #  slow = slow.next
+           # fast = fast.next.next
+        # mid = slow 
+        
         post = mid.next
         slow.next = None  # 断后
         mid.next = None 
@@ -641,5 +649,26 @@ class Solution:
         
         return root
         
+# 题七：在O(1)时间复杂度删除链表节点 
+# 改变node的val
+"""
+Definition of ListNode
+class ListNode(object):
 
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+
+class Solution:
+    """
+    @param: node: the node in the list should be deleted
+    @return: nothing
+    """
+    def deleteNode(self, node):
+        if node is None or node.next is None:
+            return None
+        node.val = node.next.val 
+        node.next = node.next.next
 
