@@ -248,7 +248,29 @@ class Solution:
                 time_cost = 0 # 新加一个人，时间累积清零
             time_cost += page #当前page加给新来的这个人
         return people 
-    
+
+# 题五： 找到两个排序数组（A, B）第k小的数  -- 每次删 k//2 个一定不是第k小的元素，
+# 1 对A, B每次向前移动k//2， 找到A， B从当前offset开始第k//2个元素a, b。  2 如果a < b, （或者b== None），说明a及之前的元素一定没有第k小元素，b有可能是第k小，所以让A的offset向后再移动k//2 
+# 3 如果b < a, 就舍去b及之前的k//2个元素，offset向后移动k//2
+
+def findKth(index_a, A, index_b, B, k):
+        if len(A) == index_a:
+            return B[index_b+k-1]
+        if len(B) == index_b:
+            return A[index_a+k-1]
+        if k == 1:
+            return min(A[index_a], B[index_b])
+            
+        a = A[index_a + k//2 -1] if index_a + k//2 <= len(A) else None
+        b = B[index_b + k//2-1] if index_b + k//2 <= len(B) else None
+        print('a  %s' %a)
+        print('b  %s' %b)
+        if b is None or (a is not None and a < b):
+            return findKth(index_a+k//2, A, index_b, B, k-k//2)
+        return findKth(index_a, A, index_b + k//2, B, k-k//2)
+print(findKth(0,[1,4,6], 0, [2,7,9], 4))
+# 6
+
  # 题六：第k大元素   
 # Partition - Quick Select 
 # 先找一个pivot, 把pivot 排在正确的位置，也就是pivot左边的数比pivot大，右边的数比pivot小（因为找的是第k大）
