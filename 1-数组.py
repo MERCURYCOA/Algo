@@ -265,6 +265,29 @@ class Solution:
     
     
 # 题四： 子数组之和为0  #前缀和存入dict
+# 方法一：presum + dict
+import collections
+class Solution:
+    """
+    @param nums: A list of integers
+    @return: A list of integers includes the index of the first number and the index of the last number
+    """
+    def subarraySum(self, nums):
+        if not nums:
+            return []
+        n = len(nums)
+        presum = [0]*(n+1)
+        dict = collections.defaultdict(list)
+        dict[0].append(0)
+        
+        for i in range(n):
+            presum[i+1] = presum[i] + nums[i]
+            if presum[i+1] in dict:
+                return [dict[presum[i+1]][0], i]
+            dict[presum[i+1]].append(i+1)
+        return []
+# 方法二：不用presum, 用sum + dict
+
 class Solution:
     """
     @param nums: A list of integers
@@ -287,29 +310,8 @@ class Solution:
             
         return res
 # 题五：子数组之和最接近0，返回index
-# 方法一：presum + dict
-import collections
-class Solution:
-    """
-    @param nums: A list of integers
-    @return: A list of integers includes the index of the first number and the index of the last number
-    """
-    def subarraySum(self, nums):
-        if not nums:
-            return []
-        n = len(nums)
-        presum = [0]*(n+1)
-        dict = collections.defaultdict(list)
-        dict[0].append(0)
-        
-        for i in range(n):
-            presum[i+1] = presum[i] + nums[i]
-            if presum[i+1] in dict:
-                return [dict[presum[i+1]][0], i]
-            dict[presum[i+1]].append(i+1)
-        return []
+
                 
-# 方法二：不用presum, 用sum + dict
 class Solution:
     """
     @param: nums: A list of integers
@@ -329,6 +331,35 @@ class Solution:
                 closest = prefix_sum[i][0] - prefix_sum[i - 1][0]  #这里一直记录的是 最小的prefix_sum差值。 注意： 在没排序的时候 prefix_sum[i]和prefix_sum[i-1]不一定是相邻的，这就是我们要找的prefix_sum[j+1] - prefix_sum[i]
                 left = min(prefix_sum[i - 1][1], prefix_sum[i][1]) + 1   # 因为index是乱的，所以要找到prefix_sum[i]和prefix_sum[i-1]谁的坐标靠左就是起点，靠右就是终点
                 right = max(prefix_sum[i - 1][1], prefix_sum[i][1])
+                answer = [left, right]
+        
+        return answer
+       
+# 第2次做这个题， 有一些新想法
+# 1， 字典不能做序列操作，所以用二元数组。 
+# 2，为什么排序？如果不排序，想找到最接近0的presum差值一定需要n^2， 但是要求nlogn解决，所以排序，排序之后，相邻的presum一定是差值最小的，看每一对差值最接近0的是哪个，就返回哪个。
+# 3, 关于nums和presum下标的问题，记住sum(i, j) = presum[j+1] - presum[i] 然后举例子套用就可以知道最终由presum下标到nums下标该怎么变了。
+
+import sys
+class Solution:
+    """
+    @param: nums: A list of integers
+    @return: A list of integers includes the index of the first number and the index of the last number
+    """
+    def subarraySumClosest(self, nums):
+        # write your code here
+        prefix_sum = [(0, 0)]
+        for i, num in enumerate(nums):
+            prefix_sum.append((prefix_sum[-1][0] + num, i+1))  # [-1]指的是最后一对元素
+        
+        prefix_sum.sort()  #按照sum大小排序，排过序之后index是乱的
+        
+        closest, answer = sys.maxsize, []
+        for i in range(1, len(prefix_sum)):
+            if closest > prefix_sum[i][0] - prefix_sum[i - 1][0]:  #不要字典就是因为不能进行i-1, i的比较
+                closest = prefix_sum[i][0] - prefix_sum[i - 1][0]  #这里一直记录的是 最小的prefix_sum差值。 注意： 在没排序的时候 prefix_sum[i]和prefix_sum[i-1]不一定是相邻的，这就是我们要找的prefix_sum[j+1] - prefix_sum[i]
+                left = min(prefix_sum[i - 1][1], prefix_sum[i][1])  # 因为index是乱的，所以要找到prefix_sum[i]和prefix_sum[i-1]谁的坐标靠左就是起点，靠右就是终点
+                right = max(prefix_sum[i - 1][1], prefix_sum[i][1]) -1
                 answer = [left, right]
         
         return answer
