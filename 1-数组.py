@@ -287,7 +287,29 @@ class Solution:
             
         return res
 # 题五：子数组之和最接近0，返回index
-
+# 方法一：presum + dict
+import collections
+class Solution:
+    """
+    @param nums: A list of integers
+    @return: A list of integers includes the index of the first number and the index of the last number
+    """
+    def subarraySum(self, nums):
+        if not nums:
+            return []
+        n = len(nums)
+        presum = [0]*(n+1)
+        dict = collections.defaultdict(list)
+        dict[0].append(0)
+        
+        for i in range(n):
+            presum[i+1] = presum[i] + nums[i]
+            if presum[i+1] in dict:
+                return [dict[presum[i+1]][0], i]
+            dict[presum[i+1]].append(i+1)
+        return []
+                
+# 方法二：不用presum, 用sum + dict
 class Solution:
     """
     @param: nums: A list of integers
