@@ -11,6 +11,33 @@ for i in range(n):
   更新i的状态
 
 # ============================================
+# 一： 滑动窗口
+# 1 滑动窗口内数的和
+# 滑动窗口的节约时间的点是只需要计算1次第一个窗口内的和， 窗口向后移动时，只需减去最前面的元素然后假设后面一个新元素，如果每个窗口都计算窗头到窗尾的和，就失去窗口的意义了。
+# 步骤： 1， 2个指针一开始就r放到窗口头尾，2， 计算第一个窗口的和  3 向后滑动窗口 加减元素
+class Solution:
+    """
+    @param nums: a list of integers.
+    @param k: length of window.
+    @return: the sum of the element inside the window at each moving.
+    """
+    def winSum(self, nums, k):
+        if not nums:
+            return []
+        n = len(nums)
+        res = []
+       
+        l, r = 0, k-1
+        sum_ = sum(nums[l : k])
+        res.append(sum_)
+        while r < n-1:  # 如果r < n, 会出界
+            sum_ -= nums[l]
+            l+= 1 
+            r += 1
+            sum_ += nums[r]
+            res.append(sum_)
+            
+        return res 
 # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
