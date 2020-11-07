@@ -1,4 +1,5 @@
 # 内容一：排序数组    内容二：前缀和 + 字典 求subarray sum ， O(n)  注意，最大平均值子数组也可以转化为最大和子数组问题，用前缀和
+# 如果问和/平均值最小/大，用presum, 但是如果求长度最小/大连续子数组，要用同向双指针
 
 # 合并排序数组 - 不要想的太简单       
  # 题1: 合并排序数组II 
@@ -238,7 +239,7 @@ class Solution:
             ans = max(ans, sum[i] - sum[i - k])
         return ans * 1.0 / k
     
-    # 题三： minimum subarray , 和大于S的最小子数组
+    # 题三： minimum subarray , 和大于S的最小子数组  # 这里求的是长度最小，要用同向双指针
 import sys
 class Solution:
     """
