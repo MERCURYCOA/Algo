@@ -11,7 +11,7 @@ for i in range(n):
   更新i的状态
 
 # ============================================
-# 一： 滑动窗口
+# 一： 同向双指针
 # 1 滑动窗口内数的和
 # 滑动窗口的节约时间的点是只需要计算1次第一个窗口内的和， 窗口向后移动时，只需减去最前面的元素然后假设后面一个新元素，如果每个窗口都计算窗头到窗尾的和，就失去窗口的意义了。
 # 步骤： 1， 2个指针一开始就r放到窗口头尾，2， 计算第一个窗口的和  3 向后滑动窗口 加减元素
@@ -38,7 +38,34 @@ class Solution:
             res.append(sum_)
             
         return res 
-# 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
+# 2  移动零 
+# 先移动i，i符合条件停下后，让j=i，然后让j向后，直到符合条件停下
+class Solution:
+    """
+    @param nums: an integer array
+    @return: nothing
+    """
+    def moveZeroes(self, nums):
+        if not nums:
+            return []
+        n = len(nums)
+        i, j = 0, 0
+        
+        while i < n and j < n:
+            while i < n and nums[i] != 0:
+                i += 1 
+            if i < n and nums[i] == 0:
+                j = i
+                while j < n and nums[j] == 0:
+                    j += 1 
+                if j < n and nums[j] != 0:
+                    nums[i], nums[j] = nums[j], nums[i]
+                    i += 1 
+                    j += 1 
+        return nums
+        
+   
+      # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
 
