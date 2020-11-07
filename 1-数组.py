@@ -1,5 +1,6 @@
 # 内容一：排序数组    内容二：前缀和 + 字典 求subarray sum ， O(n)  注意，最大平均值子数组也可以转化为最大和子数组问题，用前缀和
 # 如果问和/平均值最小/大，用presum, 但是如果求长度最小/大连续子数组，要用同向双指针
+# 前缀和是从0开始的subarray sum, 还有一个常用数组是记录当前和最大子数组，presum[i] + A[i] <= A[i], presum[i] = A[i]； else: presum[i] = presum[i] + A[i].presum永远记录当当前为止最大的子数组和
 
 # 合并排序数组 - 不要想的太简单       
  # 题1: 合并排序数组II 
@@ -405,19 +406,17 @@ class Solution:
 # 4 比较sum1和sum2， 返回更大的那一个的起点和终点坐标
 
 # trick: 怎么求最小和？ 将数组A中所有元素取相反数，求新数组的最大和。函数用最大和的函数就可以，参数A取反。
-  @param: A: An integer array
-    @return: A list of integers includes the index of the first number and the index of the last number
-    """
+  
     def continuousSubarraySumII(self, A):
-        max_start, max_end, max_sum = self.find_maximum_subarray(A)
-        min_start, min_end, min_sum = self.find_maximum_subarray([-a for a in A])
+        max_start, max_end, max_sum = self.find_maximum_subarray(A)  # 情况1      _____start\\\\\\\\\end______
+        min_start, min_end, min_sum = self.find_maximum_subarray([-a for a in A])  # 情况2     \\\\\end_____start\\\\\\  情况2怎么求？1，想求\\\\部分的最大和子数组， 等于求end到start的最小和子数组。2，想利用find_maximum_subarray这个函数求最小和子数组，就让A中所有元素取相反数 假设得到-A 。 3 求-A的最大subarray sum的子数组， 就是A的最小和子数组。
         min_sum = -min_sum  # *-1 after reuse find maximum array
         
         total = sum(A)
-        if max_sum >= total - min_sum or min_end - min_start + 1 == len(A):
+        if max_sum >= total - min_sum or min_end - min_start + 1 == len(A):  # 比较情况1和情况2谁的最大子数组大  # min_end - min_start + 1 == len(A) 的情况是end和start相邻， end和start分别是A[0]和A[n-1],这就变成第1种情况了。
             return [max_start, max_end]
         
-        return [min_end + 1, min_start - 1]
+        return [min_end + 1, min_start - 1]  # 情况2: max开始的位置是min_end向后一位,结束的位置是min_start向前1位。就是+的位置 \\\\+end_____start+\\\\\
         
     def find_maximum_subarray(self, nums):
         max_sum = -sys.maxsize
