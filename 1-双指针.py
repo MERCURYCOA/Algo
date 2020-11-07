@@ -63,9 +63,41 @@ class Solution:
                     i += 1 
                     j += 1 
         return nums
-        
-   
-      # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
+# 二：对向双指针
+# 有效回文串
+class Solution:
+    """
+    @param s: A string
+    @return: Whether the string is a valid palindrome
+    """
+    def isPalindrome(self, s):
+        if not s:
+            return True 
+        s = s.lower()
+        print(s)
+        n = len(s)
+        i, j = 0, n-1 
+        while i < j and i < n and j >= 0:
+            while  i < j and i < n and s[i].isalpha() == False and s[i].isdigit() == False:  # 用and不同or, 因为必须同时符合不是字母不是数字才能略过
+                i += 1 
+            
+            while i < j and j >= 0 and s[j].isalpha() == False and s[j].isdigit()== False:
+                j -= 1 
+            
+            if i < j and s[i] != s[j]: # 这里不可以用if else , 只能用单if 判断是否不相等， 返回false, 错误写法见下面
+                return False 
+            i += 1 
+            j -= 1 
+        return True
+# 错误写法：        
+if i < j and s[i] == s[j]:
+    i += 1 
+    j -= 1    
+else:
+    return False  # ！！！！！！！！千万慎用else: False, 这样太冒险兰，你怎么直到else里面包含什么， 一定要明确的条件下return False
+                  # 这里问题出在 当i = j时， a b a， 最后i, j都移动到b， 此时i = j 就包含在else里，返回false.这是不对的， 当i = j  时，应该i, j继续对向移动才对。
+    
+# 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
 
