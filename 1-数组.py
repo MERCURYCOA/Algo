@@ -378,7 +378,7 @@ class Solution:
         start = 0
         for i in range(1, len(A)):     # f[i]是当前子数组的最大和
             if f[i-1] + A[i] <= A[i]:  # 如果A[i]大于f[i-1]+A[i], 当前i就是新的子数组的起点，将A[i]存入f[i]
-                f.append(A[i])
+                f.append(A[i])       # 注意要用append, 因为你只给f开了一个位置，如果用f[i] = f[i-1] + A[i] 会溢出。 当然，如果你让f = [0]*n是可以这样去修改f的元素值的
             else:
                 f.append(f[i-1] + A[i])
         max_value = max(f)
