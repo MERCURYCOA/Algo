@@ -97,7 +97,7 @@ else:
     return False  # ！！！！！！！！千万慎用else: False, 这样太冒险兰，你怎么直到else里面包含什么， 一定要明确的条件下return False
                   # 这里问题出在 当i = j时， a b a， 最后i, j都移动到b， 此时i = j 就包含在else里，返回false.这是不对的， 当i = j  时，应该i, j继续对向移动才对。
 # 2. 旋转字符
-# 3步翻转 # offset说的是从后向前
+# 3步翻转 # offset说的是从后向前  # 要求额外空间O(1)
 class Solution:
     """
     @param str: An array of char
@@ -123,7 +123,32 @@ class Solution:
             i += 1 
             j -= 1 
         return s
-# 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
+ # 旋转字符II:
+# 没有要求额外空间O(1)
+class Solution:
+    """
+    @param str: An array of char
+    @param left: a left offset
+    @param right: a right offset
+    @return: return a rotate string
+    """
+    def RotateString2(self, str, left, right):
+        # write your code here
+        str_len = len(str)
+        offset = left - right		#计算总偏移量
+        flag = 1 if(offset >= 0) else -1
+        offset = abs(offset) % str_len
+        if flag >= 0:
+            A = str[:offset]		#截取offset右边部分  # 因为可以有额外空间，所以可以截取
+            B = str[offset:]		#截取offset左边部分
+        else:
+            A = str[:str_len - offset]		#截取右边算起offset位置处左边部分
+            B = str[str_len - offset:]		#截取其右边部分
+        results = B + A
+        return results
+
+      
+      # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
 
