@@ -265,7 +265,8 @@ class TwoSum:
         for num in self.map:
             if value-num in self.map and (value-num != num or self.map[num]>1):
                 return True
-        return False 
+        return False   # 注意False的位置，与for并行。在for循环出来之后还没return true的一定return false。
+      
 # 题三：3 sums, a + b + c = 0, 找到所有的[a, b, c] -> 不能重复
 # 转化为 b + c = -a
 class Solution:
