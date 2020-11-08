@@ -64,7 +64,7 @@ class Solution:
                     j += 1 
         return nums
 # 二：对向双指针
-# 有效回文串
+#1 有效回文串
 class Solution:
     """
     @param s: A string
@@ -96,7 +96,33 @@ if i < j and s[i] == s[j]:
 else:
     return False  # ！！！！！！！！千万慎用else: False, 这样太冒险兰，你怎么直到else里面包含什么， 一定要明确的条件下return False
                   # 这里问题出在 当i = j时， a b a， 最后i, j都移动到b， 此时i = j 就包含在else里，返回false.这是不对的， 当i = j  时，应该i, j继续对向移动才对。
-    
+# 2. 旋转字符
+# 3步翻转 # offset说的是从后向前
+class Solution:
+    """
+    @param str: An array of char
+    @param offset: An integer
+    @return: nothing
+    """
+    def rotateString(self, s, offset):
+        if not s:
+            return ""
+        n = len(s)
+        if offset <= 0:
+            return s
+        offset = offset % n
+        s = self.reverse(s, 0, n - offset - 1)
+        s = self.reverse(s, n - offset, n-1)
+        s = self.reverse(s, 0, n-1)
+        
+        return s
+    def reverse(self, s, start, end):
+        i, j = start, end 
+        while i < j:
+            s[i], s[j] = s[j], s[i]
+            i += 1 
+            j -= 1 
+        return s
 # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
