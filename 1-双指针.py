@@ -172,7 +172,24 @@ class Solution:
             elif i < j and A[i][0] + A[j][0] < target:
                 i += 1 
         return [-1, -1]
-      
+# 方法二：dict
+class Solution:
+    """
+    @param numbers: An array of Integer
+    @param target: target = numbers[index1] + numbers[index2]
+    @return: [index1 + 1, index2 + 1] (index1 < index2)
+    """
+    def twoSum(self, numbers, target):
+        if not numbers:
+            return [-1, -1]
+        dict = {}
+        for index, num in enumerate(numbers):
+            if target - num in dict:
+                return [dict[target-num], index]   # 注意第一个位置是dict[target-num]， dict[num]还没放进去
+            if num not in dict:
+                dict[num] = index 
+        return [-1, -1]
+
       
 # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
