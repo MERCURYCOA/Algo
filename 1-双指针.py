@@ -147,8 +147,34 @@ class Solution:
         results = B + A
         return results
 
+
+# Two Sum 系列
+# 1. Two Sum
+# 方法一：two pointers 
+# 注意一般two pointers需要排序数组，如果需要返回坐标组，不能直接排序，这样会打乱下标，应该通过二元组储存原下标，之后再排序。
+class Solution:
+    """
+    @param numbers: An array of Integer
+    @param target: target = numbers[index1] + numbers[index2]
+    @return: [index1 + 1, index2 + 1] (index1 < index2)
+    """
+    def twoSum(self, numbers, target):
+        if not numbers:
+            return [-1, -1]
+        A = [(number, index) for index, number in enumerate(numbers)]
+        A = sorted(A)
+        i, j = 0, len(A) - 1 
+        while i < j:
+            if i < j and A[i][0] + A[j][0] == target:
+                return  sorted([A[i][1], A[j][1]])
+            elif i < j and A[i][0] + A[j][0] > target:
+                j -= 1 
+            elif i < j and A[i][0] + A[j][0] < target:
+                i += 1 
+        return [-1, -1]
       
-      # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
+      
+# 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
 
