@@ -346,7 +346,31 @@ class Solution:
                 else:
                     left += 1  # 移动最小的边，因为条件要求和大于S[i], 如果要求小于某值，就移动最大的值
         return ans            
-            
+# 6: 跟5同思路  two sum less than or equal to target  // two sum greater than target
+def twoSumGreater(self, nums, target):
+        nums = sorted(nums)
+        count = 0
+        i, j = 0, len(nums)-1 
+        while i < j:
+            if nums[i] + nums[j] <= target:
+                i += 1
+            else:
+                count += j - i 
+                j -= 1
+        return count
+def twoSumLess(self, nums, target):
+        nums = sorted(nums)
+        count = 0
+        i, j = 0, len(nums)-1 
+        while i < j:
+            if nums[i] + nums[j] <= target:
+                count += j - i 
+                i += 1
+            else:
+                j -= 1
+        return count
+      
+      
 # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
