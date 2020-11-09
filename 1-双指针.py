@@ -190,7 +190,142 @@ class Solution:
                 dict[num] = index 
         return [-1, -1]
 
-      
+# 2. 两数之和 - 不同组成  
+# 关键略过重复的元素， 但又不能用set()去重 # 1, 2, 3, 4, 7, 11, 11  target = 22 , 用set 会把第2个11去掉
+class Solution:
+    """
+    @param nums: an array of integer
+    @param target: An integer
+    @return: An integer
+    """
+    def twoSum6(self, nums, target):
+        count = 0
+        if not nums:
+            return count
+        nums = sorted(nums)
+        
+        # 1, 1, 2, 45, 46, 46
+        i, j = 0, len(nums)-1
+        while i < j:
+            if i > 0 and nums[i] == nums[i-1]:
+                i += 1 
+            else:
+                if i < j and nums[i] + nums[j] > target:
+                    j -= 1 
+                elif i < j and nums[i] + nums[j] < target:
+                    i += 1 
+                elif i < j and nums[i] + nums[j] == target:
+                    count += 1 
+                    i += 1 
+                    j -= 1
+        return count
+#2. 构建data structure ,2个方法，add, find,可以加进去数，也可以返回是否存在一对数的和为value
+# 用dictionary最快
+class TwoSum:
+    """
+    @param number: An integer
+    @return: nothing
+    """
+    def __init__(self):     # 构建类， init一个map
+        self.map = {}
+    
+    def add(self, number):
+        # write your code here
+        if number in self.map:
+            self.map[number] += 1 
+            
+        else:
+            self.map[number] = 1 
+            
+            
+    """
+    @param value: An integer
+    @return: Find if there exists any pair of numbers which sum is equal to the value.
+    """
+    def find(self, value):
+        # write your code here
+        for num in self.map:
+            if value-num in self.map and (value-num != num or self.map[num]>1):
+                return True
+        return False   # 注意False的位置，与for并行。在for循环出来之后还没return true的一定return false。 
+# 4. 3Sum  a + b + c = 0, 找到所有的[a, b, c] -> 不能重复
+# 转化为 b + c = -a
+# 第一次做
+class Solution:
+    """
+    @param numbers: Give an array numbers of n integer
+    @return: Find all unique triplets in the array which gives the sum of zero.
+    """
+    def threeSum(self, numbers):
+        # write your code here
+        if not numbers or len(numbers) == 0:
+            return []
+        
+        n = len(numbers)
+        numbers = sorted(numbers)
+        res = []
+        
+        for i in range(n-2):
+            if i>0 and numbers[i] == numbers[i-1]:
+                continue
+            target = -numbers[i]
+            self.twoSum(target, numbers, i+1, res)  # 因为twoSum函数中已经将答案append到res, 这里不要让twoSum等于什么，直接传入调用twoSum,传入res
+        return res
+        
+    def twoSum(self, target, numbers, start_index,res):
+        left, right = start_index, len(numbers)-1
+        while left < right:                                     # 3种情况，第一种情况内又考虑重复，一定要思路清晰
+            if numbers[left] + numbers[right] == target:
+                res.append([-target, numbers[left], numbers[right]])  # 加入的是具体的数，不是index
+                left += 1
+                right -= 1 
+            
+                while left < right and numbers[left] == numbers[left-1]: #因为res不能重复，所以这里只需判断numbers[left] + numbers[right] == target 情况下后面的left+,right-1是否是否与left,right位置的数相等即可，其他两种情况不需要做这个判断，反正都会略过
+                    left += 1     
+                while left < right and numbers[right] == numbers[right+1]:
+                    right -= 1 
+            elif numbers[left] + numbers[right] > target:
+                right -= 1 
+                
+            else:
+                left += 1 
+# 第二次做
+# two sum函数使用index的原因
+class Solution:
+    """
+    @param numbers: Give an array numbers of n integer
+    @return: Find all unique triplets in the array which gives the sum of zero.
+    """
+    def threeSum(self, numbers):
+        if not numbers:
+            return []
+        self.res = []
+        numbers = sorted(numbers)
+        # -4, -1, -1, 0, 1, 2
+        # -1 : 1 
+        # -4, -1, 0, 1, 2  //   target 1
+        for i in range(len(numbers)):
+            if i > 0 and numbers[i] == numbers[i-1]:
+                continue
+            self.twoSum(i, numbers, 0 - numbers[i])
+        return self.res
+    
+    def twoSum(self, index, numbers, target): 
+        i, j = index+1, len(numbers)-1   # 这里必须从index下一个元素开始，不能i, j = 0, len(numbers)-1， 因为res里不能有重复的。如果每次给出一个target，都从头开始找twoSum = -target, 就会重复。例如： [-1,  0, 1]的结果就成里[[[-1,  0, 1],[[-1,  0, 1], [[-1,  0, 1]]]]]
+        while i < j:
+            if i > index+1 and numbers[i] == numbers[i-1]:
+                i += 1 
+            else:
+                if i < j and numbers[i] + numbers[j] > target:
+                    j -= 1 
+                elif i < j and numbers[i] + numbers[j] < target:
+                    i += 1 
+                elif i < j and numbers[i] + numbers[j] == target:
+                    self.res.append(sorted([0-target, numbers[i], numbers[j]]))
+                    i += 1 
+                    j -= 1 
+            
+            
 # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
@@ -232,82 +367,7 @@ def deduplication(nums):
         
         return right + 1  # 这里要注意哪个指针代表uniqur数的结束
                 
-       # print(nums)
-    
- 
-
-
-#题二：构建data structure ,2个方法，可以加进去数，也可以返回是否存在一对数的和为value
-# 用dictionary最快
-class TwoSum:
-    """
-    @param number: An integer
-    @return: nothing
-    """
-    def __init__(self):     # 构建类， init一个map
-        self.map = {}
-    
-    def add(self, number):
-        # write your code here
-        if number in self.map:
-            self.map[number] += 1 
-            
-        else:
-            self.map[number] = 1 
-            
-            
-    """
-    @param value: An integer
-    @return: Find if there exists any pair of numbers which sum is equal to the value.
-    """
-    def find(self, value):
-        # write your code here
-        for num in self.map:
-            if value-num in self.map and (value-num != num or self.map[num]>1):
-                return True
-        return False   # 注意False的位置，与for并行。在for循环出来之后还没return true的一定return false。
-      
-# 题三：3 sums, a + b + c = 0, 找到所有的[a, b, c] -> 不能重复
-# 转化为 b + c = -a
-class Solution:
-    """
-    @param numbers: Give an array numbers of n integer
-    @return: Find all unique triplets in the array which gives the sum of zero.
-    """
-    def threeSum(self, numbers):
-        # write your code here
-        if not numbers or len(numbers) == 0:
-            return []
-        
-        n = len(numbers)
-        numbers = sorted(numbers)
-        res = []
-        
-        for i in range(n-2):
-            if i>0 and numbers[i] == numbers[i-1]:
-                continue
-            target = -numbers[i]
-            self.twoSum(target, numbers, i+1, res)  # 因为twoSum函数中已经将答案append到res, 这里不要让twoSum等于什么，直接传入调用twoSum,传入res
-        return res
-        
-    def twoSum(self, target, numbers, start_index,res):
-        left, right = start_index, len(numbers)-1
-        while left < right:                                     # 3种情况，第一种情况内又考虑重复，一定要思路清晰
-            if numbers[left] + numbers[right] == target:
-                res.append([-target, numbers[left], numbers[right]])  # 加入的是具体的数，不是index
-                left += 1
-                right -= 1 
-            
-                while left < right and numbers[left] == numbers[left-1]: #因为res不能重复，所以这里只需判断numbers[left] + numbers[right] == target 情况下后面的left+,right-1是否是否与left,right位置的数相等即可，其他两种情况不需要做这个判断，反正都会略过
-                    left += 1     
-                while left < right and numbers[right] == numbers[right+1]:
-                    right -= 1 
-            elif numbers[left] + numbers[right] > target:
-                right -= 1 
-                
-            else:
-                left += 1 
-                
+       # print(nums)             
 
 # 题四：能组成三角形的个数
 
