@@ -248,7 +248,9 @@ class TwoSum:
             if value-num in self.map and (value-num != num or self.map[num]>1):
                 return True
         return False   # 注意False的位置，与for并行。在for循环出来之后还没return true的一定return false。 
-# 4. 3Sum  a + b + c = 0, 找到所有的[a, b, c] -> 不能重复
+######
+# 对于3 sum ,什么时候用2 sum函数什么时候用3指针（1定2动） -- 3 sum target 用sum, 可以调用2 sum ,传入target参数。 3 sum closest用3指针，因为你没办法用target做参数调用2 sum， 强行用会非常复杂， 本来closest问题就要遍历比较的，所以要用3指针。
+      # 4. 3Sum  a + b + c = 0, 找到所有的[a, b, c] -> 不能重复
 # 转化为 b + c = -a
 # 第一次做
 class Solution:
