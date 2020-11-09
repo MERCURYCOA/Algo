@@ -326,6 +326,7 @@ class Solution:
                     j -= 1 
 # 5：能组成三角形的个数
 # 第2次做不出的原因是：S[left] + S[right] <= S[i]时不知道该怎么办。让left向右移动即可， 不用担心left前面的再跟end后面的数，这些在ans += right - left已经算进去了， 当前left已经跟所有可能值都算到ans里了，过去的不用再考虑了。
+# 注意： 算到ans里的是left 到right中间的元素，不是right到i之间的。绕不过这个弯，就没办法知道left， right怎么移动。想法应该是left 和 right之间的数都比left大，所以如果S[left] + S[right] > S[i]，那么left,right之间的所有数都可以，而不是让right跟right与i之间的数比较。
 class Solution:
     """
     @param S: A list of integers
