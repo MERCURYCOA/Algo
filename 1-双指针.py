@@ -515,6 +515,30 @@ class Solution:
                     i += 1 
                 while i < j and numbers[j] == numbers[j+1]:
                     j -= 1 
+
+# 题五：差值为target,返回这一对数字[num1, num2], 且num1 < num2
+# 求差值， 用同向双指针， 
+class Solution:
+    """
+    @param numbers: Give an array
+    @param target: An integer
+    @return: Find all unique quadruplets in the array which gives the sum of zero
+    """
+    def twoDiff(self, numbers, target):
+        if len(numbers) < 2:
+            return []
+        j = 1
+        for i in range(len(numbers)-1):   
+            while j < len(numbers):
+                if i == j:   # 指针防撞  固定1个，动1个， 一定记得防撞
+                  j += 1
+                if numbers[j] - numbers[i] == target:
+                    return [i, j]
+                if numbers[j] - numbers[i] < target:
+                    j += 1                    
+                    
+                    
+                    
 # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
@@ -560,24 +584,7 @@ def deduplication(nums):
 
 
             
-# 题五：差值为target,返回这一对数字[num1, num2], 且num1 < num2
-# 求差值， 用同向双指针， 
-def diffTarget(A, target):
-    if not A or not target or len(A) == 0:
-        return -1
-    A.sort()
-    i, j = 0,1
-    res = []
-    while i < j and j < len(A):
-        if A[j] - A[i] == target:
-            res.extend([A[i], A[j]])
-            break
-        elif A[j] - A[i] < target: #右减左 小于target， 右指针向前，找更大的数
-            right -= 1 
-        else:                       #找到第一个右减左 大于target， 右停下，左向前，缩小当前差值
-            left += 1 
-    return res
-print(diffTarget([2, 7, 15, 24], 5))
+#
 
 
 
