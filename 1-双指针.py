@@ -369,8 +369,69 @@ def twoSumLess(self, nums, target):
             else:
                 j -= 1
         return count
+# 7 two sum closest
+import sys
+class Solution:
+    """
+    @param nums: an array of integer
+    @param target: An integer
+    @return: An integer
+    """
+    def twoSumClosest(self, nums, target):
+        nums = sorted(nums)
+        i, j = 0, len(nums)-1 
+        min_diff = sys.maxsize
+        while i < j:
+          if nums[i] + nums[j] < target:
+                diff = abs(nums[i] + nums[j] - target)
+                min_diff = min(diff, target - nums[i] - nums[j])
+                i += 1
+            else:
+                diff = abs(nums[i] + nums[j] - target)
+                min_diff = min(diff, nums[i] + nums[j] - target)
+                j -= 1
+
+        return min_diff
       
-      
+ # 错误做法：！！！！！！！严禁在i,j移动之后对nums[i], nums[j]做判断或操作，一定是先操作，判断， 最后移动i, j. 先移动i, j是什么鬼！！！！！！！！
+            if nums[i] + nums[j] > target:
+                j -= 1 
+            elif nums[i] + nums[j] < target:
+                i += 1 
+            elif nums[i] + nums[j] == target:
+                return 0 
+            if i < j:
+                diff = abs(nums[i] + nums[j] - target)
+                min_diff = min(min_diff, diff)
+        return min_diff
+# 8 three sum closest
+# 别特么想那么复杂，复杂问题简单化， 你tm老是简单问题复杂化是怎么回事？？？？？？？？
+# 固定1个，移动2个
+import sys
+class Solution:
+    """
+    @param numbers: Give an array numbers of n integer
+    @param target: An integer
+    @return: return the sum of the three integers, the sum closest target.
+    """
+    def threeSumClosest(self, numbers, target):
+        if not numbers:
+            return 0
+        numbers = sorted(numbers)
+        res = sys.maxsize
+        for i in range(len(numbers) - 2):
+            left, right = i + 1, len(numbers)-1   # left从i开始
+            while left < right:
+                sum_ = numbers[i] + numbers[left] + numbers[right]
+                if abs(sum_ - target) < abs(res - target):
+                    res = sum_     # 记住返回的是sum 不是差值
+                if sum_ < target:
+                    left += 1 
+                elif sum_ > target:
+                    right -= 1 
+                elif sum_ == target:
+                    return sum_ 
+        return res
 # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
