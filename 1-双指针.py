@@ -324,7 +324,27 @@ class Solution:
                     self.res.append(sorted([0-target, numbers[i], numbers[j]]))
                     i += 1 
                     j -= 1 
-            
+# 5：能组成三角形的个数
+# 第2次做不出的原因是：S[left] + S[right] <= S[i]时不知道该怎么办。让left向右移动即可， 不用担心left前面的再跟end后面的数，这些在ans += right - left已经算进去了， 当前left已经跟所有可能值都算到ans里了，过去的不用再考虑了。
+class Solution:
+    """
+    @param S: A list of integers
+    @return: An integer
+    """
+    def triangleCount(self, S):
+        # write your code here
+        S.sort()
+        
+        ans = 0
+        for i in range(len(S)-1, 1,-1):
+            left, right = 0, i - 1
+            while left < right:
+                if S[left] + S[right] > S[i]:
+                    ans += right - left  # 如果 S[left], S[right], S[i]能组成三角形，那么S[left]和S[right]中间的数都能和S[right]，S[i]组成，因为他们都大于S[left]
+                    right -= 1
+                else:
+                    left += 1  # 移动最小的边，因为条件要求和大于S[i], 如果要求小于某值，就移动最大的值
+        return ans            
             
 # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
@@ -369,27 +389,7 @@ def deduplication(nums):
                 
        # print(nums)             
 
-# 题四：能组成三角形的个数
 
-class Solution:
-    """
-    @param S: A list of integers
-    @return: An integer
-    """
-    def triangleCount(self, S):
-        # write your code here
-        S.sort()
-        
-        ans = 0
-        for i in range(len(S)-1, 1,-1):
-            left, right = 0, i - 1
-            while left < right:
-                if S[left] + S[right] > S[i]:
-                    ans += right - left  # 如果 S[left], S[right], S[i]能组成三角形，那么S[left]和S[right]中间的数都能和S[right]，S[i]组成，因为他们都大于S[left]
-                    right -= 1
-                else:
-                    left += 1  # 移动最小的边，因为条件要求和大于S[i], 如果要求小于某值，就移动最大的值
-        return ans
             
 # 题五：差值为target,返回这一对数字[num1, num2], 且num1 < num2
 # 求差值， 用同向双指针， 
