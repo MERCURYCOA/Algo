@@ -9,6 +9,7 @@ for i in range(n):
   if j停下的条件：
     return/ break 
   更新i的状态
+# 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 
 # ============================================
 # 一： 同向双指针
@@ -516,7 +517,7 @@ class Solution:
                 while i < j and numbers[j] == numbers[j+1]:
                     j -= 1 
 
-# 题五：差值为target,返回这一对数字[num1, num2], 且num1 < num2
+# 10：差值为target,返回这一对数字[num1, num2], 且num1 < num2
 # 求差值， 用同向双指针， 
 class Solution:
     """
@@ -539,7 +540,6 @@ class Solution:
                     
                     
                     
-# 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
 
@@ -584,12 +584,11 @@ def deduplication(nums):
 
 
             
-#
+######
+# Partition
 
-
-
-# 题七： 数组元素小于k在左边，大于等于k在右边
-# 快速选择
+# 1： 数组元素小于k在左边，大于等于k在右边
+# partition 基础
 class Solution:
     """
     @param nums: The integer array you should partition
@@ -597,28 +596,26 @@ class Solution:
     @return: The index after partition
     """
     def partitionArray(self, nums, k):
-        # write your code here
         if not nums:
             return 0
-            
-        left, right = 0, len(nums)-1
-        
-        while left < right:
-            while left < right and nums[left]  < k:
-                left += 1 
-                
-            while left < right and nums[right] >= k:
-                right -= 1 
-                
-            if left < right:
-                nums[left], nums[right] = nums[right], nums[left]
-                left += 1 
-                right -= 1 
-        if nums[left] < k:  #这里的判断很关键，细节处理一定要想清楚分好类
-            return left+1
-            
-        return left
-
+        nums = sorted(nums)
+        n = len(nums)
+        i, j = 0, n-1
+        while i + 1 < j:
+            while i + 1 < j and nums[i] < k:
+                i += 1 
+            while i + 1 < j and nums[j] >= k:
+                j -= 1 
+            if i + 1 < j and nums[i] >= k and nums[j] < k:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1 
+                j -= 1 
+        if nums[i] >= k:
+            return i 
+        if nums[j] >=k:
+            return j
+        if nums[j] < k:   #这里的判断很关键，细节处理一定要想清楚分好类
+            return j+1
 # 题八： sort colors
 
 # 三指针，分成3部分： left, i, right。 跟right交换之后，i不前进； 跟left交换，i和left一起前进；i==1， i前进
