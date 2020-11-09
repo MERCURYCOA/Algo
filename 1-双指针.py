@@ -434,6 +434,87 @@ class Solution:
                 elif sum_ == target:
                     return sum_ 
         return res
+      
+ # 9： 4 sum
+# 固定2个，移动2个
+# 注意4个数都有排除重复， i，j， left， right都要排除重复
+class Solution:
+    """
+    @param numbers: Give an array
+    @param target: An integer
+    @return: Find all unique quadruplets in the array which gives the sum of zero
+    """
+    def fourSum(self, numbers, target):
+        # write your code here
+        if len(numbers) <4:
+            return []
+        numbers.sort()
+        res = []
+        for i in range(len(numbers)-3):
+            if i and numbers[i] == numbers[i-1]:  #i去重
+                continue
+            for j in range(i+1,len(numbers)-2): # j起始点是i+1, 不是0
+                if j != i+1 and numbers[j] == numbers[j-1]:  # j 去重, j可以跟i相等, 但j不可以等于前一个j
+                    continue
+                left = j + 1 
+                right = len(numbers)-1
+                while left < right and left < len(numbers)-1:
+                    if numbers[i] + numbers[j] + numbers[left] + numbers[right] == target:
+                        res.append([numbers[i], numbers[j],numbers[left], numbers[right]])
+                        right -= 1 
+                        left += 1 
+                        while left < right and numbers[left] == numbers[left-1]:           #left去重
+                            left += 1 
+                        while left < right and numbers[right] == numbers[right+1]:          # right去重
+                            right -= 1 
+                    elif numbers[i] + numbers[j] + numbers[left] + numbers[right] > target:
+                        right -= 1 
+                    else:
+                        left += 1 
+        return res            
+# 第2次做：用two sum
+# 不难， 但是细节非常重要  1， 每层都有去重， 内层i, j对向，记得j也要去重
+# 加到res里的是start,end还是start+1， end-1上的位置，要清楚
+class Solution:
+    """
+    @param numbers: Give an array
+    @param target: An integer
+    @return: Find all unique quadruplets in the array which gives the sum of zero
+    """
+    def fourSum(self, numbers, target):
+        if not numbers:
+            return []
+        self.res = []
+        numbers = sorted(numbers)
+        for start in range(len(numbers)-3):
+            if start > 0 and numbers[start] == numbers[start-1]:
+                continue                     # 每层去重放在层首
+            end = len(numbers)-1 
+            while start+2 < end:          # 注意范围
+                if end < len(numbers)-1 and numbers[end] == numbers[end+1]:
+                    end -= 1
+                else:
+                    self.twoSum(numbers, start, end, target - numbers[start] - numbers[end])
+                    end -= 1
+        return self.res
+        
+        
+    def twoSum(self, numbers, index_start, index_end, target):
+        i, j = index_start+1, index_end-1     # i, j起始点在strat, end内侧，记得最后加到res里的是start, end位置的元素
+        while i < j: 
+            
+            if numbers[i] + numbers[j] > target:
+                j -= 1 
+            elif numbers[i] + numbers[j] < target:
+                i += 1 
+            elif numbers[i] + numbers[j] == target:
+                self.res.append(sorted([numbers[index_start], numbers[i], numbers[j], numbers[index_end]]))
+                i += 1
+                j -= 1
+                while i < j and numbers[i] == numbers[i-1]:  # 这里排除i,j的重复要用while， 且放在 if ==target里面
+                    i += 1 
+                while i < j and numbers[j] == numbers[j+1]:
+                    j -= 1 
 # 指针不是为了让你遍历，而是为了将符合某条件的中间的一些值成批量删掉或加上，这就是用指针的意义，加快运算
 # 双指针 #dictionary
 # 排好序用双指针更快，没有排序要么先排序要么用dictionary
@@ -498,44 +579,8 @@ def diffTarget(A, target):
     return res
 print(diffTarget([2, 7, 15, 24], 5))
 
-# 题六： 4 sum
-# 固定2个，移动2个
-# 注意4个数都有排除重复， i，j， left， right都要排除重复
-class Solution:
-    """
-    @param numbers: Give an array
-    @param target: An integer
-    @return: Find all unique quadruplets in the array which gives the sum of zero
-    """
-    def fourSum(self, numbers, target):
-        # write your code here
-        if len(numbers) <4:
-            return []
-        numbers.sort()
-        res = []
-        for i in range(len(numbers)-3):
-            if i and numbers[i] == numbers[i-1]:  #i去重
-                continue
-            for j in range(i+1,len(numbers)-2): # j起始点是i+1, 不是0
-                if j != i+1 and numbers[j] == numbers[j-1]:  # j 去重, j可以跟i相等, 但j不可以等于前一个j
-                    continue
-                left = j + 1 
-                right = len(numbers)-1
-                while left < right and left < len(numbers)-1:
-                    if numbers[i] + numbers[j] + numbers[left] + numbers[right] == target:
-                        res.append([numbers[i], numbers[j],numbers[left], numbers[right]])
-                        right -= 1 
-                        left += 1 
-                        while left < right and numbers[left] == numbers[left-1]:           #left去重
-                            left += 1 
-                        while left < right and numbers[right] == numbers[right+1]:          # right去重
-                            right -= 1 
-                    elif numbers[i] + numbers[j] + numbers[left] + numbers[right] > target:
-                        right -= 1 
-                    else:
-                        left += 1 
-        return res            
-                    
+
+
 # 题七： 数组元素小于k在左边，大于等于k在右边
 # 快速选择
 class Solution:
