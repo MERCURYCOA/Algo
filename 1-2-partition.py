@@ -83,3 +83,53 @@ class Solution:
     
 solution = Solution()
 print(solution.kthSmallestElement(2, [2, 5, 3, 8, 1]))
+
+
+
+# 2 交错正负数
+class Solution:
+    """
+    @param: A: An integer array.
+    @return: nothing
+    """
+    def rerange(self, A):
+        if not A:
+            return []
+        A, pos = self.partition(A)
+        n = len(A)
+        if n > 2*pos:
+            # -1,-2,-3, 1, 2, 3, 4
+            i, j = 0, n-2
+        if n == 2*pos:
+            # -1, -2, -3, 1, 2, 3
+            i, j = 0, n-1
+        if n < 2*pos:
+            # -1, -2, -3, 1, 2
+            i, j = 1, n-1
+        while i < j:
+                if i < j and A[i] < 0 and A[j] > 0:
+                    A[i], A[j] = A[j], A[i]
+                    i += 2 
+                    j -= 2
+        return A
+        
+        
+    def partition(self, A):
+        pos = len(A)-1  # first positive
+        i, j = 0, len(A) - 1
+        while i < j:
+            while i < j and A[i] < 0:
+                i += 1 
+            while i < j and A[j] > 0:
+                j -= 1 
+            if i < j:
+                A[i], A[j] = A[j], A[i]
+                i += 1 
+                j -= 1 
+        if A[j] > 0:
+            pos = j
+            return A, pos
+        if A[i] > 0:
+            pos = i 
+            return A, pos
+        return A, pos
