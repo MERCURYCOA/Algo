@@ -29,7 +29,7 @@ class Solution:
         i, j = start, end 
         pivot = nums[(i+j)//2]
         while i <= j:
-            while i <= j and nums[i] > pivot:
+            while i <= j and nums[i] > pivot: # 不可以包含， 如果是等于pivot, 那么是可以用来交换的
                 i += 1 
             while i <= j and nums[j] < pivot:
                 j -= 1 
