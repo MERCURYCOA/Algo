@@ -135,7 +135,7 @@ class Solution:
         return A, pos
 # 3: sort colors 
 
-# 三指针，分成3部分： left, i, right。 跟right交换之后，i不前进； 跟left交换，i和left一起前进；i==1， i前进
+# 三指针，分成3部分：2定1动。 left, i, right。 跟right交换之后，i不前进； 跟left交换，i和left一起前进；i==1， i前进
 class Solution:
     """
     @param nums: A list of integer which is 0, 1 or 2 
