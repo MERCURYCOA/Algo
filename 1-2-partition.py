@@ -133,3 +133,63 @@ class Solution:
             pos = i 
             return A, pos
         return A, pos
+# 3: sort colors 
+
+# 三指针，分成3部分： left, i, right。 跟right交换之后，i不前进； 跟left交换，i和left一起前进；i==1， i前进
+class Solution:
+    """
+    @param nums: A list of integer which is 0, 1 or 2 
+    @return: nothing
+    """
+    def sortColors(self, nums):
+        # write your code here
+        if not nums:
+            return []
+            
+        left, right = 0, len(nums)-1
+        i = 0
+        while i <= right:       #这里有等号，因为i停在right停的位置可能是0，1，还得进去循环判断一下
+            if nums[i] == 0:
+                nums[i],nums[left] = nums[left], nums[i]  
+                left += 1 
+                i += 1  #跟左边交换之后，i可以前进，因为左边的不是1，就是0， i走过的地方不可能有2
+            elif nums[i] == 2:
+                nums[i], nums[right] = nums[right], nums[i]
+                right -= 1      # 这里right交换后i不前进，因为换过来的数可能还是2，所以只让right向左走，一直找到不是2的数，跟i交换，这样在下个循环i 可以前进  #这就是为什么i走过的地方不可能有2
+            else:
+                i += 1  #只有i前进，因为left要坚守0的真谛，i一旦发现0，就跟left换，left前进， 也就是left永远在左边第一个不是0 的数的位置
+                
+        return nums
+       
+# 第二次做：先把2与0，1分开，再把0，1分开
+
+class Solution:
+    """
+    @param nums: A list of integer which is 0, 1 or 2 
+    @return: nothing
+    """
+    def sortColors(self, nums):
+        if not nums:
+            return []
+        i, j = 0, len(nums)-1 
+        while i < j:
+            while i < j and nums[i] < 2:
+                i += 1 
+            while i < j and nums[j] == 2:
+                j -= 1 
+            if i < j:
+                nums[i], nums[j] = nums[j],  nums[i]
+                i += 1 
+                j -= 1 
+        i = 0
+        while i < j:
+            while i < j and nums[i] == 0:
+                i += 1 
+            while i < j and nums[j] != 0:
+                j -= 1 
+            if i < j:
+                nums[i], nums[j] = nums[j],  nums[i]
+                i += 1 
+                j -= 1 
+        return nums
+                
