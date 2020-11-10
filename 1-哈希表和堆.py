@@ -173,7 +173,45 @@ class Solution:
             if len(dict[key]) > 1:
                 res.extend(dict[key])  # 不能用append, 因为结果是一维数组
         return res
-# ========================================================================================
+# 题四：
+# 拿那个100, 4, 200, 1, 3, 2样例，你该怎么数数呢？你先从100数，然后呢，就没有了。再从4开始数，唉，不对，不应该，因为后面还有3，2，1 所以应该把4跳过去，待会从小的数开始数。再后面是200，因为没有199，所以应该从200开始。
+# 或者这样看，每一个连续序列都可以被这个序列的最小值代表，要找到最小值才开始数，这样无重复，才能做到O(N)
+# 具体来看，这个代码做了三个N的操作： 1. 建dict 2. for循环里，看每一个数字n是否有n-1存在 3. while循环，从小到大的数连续序列
+    class Solution:
+    
+    def longestConsecutive(self, nums) -> int:
+        num = list(set(num))
+        max_len, table = 0, {num:True for num in nums}
+
+        for lo in nums:
+            if lo - 1 not in table:
+                hi = lo + 1 
+                while hi in table:
+                    hi += 1 
+                max_len = max(max_len, hi - lo)
+                
+        return max_len
+    
+# 如果让求这个最长序列而不是求长度呢？
+# 那就把hi都加进来
+num = list(set(num))
+max_len, table = 0, {num:[] for num in nums}  # 字典的value都变成[]
+
+for lo in nums:
+    if lo - 1 not in table:
+        hi = lo + 1 
+        while hi in table:
+            table[lo].append(hi)  # 把hi都加进lo的value里
+            hi += 1 
+        max_len = max(max_len, hi - lo)
+res = []            
+for key, value in table.items(): # 扫一遍dict，找value最长的，记得把key加进value作为res
+    cur = [key] + value
+    if len(cur) > max_len:
+        max_len = len(res)
+        res = cur
+return res
+    # ========================================================================================
 # 堆： 操作：O(logn) Add， O（logn）remove, O(1) min or max 
 # 为什么是logn? Add操作是在二叉树的最后加入，成为最后一个叶子，然后向上调整，维持最大/最小堆，最坏情况是每层都调整，时间是logn. Remove操作是让树的最后一个叶子覆盖要删除的节点，
 # 然后向上或向下调整树，时间也是logn
