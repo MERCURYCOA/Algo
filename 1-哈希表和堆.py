@@ -39,7 +39,43 @@ class Solution:
                 self.add_node(new_hash_table, node.val)
                 node = node.next
         return new_hash_table    
-  
+# 第2次做：
+"""
+Definition of ListNode
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+class Solution:
+    """
+    @param hashTable: A list of The first node of linked list
+    @return: A list of The first node of linked list which have twice size
+    """
+    def addNode(self, num, hashTable):
+        CAPACITY = len(hashTable)
+        index = num % CAPACITY
+        node = ListNode(num)
+        if hashTable[index]:
+            cur = hashTable[index]
+            while cur.next:
+                cur = cur.next
+            cur.next = node 
+        else:
+            hashTable[index] = node 
+    
+    def rehashing(self, hashTable):
+        CAPACITY = 2 * len(hashTable)
+        new_table = [None] * CAPACITY
+        for node in hashTable:
+            while node:
+                self.addNode(node.val, new_table)
+                node = node.next  
+        return new_table           
+                
+        
+        
 # 题二：LRU cache - least recently used 缓存， 维护一定长度，最新访问的节点在最前面，超过规定长度要删掉最远访问的节点
 # 关键： 字典+双向链表  {key: node}, node存4个值： prev, next, key, value
 # 链表： head -> node -> node -> tail, 链表维护head, tail, 长度capacity
