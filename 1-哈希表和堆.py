@@ -151,7 +151,28 @@ class LRUCache:         # 题意：创造一种新的数据结构
             
         node = LinkedNode(self.tail, None, key, value)
         self.add_node(node)
-
+# 题三：乱序字符串
+# 对字符串排序，作为key
+class Solution:
+    """
+    @param strs: A list of strings
+    @return: A list of strings
+    """
+    def anagrams(self, strs):
+        res = []
+        dict = {}
+        if not strs:
+            return 
+        for char in strs:
+            sortedword = ''.join(sorted(char))
+            if sortedword not in dict:
+                dict[sortedword] = [char]
+            else:
+                dict[sortedword].append(char)
+        for key in dict:
+            if len(dict[key]) > 1:
+                res.extend(dict[key])  # 不能用append, 因为结果是一维数组
+        return res
 # ========================================================================================
 # 堆： 操作：O(logn) Add， O（logn）remove, O(1) min or max 
 # 为什么是logn? Add操作是在二叉树的最后加入，成为最后一个叶子，然后向上调整，维持最大/最小堆，最坏情况是每层都调整，时间是logn. Remove操作是让树的最后一个叶子覆盖要删除的节点，
