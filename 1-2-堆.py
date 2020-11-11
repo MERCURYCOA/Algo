@@ -87,6 +87,36 @@ class Solution:
         # sorted: 最小堆只是孩子比父亲节点小，不一定是从小到大排好的
         # reverse:heapq是最小堆，所以需要reverse
         return sorted(self.heap, reverse=True)
+# 第2次做法： 错误做法
+# 错误的原因是：没明白堆的排序不稳定性，最大堆/最小堆只维持最大值/最小值， 并不能对后面的所有元素排序
+# 你的想法：将相反数存入堆，变最小堆为最大堆，长度超过k，将数组最后一个元素弹出。错误：你认为最后一个元素是这个最小堆的最大值，也就是原数组最小值，将其pop出，数组就留下了当前前k大。但是，最后一个元素并不一定是最小堆的最大值，因为最小堆只维护最小值，不对后面的元素排序，那么你pop出的就不一定是最大值。
+import heapq
+class Solution:
+    """
+    @param: k: An integer
+    """
+    def __init__(self, k):
+        self.heap = []
+        self.k = k 
+        
+    """
+    @param: num: Number to be added
+    @return: nothing
+    """
+    def add(self, num):
+        heapq.heappush(self.heap, 0-num)
+        if len(self.heap) > self.k:
+            self.heap.pop()
+    """
+    @return: Top k element
+    """
+    def topk(self):
+        res = []
+        for num in self.heap:
+            res.append(0 - num)
+        return sorted(res, reverse=True)
+    
+
 # 题四：合并K个排序链表
 # 方法一 heapq  O(Nlogk)
 """
