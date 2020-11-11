@@ -152,6 +152,41 @@ class Solution:
                 heapq.heappush(heap, (node.next.val, count, node.next))
                 count += 1
         return dummy.next
+    
+# 第2次做 ：
+# 在将node放到heapq的时候，要判断存在与否
+import heapq
+"""
+Definition of ListNode
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+class Solution:
+    """
+    @param lists: a list of ListNode
+    @return: The head of one sorted list.
+    """
+    def mergeKLists(self, lists):
+        head = ListNode(0)
+        dummy = head
+        heap = []
+        count = 0
+        for node in lists:
+            if node:
+                heapq.heappush(heap, (node.val, count, node))
+                count += 1
+        while heap:
+            value, _, node = heapq.heappop(heap)
+            dummy.next = node 
+            dummy = dummy.next 
+            if node.next:
+                heapq.heappush(heap, (node.next.val, count, node.next))
+                count += 1
+            
+        return head.next
 # 方法二： 分治法  O(nlogk)
 """
 Definition of ListNode
