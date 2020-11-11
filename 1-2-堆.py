@@ -3,6 +3,16 @@
 # 为什么是logn? Add操作是在二叉树的最后加入，成为最后一个叶子，然后向上调整，维持最大/最小堆，最坏情况是每层都调整，时间是logn. Remove操作是让树的最后一个叶子覆盖要删除的节点，
 # 然后向上或向下调整树，时间也是logn
 # 堆本质是完全二叉树，一般可以用数组表示，从上到下，从左到右将二叉树填满
+# heapq的常见方法
+# heapq.heappush(heap, item)
+# heapq.heapify(list) 
+# heapq.heappop(heap) 
+# heapq.heapreplace(heap.item) 
+# heapq.heappushpop(list, item)
+# heapq.merge（…）
+# heapq.nlargest(n,heap) 
+# heapq.nsmallest(n,heap) 
+
 # 题一： 堆化
 class Solution:
     """
