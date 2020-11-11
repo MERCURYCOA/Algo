@@ -291,3 +291,53 @@ class Solution:
         if head2:
             tail.next = head2
         return dummy.next
+# 第2次做：
+# 看注释， 错误的点
+import heapq
+"""
+Definition of ListNode
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+class Solution:
+    """
+    @param lists: a list of ListNode
+    @return: The head of one sorted list.
+    """
+    def mergeKLists(self, lists):
+        if not lists:
+            return None 
+         # 不可以这里 n = len(lists), 下面的len(lists)都用n代替， 因为lists每次都变，因为lists = next_lists， 如果n固定， 后面就乱了。
+        while len(lists) > 1: 
+            next_lists = []
+            for i in range(0, len(lists), 2):  # 用了for 就不可以在循环内i += 2, 这个只能在while用，不要犯低级错误
+                if i < len(lists)-1:           # 对于长度的奇偶，分类讨论，也可以用len(lists) % n == 0
+                    new = self.meregeTwoList(lists[i], lists[i+1])
+                else:
+                    new = lists[i]
+                next_lists.append(new)
+            lists = next_lists
+        return lists[0]
+        
+    def meregeTwoList(self, l1, l2):
+        if not l1:
+            return l2 
+        if not l2:
+            return l1 
+        head = dummy = ListNode(0)
+        while l1 and l2:
+            if l1.val < l2.val:
+                dummy.next = l1 
+                l1 = l1.next  # 记得l1也要后移
+            else:
+                dummy.next = l2
+                l2 = l2.next
+            dummy = dummy.next
+        if l1:
+            dummy.next = l1 
+        if l2:
+            dummy.next = l2 
+        return head.next
