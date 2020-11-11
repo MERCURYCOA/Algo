@@ -13,6 +13,21 @@
 # heapq.nlargest(n,heap) 
 # heapq.nsmallest(n,heap) 
 
+# 用最小堆求前k大和前k小  -- 一定要分清，然后会用
+# 前k大大大大！！！  # 看题三
+for x in A:
+    heapq.heappush(heap, x)
+    if len(heap) >k:
+        heapq.heappop(heap)
+# 前k小：   # 看题六
+for x in A:
+    heapq.heappush(heap, x)
+res = []
+for _ in range(k):
+    res.append(heapq.heappop(heap)
+ # res就是heap中前k小的元素
+               
+               
 # 题一： 堆化
 class Solution:
     """
@@ -364,3 +379,35 @@ class Solution:
             scores_avg[id] = sum(dict[id]) / 5.0
             
         return scores_avg
+
+# 题六：K个最近的点
+
+               """
+Definition for a point.
+class Point:
+    def __init__(self, a=0, b=0):
+        self.x = a
+        self.y = b
+"""
+import heapq
+class Solution:
+    """
+    @param points: a list of points
+    @param origin: a point
+    @param k: An integer
+    @return: the k closest points
+    """
+    def kClosest(self, points, origin, k):
+        heap = []
+        if not points:
+            return heap
+        res = []
+        for point in points:
+            distance_power = (point.x - origin.x)**2 + (point.y - origin.y)**2
+            heapq.heappush(heap, (distance_power, point.x, point.y))
+           
+        print(heap)
+        for _ in range(k):  # 前k小
+            distance_power, point.x, point.y = heapq.heappop(heap)
+            res.append([point.x, point.y])
+        return res
