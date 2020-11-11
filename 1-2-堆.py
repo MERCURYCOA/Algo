@@ -26,7 +26,7 @@ res = []
 for _ in range(k):
     res.append(heapq.heappop(heap)
  # res就是heap中前k小的元素
-               
+# 如果不需要得到前k大/小，只是仅仅将最小堆变成最大堆的话，直接heappush相反数，pop相反数就可以了               
                
 # 题一： 堆化
 class Solution:
@@ -410,4 +410,66 @@ class Solution:
         for _ in range(k):  # 前k小
             distance_power, point.x, point.y = heapq.heappop(heap)
             res.append([point.x, point.y])
+        return res
+# 题七：  数据流中位数
+               import heapq
+class Solution:
+    """
+    @param nums: A list of integers
+    @return: the median of numbers
+    """
+    def medianII(self, nums):
+        if not nums:
+            return []
+            
+        medians = [nums[0]]
+        maxheap = []
+        minheap = []
+        median = nums[0]
+        for num in nums[1:]:
+            maxheap, minheap, median = self.add(num, maxheap, minheap, median)
+            medians.append(median)
+        return medians
+
+    def add(self, num, maxheap, minheap, median):
+        if num >= median:
+            heapq.heappush(minheap, num)
+        else:
+            heapq.heappush(maxheap, -num)
+            
+        if len(maxheap) > len(minheap):
+            heapq.heappush(minheap, median)
+            median = -heapq.heappop(maxheap)
+        elif len(maxheap) +1 < len(minheap):
+            heapq.heappush(maxheap, -median)
+            median = heapq.heappop(minheap)
+        return maxheap, minheap, median
+
+# 第2次做： 注意最小堆变最大堆，因为不需要返回前k大，所以直接push相反数，pop相反数就可以了。               
+import heapq
+class Solution:
+    """
+    @param nums: A list of integers
+    @return: the median of numbers
+    """
+    def medianII(self, nums):
+        if not nums:
+            return []
+        # [4,5,1,3,2,6,0]
+        min_heap = []
+        max_heap = []
+        res = [nums[0]]
+        median = nums[0]
+        for num in nums[1:]:   
+            if num <= median:    
+                heapq.heappush(max_heap, -num)
+                if len(max_heap) > len(min_heap):
+                    heapq.heappush(min_heap, median)
+                    median = -heapq.heappop(max_heap)
+            elif num > median: 
+                heapq.heappush(min_heap, num)
+                if len(min_heap) > len(max_heap) + 1:
+                    heapq.heappush(max_heap, -median)
+                    median = heapq.heappop(min_heap)
+            res.append(median)
         return res
