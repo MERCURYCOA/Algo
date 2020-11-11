@@ -341,3 +341,26 @@ class Solution:
         if l2:
             dummy.next = l2 
         return head.next
+# 题五: 优秀成绩
+
+""" 每个学生有两个属性 id 和 scores。找到每个学生最高的5个分数的平均值。
+record.id, record.score"""
+
+# 想到多个capacity heap来维持前5高， 但是没想到用dict. # 如此明显， 返回的结果也是字典，都没想到用dict！！！！！！！ 
+from collections import defaultdict
+from heapq import heappush, heappop
+
+class Solution:
+    def highFive(self, records):
+        dict = defaultdict(list)
+
+        for record in records:
+            heappush(dict[record.id], record.score)
+            if (len(dict[record.id])) > 5:
+                heappop(dict[record.id])
+
+        scores_avg = {}
+        for id in dict:
+            scores_avg[id] = sum(dict[id]) / 5.0
+            
+        return scores_avg
