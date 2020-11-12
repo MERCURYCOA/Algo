@@ -72,7 +72,7 @@ class MyQueue:
         return element
     
  # 题三： expression expand 字符串解码
-
+# 第二次没做出来，因为你不知道array和"的区别，不懂灵活运用
 class Solution:
     """
     @param s: an expression includes numbers, letters and brackets
@@ -85,7 +85,7 @@ class Solution:
         
         for c in s:
             if c == ']':
-                strs = []
+                strs = [] # ！！！！！！！这里用[]而不是“”， 因为后面reverse数组和s[::-1]是不一样的。stack中存["abab", "pfpfpf"]，出栈后应翻转，翻转的是"abab" 和"pfpfpf"， 不是"ababpfpfpf"。如果用str， 只能对"ababpfpfpf"翻转，这是不对的， 应该在数组中翻转，将"abab", "pfpfpf"变成"pfpfpf"， "abab"， 后面数组变str用'.join()
                 while stack and stack[-1] != '[':
                     strs.append(stack.pop())
                 stack.pop() #弹出'['
