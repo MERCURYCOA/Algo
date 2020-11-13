@@ -18,7 +18,7 @@ class Trie:
         for c in word:
             if c not in node.children:
                 node.children[c] = TrieNode()  # {'a'： TrieNode({}, False)}
-            node = node.children[c]
+            node = node.children[c]   #####千万注意，逻辑要清楚， c不能在if内，要与if并行，因为无论如何c都要加入
         
         node.is_word = True
 
