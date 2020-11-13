@@ -1,3 +1,29 @@
+# 写在前面：
+# treemap在python可以用dict + array + sort（）实现， 字典没法排序，但可以记录值和频率，记录之后，存在数组中对频率排序。
+# 这里最关键的是对sort函数的改写，一定要记住，很方便
+
+class Solution:
+    # @param {string[]} words a list of string
+    # @param {int} k an integer
+    # @return {string[]} a list of string
+    def topKFrequentWords(self, words, k):
+        # Write your code here
+        dict = {}
+        for word in words:
+            if word not in dict:
+                dict[word] = 1
+            else:
+                dict[word] += 1
+        p = []
+        for key, value in dict.items():
+            p.append((value, key))
+
+        p.sort(key=lambda item: [-item[0], item[1]]) # 改写sort中key函数， 对元组中第一个值降序排列，对第二个值升序排列
+        result = []
+        for i in range(k):
+            result.append(p[i][1])
+        return result
+
 # 哈希表原理：数组里存着node， 通过hash funtion计算存入数组位置的下标，冲突的时候将新节点加到tail。
 # hash function:  key = number % capacity, 就是说number这个数存到数组里的位置的index是number对capacity取余数。
 # 倍增： capacity是hash table大小,即len(hash_table)，size是里边node的个数。当size/capacity == 1/10时，hash table倍增，所以节点rehashing.
