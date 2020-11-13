@@ -29,6 +29,9 @@ for _ in range(k):
 # 如果不需要得到前k大/小，只是仅仅将最小堆变成最大堆的话，直接heappush相反数，pop相反数就可以了               
                
 # 题一： 堆化
+# 方法1: sift down 从中间，向下  时间O（n）-> 从第 N/2 个位置开始往下 siftdown，那么就有大约 N/4 个数在 siftdown 中最多交换 1 次，N/8 个数最多交换 2 次，N/16 个数最多交换 3 次。 所以O(1* n/4 + 2* n/8 + 3*n/16 + ...+ 1*logN) = O(N)
+# 方法2: 新建数组，每次加入1个元素，从后向前找father，时间O(nlogn)
+#1
 class Solution:
     """
     @param: A: Given an integer array
@@ -53,7 +56,36 @@ class Solution:
                 break
             A[minIndex], A[index] = A[index], A[minIndex]
             index = minIndex
-# 堆的应用 heapq
+# 2 
+class Solution:
+    """
+    @param: A: Given an integer array
+    @return: nothing
+    """
+    def heapify(self, A):
+        # write your code here
+        res = []
+        n = len(A)
+
+        for index in range(n):  # 2, 4, 5, 
+            res.append(A[index])
+            res = self.siftup(res)
+        return res
+        
+    def siftup(self, res):
+        if len(res) == 0 or len(res) == 1:
+            return res
+        last = len(res)-1
+        while last > 0:
+            if res[(last - 1) // 2] > res[last]:
+                temp = res[(last - 1) // 2]
+                res[(last - 1) // 2] = res[last]
+                res[last] = temp
+                
+           
+            last = (last - 1) // 2
+        return res
+               # 堆的应用 heapq
 # 题二：ugly number II
 
 import heapq
