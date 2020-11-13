@@ -176,6 +176,39 @@ class Solution:
                 res = max(res, (right - left - 1) * heights[cur])
             stack.append(right)
         return res
+# 题五：最大矩形
+# 关键：思考方法，题四包了一层皮。 当前行为矩阵的下边界， 转换为直方图最大矩阵问题。一层一层查看，最后得到最大值。
+# 注意每层的heights是当前行当前列的最大高度，而这个最大高度是必须是连续的1， 如果中间有一个0， 当前高度就回归0.
+
+class Solution:
+    """
+    @param matrix: a boolean 2D matrix
+    @return: an integer
+    """
+    def maximalRectangle(self, matrix):
+        if not matrix:
+            return 0 
+        n, m = len(matrix), len(matrix[0])
+        max_area = 0
+        heights = [0]*m   # heights初始化
+        for row in matrix:
+            for i in range(m):
+                heights[i] = heights[i] + 1 if row[i] else 0 # 只要当前位置是0， 这一列的高度就变成0， 如果是连续的1， 高度就一直加1.
+            max_area = max(max_area, self.maxAreaInRow(heights))
+        return max_area 
+        
+    def maxAreaInRow(self, heights):
+        stack = []
+        max_area = 0
+        for index, height in enumerate(heights + [-1]):
+            while stack and height <= heights[stack[-1]]:
+                out = stack.pop()
+                if stack:
+                    max_area = max(max_area, heights[out]*(index - stack[-1] - 1))
+                else:
+                    max_area = max(max_area, heights[out]*index)
+            stack.append(index)
+        return max_area
 # 题五： 最大树 
 # 方法一： 维护单调递减栈
 class TreeNode:
