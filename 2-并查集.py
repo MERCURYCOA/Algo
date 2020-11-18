@@ -196,3 +196,65 @@ class Solution:
             self.father[p] = point
             
         return point
+
+# 题五： 岛屿的个数II
+"""
+Definition for a point.
+class Point:
+    def __init__(self, a=0, b=0):
+        self.x = a
+        self.y = b
+"""
+
+
+
+class Solution:
+    """
+    @param n: An integer
+    @param m: An integer
+    @param operators: an array of point
+    @return: an integer array
+    """
+    def numIslands2(self, n, m, operators):
+        dx = [1, 0, -1, 0]
+        dy = [0, 1, 0, -1]
+        res = []
+        visited = set()
+        self.father = {}
+        self.size = 0 
+        for point in operators:
+            x, y = point.x, point.y   # 转还成熟悉的x, y
+            if (x, y) in visited:
+                res.append(self.size)  # 重复的点也要加进当前的self.size
+                continue 
+            self.father[(x, y)] = (x, y)
+            visited.add((x, y))
+            self.size += 1 
+            for i in range(4):
+                x_ = x + dx[i]
+                y_ = y + dy[i]
+                if (x_, y_) in visited:
+                    self.union((x, y), (x_, y_))
+                    
+            res.append(self.size)
+        return res
+        
+        
+        
+    def union(self, point_a, point_b):
+        root_a = self.find(point_a)
+        root_b = self.find(point_b)
+        if root_a != root_b:
+            self.father[root_a] = root_b
+            self.size -= 1
+        
+    def find(self, point):
+        path = []
+        while point != self.father[point]:
+            path.append(point)
+            point = self.father[point]
+            
+        for p in path:
+            self.father[p] = point
+            
+        return point
