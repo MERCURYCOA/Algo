@@ -1,3 +1,22 @@
+# 模版1: 找到祖先，路径压缩
+ def find(self, node):
+        path = []
+        while self.father[node] != node:
+            path.append(node)
+            node = self.father[node] 
+            
+        for n in path:
+            self.father[n] = node 
+        return node 
+
+# 模版2: 合并祖先
+ def connect(self, a, b):
+        root_a = self.find(a)
+        root_b = self.find(b)
+        if root_a != root_b:
+            self.father[root_a] = root_b
+            
+            
 # 题一： 连接图I
 
 class Solution:
@@ -109,7 +128,10 @@ class Solution:
         return cur
 
     def connect(self, a, b):
-        self.father[a] = self.find(b)
+        root_a = self.find(a)
+        root_b = self.find(b)
+        if root_a != root_b:
+            self.father[root_a] = root_b
         self.size -= 1          # 每次连接两个节点，联通图个数减1
 
     def query(self):
