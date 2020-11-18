@@ -19,8 +19,10 @@ class Solution:
         return cur      # 当前node的father是指针最后停留的节点
 
     def connect(self, a, b):
-        self.father[a] = self.find(b)   # 让a的父亲指向b的祖先
-
+        root_a = self.find(a)
+        root_b = self.find(b)
+        if root_a != root_b:
+            self.father[root_a] = root_b
     def query(self, a, b):
         return self.find(a) == self.find(b)   # 看a的祖先和b的祖先是否相同
 
@@ -34,37 +36,46 @@ print(solution.find(1))  # 5
 
 # 题二：连接图 II
 
-class Solution:
+class ConnectingGraph2:
+    """
+    @param: n: An integer
+    """
     def __init__(self, n):
         self.father = {}
-        for i in range(1, n+1):
-            self.father[i] = i 
+        self.count = {}
+        for i in range(1, n + 1):
+            self.father[i] = i
+            self.count[i] = 1
+
+    """
+    @param: a: An integer
+    @param: b: An integer
+    @return: nothing
+    """
+    def connect(self, a, b):
+        root_a = self.find(a)
+        root_b = self.find(b)
+        if root_a != root_b:
+            self.father[root_a] = root_b
+            self.count[root_b] += self.count[root_a]
+
+    """
+    @param: a: An integer
+    @return: An integer
+    """
+    def query(self, a):
+        return self.count[self.find(a)]
 
     def find(self, node):
         path = []
-        cur = node
-        while self.father[cur] != cur:
-            path.append(cur)
-            cur = self.father[cur]
-
+        while node != self.father[node]:
+            path.append(node)
+            node = self.father[node]
+            
         for n in path:
-            self.father[n] = cur
-
-        return cur
-
-    def connect(self, a, b):
-        self.father[a] = self.find(b)
-
-    def query(self, a):     # 图的本质是dict, 查询图其实是查询dict
-        fa = self.find(a)
-        count = 0
-        for key, value in self.father.items():
-            if value == fa:
-                count += 1
-            else:
-                continue
-
-        return count
+            self.father[n] = node
+            
+        return node
 
 solution = Solution(8)
 solution.connect(1,2)
