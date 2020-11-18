@@ -258,3 +258,45 @@ class Solution:
             self.father[p] = point
             
         return point
+# 题六： graph valid tree
+
+class Solution:
+    """
+    @param n: An integer
+    @param edges: a list of undirected edges
+    @return: true if it's a valid tree, or false
+    """
+    def validTree(self, n, edges):
+        if len(edges) != n-1:
+            return False 
+        self.father = {}
+        self.size = n  # 记录根的个数
+        for i in range(n):
+            self.father[i] = i 
+        
+        for edge in edges:
+            self.union(edge[0], edge[1]) 
+            
+        return self.size == 1
+            
+            
+    
+    def union(self, a, b):
+        root_a = self.find(a)
+        root_b = self.find(b)
+        if root_b != root_a:
+            self.size -= 1
+            self.father[root_a] = root_b
+       
+            
+    def find(self, node):
+        path = []
+        while self.father[node] != node:
+            path.append(node)
+            node = self.father[node]
+            
+        for n in path:
+            self.father[n] = node 
+            
+        return node 
+       
