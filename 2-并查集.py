@@ -146,3 +146,53 @@ solution.connect(7,8)
 
 print(solution.find(1))
 print(solution.query())
+# 题四： number of islands
+# find和union  记住
+class Solution:
+    """
+    @param grid: a boolean 2D matrix
+    @return: an integer
+    """
+
+                
+    def numIslands(self, grid):
+        if not grid or grid[0] is None:
+            return 0
+        dx = [1, 0, -1, 0]
+        dy = [0, 1, 0, -1]
+        n, m = len(grid), len(grid[0])
+        self.father = {}  #不可以用visited, 因为要union必须访问visited
+        self.islands = 0
+        for i in range(n):
+            for j in range(m):
+                if grid[i][j] == 1:
+                    self.father[(i,j)] = (i, j)
+                    self.islands += 1
+        for x in range(n):
+            for y in range(m):
+                for i in range(4):
+                    if grid[x][y]:
+                        x_ = x + dx[i]
+                        y_ = y + dy[i]
+                        if x_ >= 0 and x_ < n and y_ >= 0 and y_ < m and grid[x_][y_] == 1:
+                            self.union((x, y), (x_, y_))
+                        
+        return self.islands
+                
+    def union(self, a, b):
+        root_a = self.find(a)
+        root_b = self.find(b)
+        if root_a != root_b:
+            self.father[root_a] = root_b
+            self.islands -= 1 
+                    
+    def find(self, point): # point = (x, y)
+        path = []
+        while self.father[point] != point:
+            path.append(point)
+            point = self.father[point] 
+            
+        for p in path:
+            self.father[p] = point
+            
+        return point
