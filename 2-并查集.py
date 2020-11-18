@@ -299,4 +299,53 @@ class Solution:
             self.father[n] = node 
             
         return node 
-       
+# 题七：surrounded Regions
+
+class unionFind:
+    def __init__(self, n):
+        self.father = [i for i in range(n)]
+    
+    def find(self, x):
+        if x == self.father[x]:
+            return x
+        self.father[x] = self.find(self.father[x])
+        return self.father[x]
+    
+    def connect(self, x, y):
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x != root_y:
+            self.father[min(root_x, root_y)] = max(root_x, root_y)
+
+class Solution:
+    """
+    @param: board: board a 2D board containing 'X' and 'O'
+    @return: nothing
+    """
+    def surroundedRegions(self, board):
+        # write your code here
+        if board is None or len(board) == 0 or len(board[0]) == 0:
+            return
+        m, n = len(board), len(board[0])
+        if m <= 2 or n <= 2:
+            return
+        total = m * n
+        uf = unionFind(total + 1)  # dummy node思想： total作为边界上0的祖先
+        dx = [1, 0, -1, 0]
+        dy = [0, 1, 0, -1]
+        for x in range(m):
+            for y in range(n):
+                if board[x][y] == "X":
+                    continue
+                if x == 0 or x == m - 1 or y == 0 or y == n - 1:
+                    uf.connect(x * n + y, total)  # 边界上0的祖先 total
+                else:
+                    for k in range(4):
+                        newx = x + dx[k]
+                        newy = y + dy[k]
+                        if board[newx][newy] == "O":  # 非边界的0如果与边界上的0相连，那么祖先也是total
+                            uf.connect(x * n + y, newx * n + newy)
+        for x in range(m):
+            for y in range(n):
+                if board[x][y] == "O" and uf.find(x * n + y) != total:
+                    board[x][y] = "X"
