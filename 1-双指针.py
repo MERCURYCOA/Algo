@@ -111,7 +111,46 @@ class Solution:
             visited.remove(s[i]) 
             
         return max_length
-      
+
+# 5 最小子串覆盖
+# 不可以用 target in source判断，因为顺序不同，也可以算作覆盖，但是target in source无法检测出
+# 双指针+ 双字典， j向前： s[source[j]] += 1， i向前：s[source[i]] -= 1， s字典不断随双指针变化，不断判断s,t是否contain
+
+class Solution:
+    """
+    @param source : A string
+    @param target: A string
+    @return: A string denote the minimum window, return "" if there is no such a string
+    """
+    def minWindow(self, source , target):
+        s = {x:0 for x in source}
+        t = {x:0 for x in target}
+        for x in target:
+            t[x] += 1
+        j = 0
+        res = ""
+        min_len = len(source)
+        for i in range(len(source)):
+            while j < len(source) and not self.contain(s, t):
+                s[source[j]] += 1 
+                j += 1 
+                
+            if self.contain(s,t):
+                if min_len >= j-i:
+                    min_len = j-i
+                    res = source[i:j]
+            s[source[i]] -= 1 
+        return res
+    
+    
+    def contain(self, s, t):
+        for key, value in t.items():
+            if key not in s:
+                return False
+            if s[key] - value < 0:
+                return False 
+                
+        return True
       
 # 二：对向双指针
 #1 有效回文串
