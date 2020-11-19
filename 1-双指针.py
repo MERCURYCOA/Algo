@@ -90,7 +90,27 @@ class Solution:
             
         return min_length
 
-      
+# 4  最长无重复字符的子串  双指针+ set
+class Solution:
+    """
+    @param s: a string
+    @return: an integer
+    """
+    def lengthOfLongestSubstring(self, s):
+        if not s:
+            return 0 
+        n = len(s)
+        max_length, j = 0, 0 
+        visited = set()
+        for i in range(n):
+            while j < n and s[j] not in visited:
+                visited.add(s[j])
+                j += 1
+            if j >= n or (j < n and s[j] in visited):
+                max_length = max(max_length, len(visited))
+            visited.remove(s[i]) 
+            
+        return max_length
       
       
 # 二：对向双指针
