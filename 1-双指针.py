@@ -64,6 +64,35 @@ class Solution:
                     i += 1 
                     j += 1 
         return nums
+
+# 3 和大于S的最小子数组
+class Solution:
+    """
+    @param nums: an array of integers
+    @param s: An integer
+    @return: an integer representing the minimum size of subarray
+    """
+    def minimumSize(self, nums, s):
+        if not nums:
+            return -1 
+        n = len(nums)
+        min_length = n+1 
+        sum, j = 0, 0 
+        for i in range(n):
+            while j < n and sum < s:
+                sum += nums[j]
+                j += 1 
+            if sum >= s:
+                min_length = min(min_length, j - i) 
+            sum -= nums[i]
+        if min_length == n + 1:
+            return -1 
+            
+        return min_length
+
+      
+      
+      
 # 二：对向双指针
 #1 有效回文串
 class Solution:
