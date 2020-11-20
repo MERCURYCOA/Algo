@@ -1,4 +1,4 @@
-# 堆： 操作：O(logn) Add， O（logn）remove, O(1) min or max 
+# 堆： 操作：O(logn) push， O（logn）remove, O(1) min or max 
 # 为什么是logn? 原理：sift up / sift down    原理解释：https://blog.csdn.net/hrn1216/article/details/51465270
 # 为什么是logn? Add操作是在二叉树的最后加入，成为最后一个叶子，然后向上调整，维持最大/最小堆，最坏情况是每层都调整，时间是logn. Remove操作是让树的最后一个叶子覆盖要删除的节点，
 # 然后向上或向下调整树，时间也是logn
@@ -87,7 +87,7 @@ class Solution:
         return res
                # 堆的应用 heapq
 # 题二：ugly number II
-
+# 边pop边往heap里放， for n次pop  同样做法看 题四：排序矩阵中的从小到大第k个数
 import heapq
 class Solution:
     """
@@ -105,8 +105,7 @@ class Solution:
                     visited.add(val*factor)
                     heapq.heappush(heap, val*factor)
                     
-        return val
-        
+        return val       
 # 题三： 前K大数II
 
 import heapq
@@ -163,7 +162,35 @@ class Solution:
             res.append(0 - num)
         return sorted(res, reverse=True)
     
-
+# 题四：排序矩阵中的从小到大第k个数 要求：klogn
+# for k个循环 * 最多n的heappush (logn) = klogn
+# 边判断边往heap里放  - 边走边放               
+from heapq import heappush, heappop
+class Solution:
+    """
+    @param matrix: a matrix of integers
+    @param k: An integer
+    @return: the kth smallest number in the matrix
+    """
+    def kthSmallest(self, matrix, k):
+        if not matrix or not matrix[0]:
+            return None 
+        heap = [(matrix[0][0], 0, 0)]
+        visited = set()
+        visited.add((0,0))
+        n, m = len(matrix), len(matrix[0])
+        res = None       
+        for _ in range(k):
+            res, x, y = heappop(heap)
+            if x+1 < n and (x+1, y) not in visited:
+                heappush(heap, (matrix[x+1][y], x+1, y))
+                visited.add((x+1, y))
+            if y+1 < m and (x, y+1) not in visited:
+                heappush(heap, (matrix[x][y+1], x, y+1))
+                visited.add((x, y+1))
+        return res
+               
+               
 # 题四：合并K个排序链表
 # 方法一 heapq  O(Nlogk)
 """
