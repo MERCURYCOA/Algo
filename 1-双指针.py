@@ -151,7 +151,70 @@ class Solution:
                 return False 
                 
         return True
+# 6 最多有k个不同字符的最长子字符串
+# ！！！！！！！！！！错误做法：
+# 一定要注意求最长还是最短，这直接影响while后面的条件
+class Solution:
+    """
+    @param s: A string
+    @param k: An integer
+    @return: An integer
+    """
+    def lengthOfLongestSubstringKDistinct(self, s, k):
+        if not s:
+            return 0 
+        n = len(s)   
+        if k<= 0:
+            return 0 
+        if k >= n:
+            return n
+        s = s.lower()
+        dict = {}
+        j, max_length = 0, 0
+        for i in range(n):
+            while j < n and len(dict) < k:  # {'e':2, 'c':1, 'b':1, 'a':1}
+                if s[j] not in dict:
+                    dict[s[j]] = 1 
+                else:
+                    dict[s[j]] += 1 
+                j += 1
+            if len(dict) >= k:             # 如果到达len(dict)后面进来的正好是dict已经有的元素，说明这个max_length还不是最长的，还可以扩展，但是这里一旦超出k, 就认为是最长的
+                max_length = max(max_length, j - i )
+            dict[s[i]] -= 1 
+            if dict[s[i]] == 0:
+                del dict[s[i]]
+            
+        return max_length
       
+# 正确做法：
+
+class Solution:
+    """
+    @param s: A string
+    @param k: An integer
+    @return: An integer
+    """
+    def lengthOfLongestSubstringKDistinct(self, s, k):
+        if not s:
+            return 0 
+        n = len(s)   
+        if k<= 0:
+            return 0 
+        if k >= n:
+            return n
+        dict = {}
+        i, max_length = 0, 0
+        for j in range(n):
+            dict[s[j]] = dict.get(s[j], 0) + 1   # 记住这个用法
+            while i <= j and len(dict) > k:  # 在超过k的时候，从左向右缩，才能找到最长子串
+                dict[s[i]] -= 1 
+                if dict[s[i]] == 0:
+                    del dict[s[i]]
+                i += 1
+            max_length = max(max_length, j - i +1)  # 注意这个max_length是跟着j向右移动而更新的， while里面 i+= 1 ，是为了向右寻找新的子串，不会影响已经得到的max_length， 因为求的是max， i右移， j不动，j-i+1肯定比当前max_length小
+        return max_length
+                
+            
 # 二：对向双指针
 #1 有效回文串
 class Solution:
