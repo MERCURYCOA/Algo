@@ -28,8 +28,7 @@ class Solution:
         if A[start] == target:
             return start
         return -1
-        
-
+       
             
 
 if __name__ == '__main__':
@@ -398,3 +397,48 @@ class Solution:
             if image[row][j] == '1':
                 return True
         return False
+# 题11: 两个排序数组和的第K小
+# 方法多种，这是二分法  - # 思想： 找到一个x，使得小于等于x的数为k， 那么这个x就是第k小的数。 只不过这里的x考虑的是a和b的和
+ 
+class Solution:
+    def calc(self, x, A, B):  # 计算小于等于x的个数, 这个x是任意a和任意b的和
+        # AB长度
+        n = len(A)
+        m = len(B)
+        # 小于等于x的数量
+        num = 0
+        # 双指针上下边界
+        start = 0
+        end = m - 1
+        while start <= n - 1:
+            while end >= 0:
+                if A[start] + B[end] > x:
+                    end -= 1
+                else:
+                    break
+            # 因为A[start]+B[end]<=x 所以A[start]+B[0]....A[start]+B[end-1]都小于等于x
+            num += end + 1
+            start += 1
+        return num
+    """
+    @param A: an integer arrays sorted in ascending order
+    @param B: an integer arrays sorted in ascending order
+    @param k: An integer
+    @return: An integer
+    """
+    def kthSmallestSum(self, A, B, k):  # 找到一个sum，使得小于等于sum的数为k， 那么这个sum就是第k小的数。这个sum的取值范围是 A[0] + B[0] ~ A[n - 1] + B[m - 1]
+        # write your code here
+        # AB长度
+        n = len(A)
+        m = len(B)
+        # 二分上下界
+        left = A[0] + B[0] - 1  
+        right = A[n - 1] + B[m - 1] + 1
+        while left + 1 < right:
+            # 如果小于等于x的超过k个就缩小上界，否则提高下界
+            mid = (int)(left + (right - left) // 2)
+            if (self.calc(mid, A, B) >= k):
+                right = mid
+            else:
+                left = mid
+        return right
