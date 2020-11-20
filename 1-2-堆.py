@@ -189,7 +189,37 @@ class Solution:
                 heappush(heap, (matrix[x][y+1], x, y+1))
                 visited.add((x, y+1))
         return res
-               
+# 题五：N数组第K大元素 
+# 关键：数组不是矩阵，每个数组长度不一， 
+# 重新进行数组反排序
+from heapq import heappush, heappop
+class Solution:
+    """
+    @param s: A string
+    @param k: An integer
+    @return: An integer
+    """
+    def kthLargest(self, A, k):
+        if not A:
+            return None 
+        sorted_A = []
+        heap = []
+        num = None
+        for i, a in enumerate(A):
+            if not a:
+                continue 
+            a.sort(reverse = True)
+            heappush(heap, (-a[0], i, 0))
+            sorted_A.append(a)
+            
+        for _ in range(k):
+            num, x, y = heappop(heap)
+            if y + 1 < len(sorted_A[x]) :
+                heappush(heap, (-sorted_A[x][y+1], x, y+1))
+        return -num
+
+solution = Solution()
+print(solution.kthLargest([[9,3,2,4,7],[1,2,3,4,8]], 3))
                
 # 题四：合并K个排序链表
 # 方法一 heapq  O(Nlogk)
