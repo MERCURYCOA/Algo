@@ -20,11 +20,11 @@ class Solution:
         if n<1:
             return 0
         f=[[None]*3 for _ in range(n+1)]
-        f[0][0] = f[0][1] = f[0][2] = 0    
+        f[0][0] = f[0][1] = f[0][2] = 0    # 一定要明白为什么开2维数组，不是因为C是2维的，而是要记录颜色，如果对颜色没限制，用1维数组就可以记录当前最小cost。
         
         for i in range(1,n+1):
             for j in range(0,3):
-                f[i][j] = sys.maxsize
+                f[i][j] = sys.maxsize # 非常重要， 必须先让f[i][i]=无穷，后面才能用min 迭代
                 for k in range(0,3):   # 用k 表示第i-1个房子的颜色
                     if k != j:
                         f[i][j] = min(f[i][j], (f[i-1][k] + C[i-1][j]))  # 注意i从1开始，但是C从[0][0]开始，所以 C[i-1][j]表示从1开始的第i个房子
@@ -34,7 +34,29 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.paint_house_min_cost([[14,2,11],[11,14,5],[14,3,10]]))
-
+    
+# 解法2: 滚动数组：
+class Solution:
+    """
+    @param costs: n x 3 cost matrix
+    @return: An integer, the minimum cost to paint all houses
+    """
+    def minCost(self, costs):
+        n = len(costs)
+        if n == 0:
+            return 0
+            
+        INF = 0x7fffffff   # 记住这个用法
+        f = [costs[0], [INF, INF, INF]]
+        
+        for i in range(1, n):
+            for j in range(3):
+                f[i&1][j] = INF    # i&1  - 判断奇偶的常见用法， 记住！！！！！！  1&1 = 1， 0&1 = 0， i是奇数， i&1就是1， i是偶数， i&1就是0
+                for k in range(3):
+                    if j != k:
+                        f[i&1][j] = min(f[i&1][j], f[(i+1)&1][k] + costs[i][j])
+        
+        return min(f[(n-1)&1])
 # 题二： 与题一类似，颜色改成k个
 # 方法一：时间复杂度 O(NK^2)
 import sys
