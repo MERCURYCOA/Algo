@@ -131,15 +131,7 @@ class Solution:
         if n == 0:
             return 0
         r1 = self.max_increase_subarray(A)
-        i = 0
-        j = n-1
-        while (i < j):
-            temp = A[i]
-            A[i] = A[j]
-            A[j] = temp
-            i += 1
-            j -= 1
-        r2 = self.max_increase_subarray(A)
+        r2 = self.max_increase_subarray(A[::-1])
         return max(r1,r2)
 if __name__ == '__main__':
     solution = Solution()
