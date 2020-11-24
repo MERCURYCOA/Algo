@@ -41,35 +41,75 @@ if __name__ == '__main__':
 #                  就可以把f[i-1][j]和f[i][j-1]都加上。
 #                  **这里第一行第一列也被包含了。假设：第一行第3列无障碍，语句f[i][j] = f[i][j] + f[i][j-1]会加上左边第二列的f[0][1]，正合题意。
 class Solution:
-    def total_unique_paths(self, A):
-        n = len(A)
-        m = len(A[0])
-        f = [[0] * m for _ in range(n)]  #创建空二维数组
-        # 合规判断
-        if n < 1 or m < 1:
-           return -1
+    """
+    @param obstacleGrid: A list of lists of integers
+    @return: An integer
+    """
+    def uniquePathsWithObstacles(self, obstacleGrid):
+        #获取网格的长宽
+        n,m = len(obstacleGrid),len(obstacleGrid[0])
+        if n == 0 and m == 0:
+            return 0
+        dp=[[0] * m for _ in range(n)]
+        if obstacleGrid[0][0] == 0:
+            dp[0][0] = 1
+        for i in range(0,n):
+            for j in range(0,m):
+                if i == 0 and j == 0:
+                    continue
+                #若遇到障碍物，则跳过
+                if obstacleGrid[i][j] == 1:
+                    continue
+                #对于上边界，第一个障碍物或边界左边的所有边界点皆可到达
+                if i == 0:
+                    dp[i][j] = dp[i][j-1]
+                    continue
+                #对于左边界，第一个障碍物或边界前的所有边界点皆可到达
+                if j == 0:
+                    dp[i][j] = dp[i-1][j]
+                    continue
+                #到达当前点的路径数等于能到达此点上面的点和左边点的路径数之和
+                dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        return dp[n-1][m-1]
     
-        for i in range(0, n):
-            for j in range(0, m):
-                # 不能用if else, 应该用多个if, 因为这些情况是分类，不是互斥的
-                # 可能同时满足i>0, j>0, 这个时候如果不想执行剩下的语句，用continue
-                if A[i][j] == 1:
+# 第2次自己做的：有些麻烦，跟别人简便做法比：1， 简便做法利用了初始化f全为0，所以在边界上obstacleGrid[i][j]=1时，就直接continue, 
+# 2 又因为边界上所有值只跟左边或上边有关，所以dp[i][j] = dp[i-1][j] 就可以解决边界遇到obstacal之后的所有f必须全为0的问题。         
+class Solution:
+    """
+    @param obstacleGrid: A list of lists of integers
+    @return: An integer
+    """
+    def uniquePathsWithObstacles(self, obstacleGrid):
+        if not obstacleGrid or obstacleGrid[0] is None or obstacleGrid[0][0] == 1:
+            return 0 
+            
+        n, m = len(obstacleGrid), len(obstacleGrid[0])
+        f = [[0] * m for _ in range(n)]
+        
+        for j in range(m):
+            if obstacleGrid[0][j] == 1:
+                for t in range(j, m):
+                    f[0][t] = 0
+                break 
+            elif obstacleGrid[0][j] == 0:
+                f[0][j] = 1 
+                
+        for i in range(n):
+            if obstacleGrid[i][0] == 1:
+                for t in range(i, n):
+                    f[t][0] = 0
+                break   
+            elif obstacleGrid[i][0] == 0:
+                f[i][0] = 1
+        for i in range(1, n):
+            for j in range(1, m):
+                if obstacleGrid[i][j] == 1:
                     f[i][j] = 0
-                    continue
-                if i == 0 and j ==0:
-                    f[i][j] = 1
-                    continue
-                if i>0:
-                    f[i][j] = f[i][j] + f[i-1][j]
-                if j >0:
-                    f[i][j] = f[i][j] + f[i][j-1]
+                else:
+                    f[i][j] = f[i-1][j] + f[i][j-1]
         return f[n-1][m-1]
-   
 
-if __name__ == '__main__':
-    solution = Solution()
-    print(solution.total_unique_paths([[0,0,1,0],[0,1,0,0],[0,0,0,0]]))
-    
+
 # 题三：找到双向最大上升连续子序列，从左到右上升和从右到左上升
 # 题目转换成：求上升，然后翻转数组，之后在求上升，最后比较那个大返回哪个
 
