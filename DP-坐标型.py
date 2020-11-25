@@ -1,7 +1,7 @@
 # |   |   |   |
 # |   |   |   |
 # |   |   |   |
-# 动态规划 - 坐标型
+# 动态规划 - 坐标型 + 位运算动态规划
 # （也是计数型）
 # 坐标型解法：对于输入数组A, 创建一个与其大小相同的F数组
 
@@ -384,3 +384,17 @@ class Solution:
         
         
         return res
+# 位运算
+# 1 
+class Solution:
+    """
+    @param num: a non negative integer number
+    @return: an array represent the number of 1's in their binary
+    """
+    def countBits(self, num):
+        dp = [0]
+        
+        for i in range(1, num+1):
+            dp.append(dp[i>>1] + i%2)  # 这里不可以用 i&1代替1或0. 因为  1 + 1&1 = 0而不是1， 因为加号优先于&， 就变成2&1
+            print(dp[i>>1], i%2)
+        return dp 
