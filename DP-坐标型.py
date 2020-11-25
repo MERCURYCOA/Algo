@@ -333,104 +333,54 @@ class Solution:
 
     def maxKilledEnemies(self, grid):
 
-        if len(grid) == 0:
-
+        if not grid or len(grid) == 0 or len(grid[0]) == 0 :
             return 0
-
-        n = len(grid)
-
-        m = len(grid[0])
-
-        left  = [[0 for i in range(m + 2)] for j in range(n + 2)]
-
-        right = [[0 for i in range(m + 2)] for j in range(n + 2)]
-
-        up    = [[0 for i in range(m + 2)] for j in range(n + 2)]
-
-        down  = [[0 for i in range(m + 2)] for j in range(n + 2)]
-
-        #left
-
-        for i in range(1, n + 1):
-
-            for j in range(1, m + 1):
-
-                if grid[i - 1][j - 1] == 'E':
-
-                    left[i][j] = left[i][j - 1] + 1
-
-                elif grid[i - 1][j - 1] == 'W':
-
-                    left[i][j] = 0
-
-                else:
-
-                    left[i][j] = left[i][j - 1]
-
-        #right
-
-        for i in range(1, n + 1):
-
-            for j in range(m, 0, -1):
-
-                if grid[i - 1][j - 1] == 'E':
-
-                    right[i][j] = right[i][j + 1] + 1
-
-                elif grid[i-1][j-1] == 'W':
-
-                    right[i][j] = 0
-
-                else:
-
-                    right[i][j] = right[i][j + 1]
-
-        #up
-
-        for j in range(1, m + 1):
-
-            for i in range(1, n + 1):
-
-                if grid[i - 1][j - 1] == 'E':
-
-                    up[i][j] = up[i - 1][j] + 1
-
-                elif grid[i - 1][j - 1] == 'W':
-
-                    up[i][j] == 0
-
-                else:
-
-                    up[i][j] = up[i - 1][j]
-
+        row, col = len(grid), len(grid[0])
+        # init
+        up = [[0] * col for _ in range(row)]
+        down = [[0] * col for _ in range(row)]
+        left = [[0] * col for _ in range(row)]
+        right = [[0] * col for _ in range(row)]
+        # up
+        for i in range(row) : 
+            for j in range(col) :
+                if grid[i][j] != 'W' :
+                    if grid[i][j] == 'E' :
+                        up[i][j] = 1
+                    if i > 0 :
+                        up[i][j] += up[i - 1][j]
+        # down
+        for i in range(row - 1, -1, -1) :
+            for j in range(col) :
+                if grid[i][j] != 'W' :
+                    if grid[i][j] == 'E' :
+                        down[i][j] = 1
+                    if i + 1 < row :
+                        down[i][j] += down[i + 1][j]
+        # right
+        for i in range(row) : 
+            for j in range(col - 1, -1, -1) :
+                if grid[i][j] != 'W' :
+                    if grid[i][j] == 'E' :
+                        right[i][j] = 1
+                    if j + 1 < col :
+                        right[i][j] += right[i][j + 1]
+                        
+        # left
+        for i in range(row) : 
+            for j in range(col) :
+                if grid[i][j] != 'W' :
+                    if grid[i][j] == 'E' :
+                        left[i][j] = 1
+                    if j > 0 :
+                        left[i][j] += left[i][j - 1]
         
-
-        #down
-
-        for j in range(1, m + 1):
-
-            for i in range(n, 0, -1):
-
-                if grid[i - 1][j - 1] == 'E':
-
-                    down[i][j] = down[i + 1][j] + 1
-
-                elif grid[i - 1][j - 1] == 'W':
-
-                    down[i][j] == 0
-
-                else:
-
-                    down[i][j] = down[i + 1][j]
-
-        result = 0
-
-        for i in range(1, n + 1):
-
-            for j in range(1, m + 1):
-
-                if grid[i - 1][j - 1] == '0':
-
-                    result = max(result, left[i][j] + right[i][j] + up[i][j] + down[i][j])
-
-        return result
+        # sum 
+        res = 0
+        for i in range(row):
+            for j in range(col) :
+                if grid[i][j] == '0' :
+                    res = max(res, up[i][j] + down[i][j] + left[i][j] + right[i][j])
+        
+        
+        return res
