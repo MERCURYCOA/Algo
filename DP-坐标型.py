@@ -112,7 +112,7 @@ class Solution:
 
 # 题三：找到双向最大上升连续子序列，从左到右上升和从右到左上升
 # 题目转换成：求上升，然后翻转数组，之后在求上升，最后比较那个大返回哪个
-
+# 解法一：空间O(N)
 class Solution:
     def max_increase_subarray(self, A):
         n = len(A)
@@ -136,7 +136,35 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.bidirection([1,2,3,5,4,3,2,1,7,1]))
-# 题四
+#解法二： 空间O(1)  局部变量和全局变量
+class Solution:
+    def max_increase_subarray(self, A):
+        n = len(A)
+        #f = [0]*n
+        #f[0] = 1
+        max_subarray = 1
+        local = 1
+        for i in range(1, n):
+            if A[i] > A[i-1]:
+                local+=1
+                
+            else:
+                max_subarray = max(max_subarray, local)
+                local = 1
+        return max_subarray
+    def bidirection(self, A):
+        n = len(A)
+        if n == 0:
+            return 0
+        r1 = self.max_increase_subarray(A)
+    
+        r2 = self.max_increase_subarray(A[::-1])
+        return max(r1,r2)
+if __name__ == '__main__':
+    solution = Solution()
+    print(solution.bidirection([1,2,3,5,4,3,2,1,7,1]))
+    
+    # 题四
 # N*M 网格中有数字，求从左上到右下角路径上数字和最小是多少？
 #方法一：
 import sys
@@ -163,6 +191,31 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.min_path_sum([[1,2]]))
+    
+# 第2次做：
+class Solution:
+    """
+    @param grid: a list of lists of integers
+    @return: An integer, minimizes the sum of all numbers along its path
+    """
+    def minPathSum(self, grid):
+        if not grid or not grid[0]:
+            return -1
+        n, m = len(grid), len(grid[0])
+        f = [[0] * m] * n
+        f[0][0] = grid[0][0]
+        for i in range(n):
+            for j in range(m):
+                if i == 0:
+                    f[i][j] = f[i][j-1] + grid[i][j]
+                    continue
+                if j == 0:
+                    f[i][j] = f[i-1][j] + grid[i][j]
+                    continue
+                f[i][j] = min(f[i-1][j], f[i][j-1]) + grid[i][j] 
+                
+        return f[n-1][m-1]
+
 # 方法二： 滚动数组
 #关键：开2行数组，建2个指针，old, new, 每行一换，也就是在i循环这一层，需要让old new交替，也就是old = new, new = 1 [其实就是0 -> 1, 1 -> 0]
 #     然后把后面每个i改成new, i-1改成old， 返回f[new][m-1]
@@ -193,3 +246,28 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.min_path_sum([[1,2]]))
+# 第2次做：滚动数组
+class Solution:
+    """
+    @param grid: a list of lists of integers
+    @return: An integer, minimizes the sum of all numbers along its path
+    """
+    def minPathSum(self, grid):
+        if not grid or not grid[0]:
+            return -1
+        n, m = len(grid), len(grid[0])
+        f = [[0] * m] * 2
+        for i in range(n):
+            for j in range(m):
+                if i == 0 and j == 0:
+                    f[i][j] = grid[i][j]
+                    continue
+                if i == 0:
+                    f[i][j] = f[i][j-1] + grid[i][j]
+                    continue
+                if j == 0:
+                    f[i&1][j] = f[(i-1)&1][j] + grid[i][j]
+                    continue
+                f[i&1][j] = min(f[(i-1)&1][j], f[i&1][j-1]) + grid[i][j] 
+                
+        return f[(n-1)&1][m-1]
