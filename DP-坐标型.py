@@ -271,3 +271,166 @@ class Solution:
                 f[i&1][j] = min(f[(i-1)&1][j], f[i&1][j-1]) + grid[i][j] 
                 
         return f[(n-1)&1][m-1]
+# 题四：炸弹袭击
+# 方法一： 预处理出每个点向四个方向能炸到的人数，然后枚举所有点，取最大值即可
+class Solution:
+    # @param {character[][]} grid Given a 2D grid, each cell is either 'W', 'E' or '0'
+    # @return {int} an integer, the maximum enemies you can kill using one bomb
+    def maxKilledEnemies(self, grid):
+        # Write your code here
+        m, n = len(grid), 0
+        if m:
+            n = len(grid[0])
+        result, rows = 0, 0
+        cols = [0 for i in xrange(n)]
+
+        for i in xrange(m):
+            for j in xrange(n):
+                if j == 0 or grid[i][j-1] == 'W':
+                    rows = 0
+                    for k in xrange(j, n):
+                        if grid[i][k] == 'W':
+                            break
+                        if grid[i][k] == 'E':
+                            rows += 1
+
+                if i == 0 or grid[i-1][j] == 'W':
+                    cols[j] = 0
+                    for k in xrange(i, m):
+                        if grid[k][j] == 'W':
+                            break
+                        if grid[k][j] == 'E':
+                            cols[j] += 1
+
+                if grid[i][j] == '0' and rows + cols[j] > result:
+                    result = rows + cols[j]
+                print(rows, cols, result)
+        return result 
+
+solution = Solution()
+print(solution.maxKilledEnemies(["0E00","E0WE","0E00"]))
+
+# 方法二：四个dp数组
+# 这道题翻来覆去就是一个概念，计算顺序。 四个方向的预处理计算分别是4个DP。 最后过一遍，求四个方向的和。
+
+# 比如，从左到右。
+
+# 固定每一行（相当于01背包为毛要首先遍历item？）
+# 对固定的行，从左到右计算每一列。
+# 如果是 W 就清零，
+# 如果是E就累加dp[i] = dp[i-1] + 1
+# 如果是0就直接转移上一个状态 dp[i] = dp[i-1]
+
+class Solution:
+
+    """
+
+    @param grid: Given a 2D grid, each cell is either 'W', 'E' or '0'
+
+    @return: an integer, the maximum enemies you can kill using one bomb
+
+    """
+
+    def maxKilledEnemies(self, grid):
+
+        if len(grid) == 0:
+
+            return 0
+
+        n = len(grid)
+
+        m = len(grid[0])
+
+        left  = [[0 for i in range(m + 2)] for j in range(n + 2)]
+
+        right = [[0 for i in range(m + 2)] for j in range(n + 2)]
+
+        up    = [[0 for i in range(m + 2)] for j in range(n + 2)]
+
+        down  = [[0 for i in range(m + 2)] for j in range(n + 2)]
+
+        #left
+
+        for i in range(1, n + 1):
+
+            for j in range(1, m + 1):
+
+                if grid[i - 1][j - 1] == 'E':
+
+                    left[i][j] = left[i][j - 1] + 1
+
+                elif grid[i - 1][j - 1] == 'W':
+
+                    left[i][j] = 0
+
+                else:
+
+                    left[i][j] = left[i][j - 1]
+
+        #right
+
+        for i in range(1, n + 1):
+
+            for j in range(m, 0, -1):
+
+                if grid[i - 1][j - 1] == 'E':
+
+                    right[i][j] = right[i][j + 1] + 1
+
+                elif grid[i-1][j-1] == 'W':
+
+                    right[i][j] = 0
+
+                else:
+
+                    right[i][j] = right[i][j + 1]
+
+        #up
+
+        for j in range(1, m + 1):
+
+            for i in range(1, n + 1):
+
+                if grid[i - 1][j - 1] == 'E':
+
+                    up[i][j] = up[i - 1][j] + 1
+
+                elif grid[i - 1][j - 1] == 'W':
+
+                    up[i][j] == 0
+
+                else:
+
+                    up[i][j] = up[i - 1][j]
+
+        
+
+        #down
+
+        for j in range(1, m + 1):
+
+            for i in range(n, 0, -1):
+
+                if grid[i - 1][j - 1] == 'E':
+
+                    down[i][j] = down[i + 1][j] + 1
+
+                elif grid[i - 1][j - 1] == 'W':
+
+                    down[i][j] == 0
+
+                else:
+
+                    down[i][j] = down[i + 1][j]
+
+        result = 0
+
+        for i in range(1, n + 1):
+
+            for j in range(1, m + 1):
+
+                if grid[i - 1][j - 1] == '0':
+
+                    result = max(result, left[i][j] + right[i][j] + up[i][j] + down[i][j])
+
+        return result
