@@ -58,7 +58,7 @@ class Solution:
         
         return min(f[(n-1)&1])
 # 题二： 与题一类似，颜色改成k个
-# 方法一：时间复杂度 O(NK^2)
+# 方法一：时间复杂度 O(NK^2), 时间复杂度太高，无法AC
 import sys
 
 class Solution:
@@ -108,6 +108,7 @@ class Solution:
                 else:
                     if f[i-1][j] < min2:
                         min2 = f[i-1][j]
+                        id2 = j
             for j in range(0,m):
                 f[i][j] = C[i-1][j]
                 if j != id1:
@@ -122,7 +123,43 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.paint_house_min_cost([[14,2,11],[11,14,5],[14,3,10]]))
- 
+# 方法三：滚动数组：
+class Solution:
+    """
+    @param costs: n x k cost matrix
+    @return: an integer, the minimum cost to paint all houses
+    """
+    def minCostII(self, C):
+        if not C or not C[0]:
+            return 0
+        n = len(C)
+        m = len(C[0])
+        f = [[0]*m for _ in range(2)]
+        min1 = min2 = 0
+        id1 = id2 = 0
+        for i in range(1,n+1):
+            min1 = min2 = sys.maxsize
+            for j in range(0,m):
+                if f[(i-1)&1][j] < min1:
+                    min2 = min1
+                    id2 = id1
+                    min1 = f[(i-1)&1][j]
+                    id1 = j
+                else:
+                    if f[(i-1)&1][j] < min2:
+                        min2 = f[(i-1)&1][j]
+                        id2 = j
+            for j in range(0,m):
+                f[i&1][j] = C[i-1][j]
+                if j != id1:
+                    f[i&1][j] += min1
+                else:
+                    f[i&1][j] += min2
+        res = f[n&1][0]
+        for t in range(1,m):
+            res = min(res,f[n&1][t])
+        return res
+
  # 题三： 小偷偷金币，N栋房子， 每个房子有A[i]个金币，不能同时偷相邻房子
  # 方法一：
     class Solution:
