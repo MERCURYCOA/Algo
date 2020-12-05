@@ -163,22 +163,19 @@ class Solution:
  # 题三： 小偷偷金币，N栋房子， 每个房子有A[i]个金币，不能同时偷相邻房子
  # 方法一：
     class Solution:
-    def max_house_stealing(self, A):
-        n = len(A)
-        f = [0]*(n+1)
-        if n == 0:
-            return 0
-        f[0] = 0
-        for i in range(1,n+1):
-            if i == 1:
-                f[i] = A[i-1]
-            if i > 1:
-                f[i] = max(f[i-2] + A[i-1], f[i-1])
-        return f[n]
-
-if __name__ == '__main__':
-    solution = Solution()
-    print(solution.max_house_stealing([1,2]))
+    """
+    @param A: An array of non-negative integers
+    @return: The maximum amount of money you can rob tonight
+    """
+    def houseRobber(self, A):
+        if not A:
+            return 0 
+        n = len(A)    
+        f = [0]*(n + 1)
+        f[1] = A[0]
+        for i in range(2, n+1):
+            f[i] = max(f[i-1], f[i-2]+A[i-1])
+        return max(f[n], f[n-1])
    
 # 方法二：
 # 滚动数组的思想 - 这里用长度为2的数组，或者直接设两个值滚动向前
@@ -203,33 +200,31 @@ if __name__ == '__main__':
 # 题四：与题三类似，房子从一排变成一个圈，相邻不能同时偷，最多偷多少？
 #技巧点： 拆分问题，会成排的，就把圈圈破成排
 # 关键：破开圈圈，变成排 - 考虑两种情况 （一）有A[0]和没有A[0]  或者 （二）有A[n-1]和没有A[n-1] ，只需要考虑一种就可以，因为 有A[0] = 没有A[n-1], 没有A[0]=有A[n-1]
-# 方法： 令开写一个函数，在其中调用2次max_house_stealing(),第1次参数为A[0:n-2] - 不考虑A[n-1], 第2次参数为A[1: n-1] - 不考虑A[0]
+# 方法： 令开写一个函数，在其中调用2次max_house_stealing(),第1次参数为A[0:n-1] - 不考虑A[n-1], 第2次参数为A[1: n] - 不考虑A[0]
 # 对两种情况求最大值就是圈圈情况的最大值
 
-import sys
-
 class Solution:
-    def circle_house(self, A):
-        n = len(A)
-        res = -sys.maxsize-1
-        res = max(self.max_house_stealing(A[0:n-2]), self.max_house_stealing(A[1:n-1]))
+    """
+    @param nums: An array of non-negative integers.
+    @return: The maximum amount of money you can rob tonight
+    """
+    def houseRobber2(self, nums):
+        if not nums:
+            return 0 
+            
+        n = len(nums)
+        if n <= 2:
+            return max(nums)
+        res = max(self.helper(nums[0:n-1]), self.helper(nums[1:n]))
         return res
-    def max_house_stealing(self, A):
-        n = len(A)
-        f = [0]*(n+1)
-        if n == 0:
-            return 0
-        f[0] = 0
-        for i in range(1,n+1):
-            if i == 1:
-                f[i] = A[i-1]
-            if i > 1:
-                f[i] = max(f[i-2] + A[i-1], f[i-1])
-        return f[n]
-
-if __name__ == '__main__':
-    solution = Solution()
-    print(solution.circle_house([1,2,3]))
+        
+    def helper(self, A):
+        n = len(A)  
+        f = [0]*(n + 1)
+        f[1] = A[0]
+        for i in range(2, n+1):
+            f[i] = max(f[i-1], f[i-2]+A[i-1])
+        return max(f[n], f[n-1])
 
 # 题五： 股票买卖，给出连续n天股票价格，只能买一股卖一股，不能多次交易，最大利润？
 
