@@ -266,3 +266,44 @@ class Solution:
 if __name__ == '__main__':
     solution = Solution()
     print(solution.max_stock_profits([2，1，2，1，2，3，0]))
+
+    
+# 题七：最多交易k次，最大利润
+class Solution:
+    """
+    @param prices: Given an integer array
+    @return: Maximum profit
+    """
+    def maxProfit(self, prices):
+        # write your code here
+        if not prices or len(prices) <= 1:
+            return 0
+        
+        m, k = len(prices), 2
+        res = [[0 for _ in range(2 * k + 1)] for _ in range(m + 1)]
+        # res[0][0] = 0
+        res[0][1], res[0][2], res[0][3], res[0][4] = -sys.maxsize, -sys.maxsize, -sys.maxsize, -sys.maxsize
+        
+        for i in range(1, m + 1):
+            # stage 0 alreday initialized to 0 no need for extra set
+            
+            for j in range(1, 2 * k + 1):
+                if j % 2:
+                    # stage 1 and stage 3
+                    res[i][j] = max(res[i - 1][j - 1], res[i - 1][j] + prices[i - 1] - prices[i - 2])
+                    # 状态1， 3 -- 持有股票
+                    # 1， 天改变 状态改变，今天买入，利润与前一天前一状态相同   2，天改变，状态不变（昨天就持有股票） + 持续获利
+                else:
+                    res[i][j] = max(res[i - 1][j], res[i - 1][j - 1] + prices[i - 1] - prices[i - 2])
+                    # 状态2， 4  -- 不持有股票
+                    # 1，天改变，状态不变，昨天就没有股票，利润与前一天相同  2，天改变，状态改变，昨天持有股票，今天卖掉，利润增加
+        
+        #return max(res[m][0], res[m][2], res[m][4])
+        # 通用的写法
+        max_value = res[m][0]
+        i = 0
+        while i < 2 * k + 1:
+            if res[m][i] > max_value:
+                max_value = res[m][i]
+            i += 2 
+        return max_value
