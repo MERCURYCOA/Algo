@@ -299,11 +299,5 @@ class Solution:
                     # 1，天改变，状态不变，昨天就没有股票，利润与前一天相同  2，天改变，状态改变，昨天持有股票，今天卖掉，利润增加
         
         #return max(res[m][0], res[m][2], res[m][4])
-        # 通用的写法
-        max_value = res[m][0]
-        i = 0
-        while i < 2 * k + 1:
-            if res[m][i] > max_value:
-                max_value = res[m][i]
-            i += 2 
-        return max_value
+       
+        return max(res[m])
