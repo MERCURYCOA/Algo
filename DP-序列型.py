@@ -301,3 +301,28 @@ class Solution:
         #return max(res[m][0], res[m][2], res[m][4])
        
         return max(res[m])
+# 题八：最大上升子序列
+# 方法一：O(n^2)
+class Solution:
+    """
+    @param nums: An integer array
+    @return: The length of LIS (longest increasing subsequence)
+    """
+    def longestIncreasingSubsequence(self, nums):
+        if nums is None or not nums:
+            return 0
+            
+        # state: dp[i] 表示以第 i 个数结尾的 LIS 的长度
+        # initialization: dp[0..n-1] = 1
+        dp = [1] * len(nums)
+        
+        # function: dp[i] = max(dp[j] + 1), j < i && nums[j] < nums[i]
+        for i in range(len(nums)):
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    dp[i] = max(dp[i], dp[j] + 1)
+        
+        # answer, 任意一个位置都可能是 LIS 的结尾  
+        return max(dp)
+# 方法二：O(nlogn)
+# 没看懂
