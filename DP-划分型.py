@@ -72,3 +72,29 @@ class Solution:
                 dp[i] = min(dp[i], dp[i-j**2] + 1)
                 j +=1
         return dp[n]
+# 题三：分割回文串
+class Solution:
+    """
+    @param s: A string
+    @return: An integer
+    """
+    def minCut(self, s):
+        if not s or len(s) == 0:
+            return 0
+        
+        m = len(s)
+        res = [0 for _ in range(m + 1)]
+        
+        for i in range(1, m + 1):
+            res[i] = sys.maxsize
+            for j in range(i):
+                #if (j, i - 1) not in palin_index:
+                if not self.isPalin(s, j, i-1):
+                    continue
+                res[i] = min(res[i], res[j] + 1)
+        
+        return res[m] - 1
+    def isPalin(self, s, start, end):
+        if s[start : end+1] == s[start : end+1][::-1]:
+            return True 
+        return False
