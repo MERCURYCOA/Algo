@@ -1,4 +1,7 @@
 # 背包问题中，dp数组的大小跟背包总承重有关
+# 题1， 题2中，A数组中元素的顺序是重要的，问题转化是：An放不放进背包
+# 题3中， A数组中元素的顺序已经不重要了， 因为你可以重复使用元素，这是要考虑的是最后一个放进背包的元素是谁（硬币组合问题）
+
 # 题1 背包问题
 # 记录前i个物品能拼出哪些重量：1 等于前i-1个物品能拼出的重量  2 前i-1个物品能拼出的重量 + 第i个物品重量
 class Solution:
@@ -79,7 +82,7 @@ class Solution:
                     
         return dp[target]
 # 题3  背包问题 VI 
-# 可重复使用数字 且 顺序不同算作不同组合
+# 可重复使用数字 且 顺序不同算作不同组合 （变成硬币组合问题）
 class Solution:
     """
     @param nums: an integer array and all positive numbers, no duplicates
