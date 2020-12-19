@@ -78,3 +78,23 @@ class Solution:
                     dp[j] += dp[j - nums[i-1]]
                     
         return dp[target]
+# 题3  背包问题 VI 
+# 可重复使用数字 且 顺序不同算作不同组合
+class Solution:
+    """
+    @param nums: an integer array and all positive numbers, no duplicates
+    @param target: An integer
+    @return: An integer
+    """
+    def backPackVI(self, nums, target):
+        n = len(nums)
+        if n == 0:
+            return 0 
+        f = [0] * (target+1)    
+        f[0] = 1 
+        for i in range(1, target+1):
+            for j in range(n):
+                if i >= nums[j]:
+                    f[i] += f[i - nums[j]]
+                    
+        return f[target]
