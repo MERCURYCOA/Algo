@@ -398,34 +398,32 @@ class Solution:
     @return: Return the LCA of the two nodes.
     """
     def lowestCommonAncestor3(self, root, A, B):
-        # write your code here
-        lca, a, b = self.helper(root, A, B)
-        if a and b:
-            return lca
+        have_a, have_b, parent = self.dfs(root, A, B)
+        if have_a and have_b:
+            return parent
         else:
             return None
-    
-    def helper(self, root, A, B):
+
+    def dfs(self, root, A, B):
         if not root:
-            return None, False, False
+            return False, False, None 
         
         
-        left, left_a, left_b = self.lowestCommonAncestor3(root.left, A, B)
-        right, right_a, right_b = self.lowestCommonAncestor3(root.right, A, B)
-        
-        a = left_a or right_a or root == A
-        b = left_b or right_b or root == B
-        
+        left_have_a, left_have_b, left = self.dfs(root.left, A, B)
+        right_have_a, right_have_b, right = self.dfs(root.right, A, B)
+
+        have_a = left_have_a or right_have_a or root == A 
+        have_b = left_have_b or right_have_b or root == B
         if A == root or B == root:
-            return root, a, b
-        
+            return have_a, have_b, root
+       
         if left and right:
-            return root, a, b
+            return have_a, have_b, root
         if left and not right:
-            left, left_a, left_b
+            return have_a, have_b, left 
         if right and not left:
-            right, right_a, right_b
-        return a, b, None
+            return have_a, have_b, right
+        return False, False, None
  
  
 # 题九： 最近公共祖先 II   #建立parent set
