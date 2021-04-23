@@ -467,7 +467,68 @@ class Solution:
             return left_validate and right_validate and left_max < root.val and root.val < right_min, max(right_max, root.val), min(left_min, root.val)
         return False, max(right_max, root.val), min(left_min, root.val)  #这里的返回值根据isValidBST需要的返回值确定
      
- # 题十一：二叉树转单链表
+ 
+ # 题十一：左右反转二叉树
+ """
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: a TreeNode, the root of the binary tree
+    @return: nothing
+    """
+    def invertBinaryTree(self, root):
+        # write your code here
+        if not root:
+            return root 
+        left = self.invertBinaryTree(root.left)
+        right = self.invertBinaryTree(root.right)
+
+        root.left = right
+        root.right = left
+        return root   
+ # 题十二： 上下左右翻转二叉树
+ """
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    题意理解： 如果有右孩子，那么一定存在左孩子。
+    翻转的意思是：如果有2个孩子，让左孩子做新的根节点，右孩子做新根的左孩子，旧根做新根的右孩子。
+    如果只有左孩子，那么让左孩子做新根，让旧根做新根的右孩子。
+
+    @param root: the root of binary tree
+    @return: new root
+    """
+    def upsideDownBinaryTree(self, root):
+        if not root:
+            return None 
+        return self.dfs(root)
+
+    def dfs(self, root):  # 输入为本层旧根
+        if root.left == None:  # 如果有右孩子，那么一定有左孩子，这里判断，如果左孩子是None, 那么此根就一定没有孩子，是叶子
+            return root
+
+        newroot = self.dfs(root.left) # 深度优先：先到达最深处，做翻转，之后向上逐层翻转
+
+        root.left.right = root  # root.left要做本层的新根，那么其右孩子=本层的旧根root
+        root.left.left = root.right  # 本层新根的左孩子(root.left.left)是旧根的右孩子root.right
+        root.left = None   # 将旧根与原孩子断开，称为叶子
+        root.right = None 
+              # 上面的过程可以理解为：根左右按顺时针顺序向前走一步
+        return newroot  # 返回本层新根
+ 
+ # 题十三：二叉树转单链表
  class TreeNode:
     def __init__(self,val):
         self.val = val
