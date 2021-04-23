@@ -529,6 +529,56 @@ class Solution:
         return newroot  # 返回本层新根
  
  # 题十三：二叉树转单链表
+      # 法1  把双向链表的代码改成单向的
+ """
+Definition of Doubly-ListNode
+class DoublyListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = None
+        self.prev = None
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: The root of tree
+    @return: the head of doubly list node
+    """
+    def bstToDoublyList(self, root):
+        # write your code here
+        _, _, node, _ = self.dfs(root)
+        return node
+    def dfs(self, root):
+        if not root:
+            return root, root, root, root
+        
+        node = DoublyListNode(root.val)
+        
+        left_head, left_tail, left_head_node, left_tail_node = self.dfs(root.left)
+        right_head, right_tail, right_head_node, right_tail_node = self.dfs(root.right)
+
+        if left_tail:
+            left_tail.right = root
+            root.left = None
+            left_tail_node.next = node 
+            #node.prev = left_tail_node
+        if right_head:
+            root.right = right_head 
+            right_head.left = None 
+            node.next = right_head_node
+            #right_head_node.prev = node
+            
+        head = left_head or root or right_head 
+        tail = right_tail or root or left_tail 
+        head_node = left_head_node or node or right_head_node
+        tail_node = right_tail_node or node or left_tail_node
+
+        return head, tail, head_node, tail_node
+      # 法2
  class TreeNode:
     def __init__(self,val):
         self.val = val
@@ -573,7 +623,57 @@ Node4 = Node2.left = TreeNode(4)
 Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.BTtoLinkedList(Node1).val)
-# 题十二： 二叉树转双链表 （1<->2<->3）
+# 题十四：二叉树转双向链表 
+      # 递归
+"""
+Definition of Doubly-ListNode
+class DoublyListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = None
+        self.prev = None
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: The root of tree
+    @return: the head of doubly list node
+    """
+    def bstToDoublyList(self, root):
+        # write your code here
+        _, _, node, _ = self.dfs(root)
+        return node
+    def dfs(self, root):
+        if not root:
+            return root, root, root, root
+        node = DoublyListNode(root.val)
+        left_head, left_tail, left_head_node, left_tail_node = self.dfs(root.left)
+        right_head, right_tail, right_head_node, right_tail_node = self.dfs(root.right)
+
+        if left_tail:
+            left_tail.right = root
+            root.left = left_tail
+            left_tail_node.next = node 
+            node.prev = left_tail_node
+        if right_head:
+            root.right = right_head 
+            right_head.left = root 
+            node.next = right_head_node
+            right_head_node.prev = node
+            
+        head = left_head or root or right_head 
+        tail = right_tail or root or left_tail 
+        head_node = left_head_node or node or right_head_node
+        tail_node = right_tail_node or node or left_tail_node
+
+        return head, tail, head_node, tail_node
+
+# 题十五： 二叉树转循环双链表 （1<->2<->3）
+      # 递归
 """
 Definition of TreeNode:
 class TreeNode:
