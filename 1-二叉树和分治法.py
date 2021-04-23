@@ -574,52 +574,53 @@ Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.BTtoLinkedList(Node1).val)
 # 题十二： 二叉树转双链表 （1<->2<->3）
+"""
+Definition of TreeNode:
 class TreeNode:
-    def __init__(self,val):
+    def __init__(self, val):
         self.val = val
-        self.left = None
-        self.right = None
-class ListNode:
-    def __init__(self,val,next, prev):
-        self.val = val
-        self.next = next
-        self.prev = prev
+        self.left, self.right = None, None
+"""
 
 class Solution:
-    def BTtoLinkedList(self, root):
-        first, last = self.helper(root)   # 分治法的返回值一定要选好，最直观的方法去选择
-        return first
-    def helper(self, root):
-        if not root:
+   
+    """
+    @param root: root of a tree
+    @return: head node of a doubly linked list
+    """
+    def treeToDoublyList(self, root):
+        if root is None:
+            return None
+        
+        head, tail = self.dfs(root)
+        
+        # 因为题目要求是环，所以还要首尾相连
+        tail.right = head
+        head.left = tail
+        
+        return head
+        
+    def dfs(self, root):
+        if root is None:
             return None, None
+            
+        left_head, left_tail = self.dfs(root.left)
+        right_head, right_tail = self.dfs(root.right)
         
-        l_first, l_last = self.helper(root.left)
-        r_first, r_last = self.helper(root.right)
-        root_node = ListNode(root.val, None, None)
+        # left tail <-> root
+        if left_tail:
+            left_tail.right = root
+            root.left = left_tail
+        # root <-> right head
+        if right_head:
+            root.right = right_head
+            right_head.left = root
         
-        if not l_last and not r_first:
-            return root_node, root_node
-        if l_last and r_first:
-            l_last.next = root_node
-            root_node.prev = l_last
-            root_node.next = r_first
-            r_first.prev = root_node
-            return l_first, r_last
-        if left and not right:
-            l_last.next = root_node
-            root_node.prev = l_last
-            return l_first, root_node
-        if not left and right:
-            root_node.next = r_first
-            r_first.prev = root_node
-            return root_node, r_last
-Node1 = TreeNode(1)
-Node2 = Node1.left = TreeNode(2)
-Node3 = Node1.right = TreeNode(3)
-Node4 = Node2.left = TreeNode(4)
-Node4 = Node2.right = TreeNode(5)
-solution = Solution()
-print(solution.BTtoLinkedList(Node1).val)
+        # 其实 root 肯定是有的，第三个 or 只是为了好看
+        head = left_head or root or right_head
+        tail = right_tail or root or left_tail
+        
+        return head, tail
 
 # 题十三：二叉树拆成伪链表形式，只有右枝
 class TreeNode:
