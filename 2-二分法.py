@@ -187,7 +187,9 @@ class Solution:
             pieces += l//a 
         return pieces
 # 题五：寻找重复的数
-
+# 原本如果数组未排序，是不能用二分搜索的
+    # 这一题的数组虽然没有排序，但是其数组元素是特殊的。
+    # 可以利用数组元素的特殊性质。每个元素在1,n之间， 数组长n+1， 只有一个元素重复了一次
 class Solution:
     """
     @param nums: an array containing n + 1 integers which is between 1 and n
@@ -195,19 +197,24 @@ class Solution:
     """
     def findDuplicate(self, nums):
         start, end = 1, len(nums) - 1
-        
+         # 注意这里start不是0，这里start=1, end = len(nums-1),
+        # 所以这里二分搜索的不是按索引，是按元素，而元素虽然在数组中不是排序的，但其本身的内在性质是依次递增的。
+        # 这也是这道题可以用二分法的原因
         while start + 1 < end:
+
             mid = (start + end) // 2
-            if self.smaller_than_or_equal_to(nums, mid) > mid: # 小于mid的元素个数大于等于mid，说明重复元素在前面
+            if self.smaller_than_or_equal_to(nums, mid) > mid: # 小于等于mid的元素个数大于mid，说明重复元素在前面
                 end = mid
-            else:                                               # 小于mid的元素个数小于mid，说明重复元素在后面
+            else:                                               # 小于等于mid的元素个数等于mid，说明重复元素在后面
                 start = mid
-                
+                          # ！！！ 一定要注意，这里二分不是按索引，是按1到n的整数
+  
         if self.smaller_than_or_equal_to(nums, start) > start: #先检查前面的
             return start
             
         return end
-        
+            # 找到满足小于等于val的的元素个数
+
     def smaller_than_or_equal_to(self, nums, val):
         count = 0
         for num in nums:
