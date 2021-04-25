@@ -19,6 +19,7 @@ class Solution:
             mid = start + (end-start)//2   # 除法向下取整用//, 取浮点用/
             if A[mid] == target:
                 start = mid
+                break
             elif A[mid] < target:
                 start = mid
             else:
