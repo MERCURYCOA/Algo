@@ -85,9 +85,11 @@ class Solution:
            
             last = (last - 1) // 2
         return res
-               # 堆的应用 heapq
+# 堆的应用 heapq
 # 题二：ugly number II
 # 边pop边往heap里放， for n次pop  同样做法看 题四：排序矩阵中的从小到大第k个数
+# 为什么想到用heapq，2^i, 3^j, 5^k到底哪个作为下一个丑数呢，应该是最小的那一个，所以用最小堆
+# 怎么去实现2^i, 3^j, 5^k的计算过程呢？用exp不现实，所以用连乘，从heap弹出的数肯定是以2,3,5为因子，那么让这些数乘上【2，3，5】就实现了连乘，也就是exp的效果
 import heapq
 class Solution:
     """
