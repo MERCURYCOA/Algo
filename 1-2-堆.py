@@ -13,7 +13,10 @@
 # heapq.nlargest(n,heap) 
 # heapq.nsmallest(n,heap) 
 
-# 用最小堆求前k大和前k小  -- 一定要分清，然后会用
+# 第k大/第k小用partition
+# 前k大/前k小用堆  ！！！！！
+# 用最小堆求前k大和前k小  -- 一定要分清
+
 # 前k大大大大！！！  # 看题三
 for x in A:
     heapq.heappush(heap, x)
