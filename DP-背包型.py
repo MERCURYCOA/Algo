@@ -33,7 +33,86 @@ class Solution:
                 break
         return res
       
- 
+ # 背包问题 II
+# 背包问题 III
+# 原始方法（超时）- 时间优化 - 空间优化
+# 方法一：f[i][w] = max{f[i-1][w], f[i-1][w-Ai-1] + Vi-1, f[i-1][w-2Ai-1] + 2Vi-1,...}
+class Solution:
+    """
+    @param A: an integer array
+    @param V: an integer array
+    @param m: An integer
+    @return: an array
+    """
+    def backPackIII(self, A, V, m):
+        # write your code here
+        # f[i]f[j] = f[i-1][j]
+        n = len(A)
+        f = [[0 for _ in range(m+1)] for _ in range(n+1)]
+        for x in range(1, m+1):
+            f[0][x] = -1
+        
+        for i in range(1, n+1):
+            for j in range(1, m+1):
+                f[i][j] = f[i-1][j]
+                k = 1
+                while j >= k*A[i-1]:
+                    if f[i-1][j-k*A[i-1]] != -1:
+                        f[i][j] = max(f[i][j], f[i-1][j - k * A[i-1]] + k * V[i-1])
+                    
+                    k += 1   # 注意k不可以在if里面，不然的话k无法向后循环，后面可能还有k符合条件，但是无法到达那个k
+        return max(f[n])
+    
+    
+# 方法二：f[i][w] = max{f[i-1][w], f[i][w-Ai-1] + Vi-1}
+# 因为这一坨 f[i-1][w-Ai-1] + Vi-1, f[i-1][w-2Ai-1] + 2Vi-1,...已经在前面算过了，就是求f[i][w-Ai-1] + Vi-1的时候， 
+# f[i][w-Ai-1] + Vi-1在f[i][w] 同一行靠前面，中间差着Ai-1， 所以为了避免重复计算，时间优化，所以用f[i][w-Ai-1] + Vi-1 取代那一坨
+class Solution:
+    """
+    @param A: an integer array
+    @param V: an integer array
+    @param m: An integer
+    @return: an array
+    """
+    def backPackIII(self, A, V, m):
+        # write your code here
+        # f[i]f[j] = f[i-1][j]
+        n = len(A)
+        f = [[0 for _ in range(m+1)] for _ in range(n+1)]
+        for x in range(1, m+1):
+            f[0][x] = -1
+        
+        for i in range(1, n+1):
+            for j in range(1, m+1):
+                f[i][j] = f[i-1][j]
+                if j >= A[i-1] and f[i][j-A[i-1]] != -1:
+                    f[i][j] = max(f[i][j], f[i][j - A[i-1]] + V[i-1])
+                    
+        
+        return max(f[n])
+# 方法三：        
+# 空间优化：一维数组
+class Solution:
+    """
+    @param A: an integer array
+    @param V: an integer array
+    @param m: An integer
+    @return: an array
+    """
+    def backPackIII(self, A, V, m):
+        # write your code here
+        # f[i]f[j] = f[i-1][j]
+        n = len(A)
+        f = [0 for _ in range(m+1)]
+        
+        
+        for i in range(1, n+1):
+            for j in range(A[i-1],m+1):
+                f[j] = max(f[j-A[i-1]] + V[i-1], f[j])
+        return f[m]
+    
+# 背包问题 IV
+
 # 题2 背包问题 V
 # 解法1: 2维滚动数组
 class Solution:
