@@ -79,7 +79,7 @@ Node4 = Node2.right = TreeNode(5)
 solution = Solution()
 print(solution.postorderTraversal(Node1, []))
 # 方法二：非递归
-# 用stack/ queue
+# 用stack
 
 # 后序（一）非常巧妙
 class TreeNode:
